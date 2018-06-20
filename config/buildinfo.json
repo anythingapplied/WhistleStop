@@ -1,0 +1,13 @@
+{
+    "output_directory": "../mods",
+    "info":{
+        "name": "WhistleStopFactories",
+        "version": "0.0.1",
+        "factorio_version": "0.16",
+        "title": "Whistle Stop Factories",
+        "author": "Anythingapplied",
+        "homepage": "https://github.com/anythingapplied/WhistleStop",
+        "contact": "n/a",
+        "description": "Spawns massive furnaces and assembly machines around the map to make the game all about trains.",
+        "dependencies": ["base >= 0.16"] }
+}
