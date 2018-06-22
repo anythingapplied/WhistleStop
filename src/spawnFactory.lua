@@ -31,6 +31,7 @@ function spawn(center, surface, itemname)
     local force = game.forces.player
 
     if clearArea(center, surface) then
+        table.insert(global.whistlelocations, center)
         if itemname == "big-furnace" then
             global.whistlestats.furnace_count = global.whistlestats.furnace_count + 1
             local en = ce{name = "big-furnace", position = {center.x, center.y}, force = force}

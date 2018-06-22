@@ -42,8 +42,8 @@ data:extend({
     allowed_effects = {"consumption", "speed", "productivity", "pollution"},
     crafting_categories = {"big-smelting"},
     result_inventory_size = 2,
-    crafting_speed = 40,
-    energy_usage = "3600kW",
+    crafting_speed = 100,
+    energy_usage = "2000kW",
     source_inventory_size = 1,
     energy_source =
     {
@@ -328,14 +328,14 @@ data:extend({
       },
   
       crafting_categories = {"big-recipe"},
-      crafting_speed = 30,
+      crafting_speed = 40,
       energy_source =
       {
         type = "electric",
         usage_priority = "secondary-input",
         emissions = 0.03 / 3.5
       },
-      energy_usage = "1000kW",
+      energy_usage = "1500kW",
       ingredient_count = 10,
       module_specification =
       {
