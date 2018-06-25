@@ -1,5 +1,5 @@
 -- Creates 50x versions of each recipe from selected categories
-local inspect = require('inspect')
+require('luaMacros')
 
 -- Multiplies energy required and result count by a set factor with default fallback
 function setFactor(value, default)
@@ -70,21 +70,20 @@ function recipeSetup()
         v.subgroup = findSubgroup(v.name) .. "-big"
         v.name = v.name .. "-big"
 
+        local valid_assembly_categories = {"crafting", "advanced-crafting", "crafting-with-fluid", "chemistry"}
+
         -- Big furnace recipes
         if v.category == "smelting" then
             v.category = "big-smelting"
             data.raw.recipe[k .. "-big"] = v
         
         -- Big assembly recipes
-        elseif v.category == nil or 
-                v.category == "crafting" or
-                v.category == "advanced-crafting" or
-                v.category == "crafting-with-fluid" or
-                v.category == "chemistry" then
+        -- nil category means the same as "crafting"
+        elseif v.category == nil or inlist(v.category, valid_assembly_categories) then
             v.category = "big-recipe"
             data.raw.recipe[k .. "-big"] = v
         end
     end
 end
 
-return recipeSetup
+recipeSetup()

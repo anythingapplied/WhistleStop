@@ -1,18 +1,15 @@
 -- Provides spawn function which checks for valid spawn location and requests spawning
-require("spawnFactory")
+require("scripts.spawnFactory")
 -- Handles big machine spawn events with its loaders
-require("controlSpawnEvent")
+require("scripts.controlSpawnEvent")
 
 --TODO: Test game with Multi-Force PvP games?
---TODO: Minimum distances from each other? May break seed based generation... actually seed based is already broken
--- because it depends on chunk load order
 --TODO: Item-group hide from players
---TODO: Make animation speed slower?
 --TODO: Balancing: Crafting speed, power, pollution, recipe factor
 --TODO: Balancing: Rarer as distance gets further? Multiple types of machines based on distance? Tech to enhance machines?
---TODO: Restore settings, min distance vs min distance from start, probabilities
+--TODO: helmod doesn't recognize productivity modules as valid for big iron recipe
 
-local DEBUG = true --used for debug, users should not enable
+local DEBUG = false --used for debug, users should not enable
 
 -- Stat Tracking
 global.whistlestats = {furnace_count=0, assembly_count=0, valid_chunk_count=0}
@@ -35,35 +32,38 @@ end
 
 script.on_event({defines.events.on_chunk_generated},
     function (e)
-        if probability(0.02) then -- Initial probability filter to give the map a more random spread
+        if probability(0.005) then -- Initial probability filter to give the map a more random spread
+            return
+        end
 
-            -- Chunk center plus random variance so they aren't always chunk aligned
-            local center = {
-                x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
-                y=(e.area.left_top.y+e.area.right_bottom.y)/2 + math.random(-8,8)}
+        -- Chunk center plus random variance so they aren't always chunk aligned
+        local center = {
+            x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
+            y=(e.area.left_top.y+e.area.right_bottom.y)/2 + math.random(-8,8)}
 
-            if not distanceOkay(center) then return end  -- too close to other big structure
+        if not distanceOkay(center) then -- too close to other big structure
+            return
+        end
 
-            global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
-            
+        global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
+        
 
-            local assembly_to_furnace_ratio = 1.2  -- How many assembly machines you want per furnace spawn
+        local assembly_to_furnace_ratio = 1.2  -- How many assembly machines you want per furnace spawn
 
-            if probability(1/(1+assembly_to_furnace_ratio)) then
-                -- Spawn big furnace
-                if DEBUG then
-                    game.print("A big furnace spawn attempt at " .. center.x .. "," .. center.y .. " (" .. global.whistlestats.furnace_count .. "/" .. global.whistlestats.valid_chunk_count .. ")")
-                end
-
-                spawn(center, e.surface, "big-furnace")
-            else
-                -- Spawn big assembly machine
-                if DEBUG then
-                    game.print("A big assembly machine spawn attempt at " .. center.x .. "," .. center.y .. " (" .. global.whistlestats.assembly_count .. "/" .. global.whistlestats.valid_chunk_count .. ")")
-                end
-
-                spawn(center, e.surface, "big-assembly")
+        if probability(1/(1+assembly_to_furnace_ratio)) then
+            -- Spawn big furnace
+            if DEBUG then
+                game.print("A big furnace spawn attempt at " .. center.x .. "," .. center.y .. " (" .. global.whistlestats.furnace_count .. "/" .. global.whistlestats.valid_chunk_count .. ")")
             end
+
+            spawn(center, e.surface, "big-furnace")
+        else
+            -- Spawn big assembly machine
+            if DEBUG then
+                game.print("A big assembly machine spawn attempt at " .. center.x .. "," .. center.y .. " (" .. global.whistlestats.assembly_count .. "/" .. global.whistlestats.valid_chunk_count .. ")")
+            end
+
+            spawn(center, e.surface, "big-assembly")
         end
     end
 )

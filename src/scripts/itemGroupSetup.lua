@@ -1,3 +1,5 @@
+require('luaMacros')
+
 -- Create the item groups for the new big recipes
 function itemGroupSetup()
     for k,v in pairs(copy(data.raw["item-group"])) do
@@ -19,4 +21,4 @@ function itemGroupSetup()
     data.raw["item-group"]["signals-big"].icon = "__WhistleStopFactories__/graphics/item-group/signals.png"
 end
 
-return itemGroupSetup
+itemGroupSetup()
