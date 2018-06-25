@@ -26,28 +26,23 @@ function clearArea(center, surface)
     return true
 end
 
-function spawn(center, surface, itemname)
+function spawn(center, surface)
     local ce = surface.create_entity --save typing
     local force = game.forces.player
+    local assembly_to_furnace_ratio = 1.2  -- How many assembly machines you want per furnace spawn
 
     if clearArea(center, surface) then
-        table.insert(global.whistlelocations, center)
-        if itemname == "big-furnace" then
-            global.whistlestats.furnace_count = global.whistlestats.furnace_count + 1
-            local en = ce{name = "big-furnace", position = {center.x, center.y}, force = force}
-            local event = {created_entity=en, player_index=1}
-            script.raise_event(defines.events.on_built_entity, event)
-            en.minable = false
-            --en.destructable = false
-        elseif itemname == "big-assembly" then
-            global.whistlestats.assembly_count = global.whistlestats.assembly_count + 1
-            local en = ce{name = "big-assembly", position = {center.x, center.y}, force = force}
-            local event = {created_entity=en, player_index=1}
-            script.raise_event(defines.events.on_built_entity, event)
-            en.minable = false
-            --en.destructable = false
-        elseif DEBUG then
-            game.print("Error: itemname not recognized")
+        addPoint(center)
+
+        if probability(1/(1+assembly_to_furnace_ratio)) then
+            entityname = "big-furnace"
+        else
+            entityname = "big-assembly"
         end
+        
+        global.whistlestats[entityname] = global.whistlestats[entityname] + 1
+        local en = ce{name = entityname, position = {center.x, center.y}, force = force}
+        local event = {created_entity=en, player_index=1}
+        script.raise_event(defines.events.on_built_entity, event)
     end
 end

@@ -8,6 +8,7 @@ local function placeLoader(entity, position, type, direction)
 end
 
 local function on_built_event(event)
+	local entity = event.created_entity
 	local center = entity.position
 
 	if entity.name == "big-furnace" then

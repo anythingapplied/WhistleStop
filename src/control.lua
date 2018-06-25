@@ -8,22 +8,34 @@ require("scripts.controlSpawnEvent")
 --TODO: Balancing: Crafting speed, power, pollution, recipe factor
 --TODO: Balancing: Rarer as distance gets further? Multiple types of machines based on distance? Tech to enhance machines?
 --TODO: helmod doesn't recognize productivity modules as valid for big iron recipe
+--TODO: Algorithm improvement to distance check to improve performance
 
 local DEBUG = false --used for debug, users should not enable
 
 -- Stat Tracking
-global.whistlestats = {furnace_count=0, assembly_count=0, valid_chunk_count=0}
-global.whistlelocations = {{x=0,y=0}}  -- fake location at spawn to prevent ones close to starting area
+global.whistlestats = {}
+global.whistlestats["big-furnace"] = 0
+global.whistlestats["big-assembly"] = 0
+global.whistlestats.valid_chunk_count = 0
+
+-- Tracks location of big factory and or buffer locations, starting with a buffer location at spawn
+global.whistlelocations = {{x=0, y=0, mindist=2 * settings.global["whistle-min-distance"].value}}
+
+-- Registers a new location of a big factory or buffer location with a random minimum distance threshhold
+function addPoint(center)
+    local mindist = settings.global["whistle-min-distance"].value
+    table.insert(global.whistlelocations, {x=center.x, y=center.y, mindist=math.random(mindist, 2*mindist)})
+end
 
 -- Function that will return true 'percent' of the time.
 function probability(percent)
     return math.random() <= percent
 end
 
--- Returns true of no big structures within whistle-min-distances
+-- Returns true if no big structures within minimum distance threshholds
 function distanceOkay(a)
     for k,v in pairs(global.whistlelocations) do
-        if (a.x-v.x)^2+(a.y-v.y)^2 < settings.global["whistle-min-distance"].value^2 then
+        if (a.x-v.x)^2 + (a.y-v.y)^2 < v.mindist^2 then
             return false
         end
     end
@@ -35,7 +47,7 @@ script.on_event({defines.events.on_chunk_generated},
         if probability(0.005) then -- Initial probability filter to give the map a more random spread
             return
         end
-
+        
         -- Chunk center plus random variance so they aren't always chunk aligned
         local center = {
             x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
@@ -46,25 +58,14 @@ script.on_event({defines.events.on_chunk_generated},
         end
 
         global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
-        
 
-        local assembly_to_furnace_ratio = 1.2  -- How many assembly machines you want per furnace spawn
-
-        if probability(1/(1+assembly_to_furnace_ratio)) then
-            -- Spawn big furnace
-            if DEBUG then
-                game.print("A big furnace spawn attempt at " .. center.x .. "," .. center.y .. " (" .. global.whistlestats.furnace_count .. "/" .. global.whistlestats.valid_chunk_count .. ")")
-            end
-
-            spawn(center, e.surface, "big-furnace")
-        else
-            -- Spawn big assembly machine
-            if DEBUG then
-                game.print("A big assembly machine spawn attempt at " .. center.x .. "," .. center.y .. " (" .. global.whistlestats.assembly_count .. "/" .. global.whistlestats.valid_chunk_count .. ")")
-            end
-
-            spawn(center, e.surface, "big-assembly")
+        if probability(0.3) then -- Insert fake big factory placeholder to cause more spreading out
+            addPoint(center)
+            return
         end
+
+        spawn(center, e.surface)
+    
     end
 )
 

@@ -10,6 +10,17 @@ bigassembly.minable = nil
 bigassembly.fast_replaceable_group = nil
 bigassembly.dying_explosion = "big-explosion"
 
+bigassembly.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
+bigassembly.selection_box = {{-8.8, -9}, {8.8, 9}}
+bigassembly.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
+
+bigassembly.crafting_categories = {"big-recipe"}
+bigassembly.crafting_speed = 40
+
+bigassembly.energy_usage = "1500kW"
+bigassembly.ingredient_count = 10
+bigassembly.module_specification.module_slots = 5
+
 local function fluidBox(type, position)
     retvalue = {
             production_type = type,
@@ -34,17 +45,6 @@ bigassembly.fluid_boxes = {
     fluidBox("output", {-1, 9}),
     off_when_no_fluid_recipe = true
 }
-
-bigassembly.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
-bigassembly.selection_box = {{-8.8, -9}, {8.8, 9}}
-bigassembly.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
-
-bigassembly.crafting_categories = {"big-recipe"}
-bigassembly.crafting_speed = 40
-
-bigassembly.energy_usage = "1500kW"
-bigassembly.ingredient_count = 10
-bigassembly.module_specification.module_slots = 5
 
 -- Scale graphics by a factor and correct animation speed
 local function bumpUp(animation, factor)
