@@ -1,0 +1,8 @@
+- Test game with Multi-Force PvP games?
+- Item-group hide from players
+- Balancing: Crafting speed, power, pollution, recipe factor
+- Balancing: Rarer as distance gets further? Multiple types of machines based on distance? Tech to enhance machines?
+- helmod doesn't recognize productivity modules as valid for big iron recipe
+- Algorithm improvement to distance check to improve performance
+- Compatability with faster loaders
+- Fix deploy scripts destortion of >= symbol in info.json

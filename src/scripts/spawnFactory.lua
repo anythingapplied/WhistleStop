@@ -40,6 +40,9 @@ function spawn(center, surface)
             entityname = "big-assembly"
         end
         
+        if global.whistlestats[entityname] == nil then
+            global.whistlestats[entityname] = 0
+        end
         global.whistlestats[entityname] = global.whistlestats[entityname] + 1
         local en = ce{name = entityname, position = {center.x, center.y}, force = force}
         local event = {created_entity=en, player_index=1}

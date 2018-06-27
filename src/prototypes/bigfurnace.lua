@@ -4,6 +4,7 @@ require("scripts.luaMacros")
 local bigfurnace = copy(data.raw.furnace["electric-furnace"])
 
 bigfurnace.name = "big-furnace"
+
 bigfurnace.icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
 
 bigfurnace.minable = nil
@@ -18,7 +19,13 @@ bigfurnace.crafting_categories = {"big-smelting"}
 bigfurnace.crafting_speed = 100
 bigfurnace.result_inventory_size = 2
 bigfurnace.energy_usage = "2000kW"
-bigfurnace.module_slots = 6
+bigfurnace.module_specification.module_slots = 6
+
+-- Set this to an assembling machine type
+bigfurnace.type = "assembling-machine"
+bigfurnace.result_inventory_size = nil
+bigfurnace.source_inventory_size = nil
+bigfurnace.ingredient_count = 1
 
 -- Scale graphics by a factor and correct animation speed
 local function bumpUp(animation, factor)
@@ -43,4 +50,4 @@ for k,v in pairs(bigfurnace.working_visualisations) do
     v.animation.hr_version.shift[2] = v.animation.hr_version.shift[2] * 2 - .5
 end
 
-data.raw.furnace["big-furnace"] = bigfurnace
+data.raw["assembling-machine"]["big-furnace"] = bigfurnace

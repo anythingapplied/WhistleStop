@@ -1,4 +1,4 @@
-require('luaMacros')
+require("luaMacros")
 
 -- Create the item groups for the new big recipes
 function itemGroupSetup()

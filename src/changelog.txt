@@ -1,0 +1,12 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Changes:
+    - Furnaces now take up to 6 modules
+  Bugfixes:
+    - Changed big-furnace to a assembling machine to allow steel and stonebrick production with their stacksize limit
+    - Migrated entity definitions to data-final-fixes so it will load after all other mods
+    - More error catches for unexpected values in modded recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Changes:
+    - initial release

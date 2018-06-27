@@ -1,6 +1,6 @@
 -- Makes a deep copy of any object
 function copy(obj, seen)
-    if type(obj) ~= 'table' then return obj end
+    if type(obj) ~= "table" then return obj end
     if seen and seen[obj] then return seen[obj] end
     local s = seen or {}
     local res = setmetatable({}, getmetatable(obj))

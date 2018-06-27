@@ -1,19 +1,45 @@
 -- Creates 50x versions of each recipe from selected categories
-require('luaMacros')
+require("luaMacros")
+local inspect = require("inspect")
+
+local maxIngredientCount = 65535 -- Game crashes if ingredient amount is higher than this
 
 -- Multiplies energy required and result count by a set factor with default fallback
-function setFactor(value, default)
+local function setFactor(value, default)
     if value == nil then
         return default * factor
     end
     return value * factor
 end
 
--- Multiplies the ingredient counts by a set factor
-function setFactorIngredients(ary)
+-- Figures out max ingredient amount to ensure nothing goes over the max allowable of 65535
+local function maxRecipeAmount(ary)
+    local maxAmount = 0
     for k,v in pairs(ary) do
         if v.amount == nil then
-            v[2] = v[2] * factor
+            if v[2] ~= nil then
+                if v[2] > maxAmount then
+                    maxAmount = v[2]
+                end
+            end
+        else
+            if v.amount > maxAmount then
+                maxAmount = v.amount
+            end
+        end
+    end
+    return maxAmount
+end
+
+-- Multiplies the ingredient counts by a set factor
+local function setFactorIngredients(ary)
+    for k,v in pairs(ary) do
+        if v.amount == nil then
+            if v[2] ~= nil then
+                v[2] = v[2] * factor
+            elseif DEBUG then
+                print("Recipe with no amount and no 2nd index " .. inspect(v) .. inspect(ary))
+            end
         else
             v.amount = v.amount * factor
         end
@@ -22,7 +48,7 @@ function setFactorIngredients(ary)
 end
 
 -- Find the subgroup for a given item
-function findSubgroup(recipename)
+local function findSubgroup(recipename)
     local recipe = data.raw.recipe[recipename]
     if recipe.subgroup ~= nil then
         return recipe.subgroup
@@ -45,18 +71,20 @@ function findSubgroup(recipename)
     end
 end
 
--- Adjusts counts on all variables
-function setValues(recipe)
-    recipe.energy_required = setFactor(recipe.energy_required, 0.5)
-    if recipe.result ~= nil then
-        recipe.result_count = setFactor(recipe.result_count, 1)
-    else
-        recipe.results = setFactorIngredients(recipe.results)
+-- Adjusts counts on all variables by factor.  Does nothing if factor would go over max ingredient amount.
+local function setValues(recipe)
+    if maxRecipeAmount(recipe.ingredients) * factor <= maxIngredientCount then
+        recipe.energy_required = setFactor(recipe.energy_required, 0.5)
+        if recipe.result ~= nil then
+            recipe.result_count = setFactor(recipe.result_count, 1)
+        else
+            recipe.results = setFactorIngredients(recipe.results)
+        end
+        recipe.ingredients = setFactorIngredients(recipe.ingredients)
     end
-    recipe.ingredients = setFactorIngredients(recipe.ingredients)
 end
 
-function recipeSetup()
+local function recipeSetup()
     local recipe2 = copy(data.raw.recipe)
     -- Cycles through recipes adding big version to recipe list
     for k,v in pairs(recipe2) do
@@ -67,7 +95,12 @@ function recipeSetup()
             setValues(v)
         end
 
-        v.subgroup = findSubgroup(v.name) .. "-big"
+        local subgroup = findSubgroup(v.name)
+        if subgroup ~= nil then
+            v.subgroup = findSubgroup(v.name) .. "-big"
+        elseif DEBUG then
+            print("No subgroup found " .. inspect(v))
+        end
         v.name = v.name .. "-big"
 
         local valid_assembly_categories = {"crafting", "advanced-crafting", "crafting-with-fluid", "chemistry"}

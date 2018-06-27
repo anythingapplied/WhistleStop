@@ -1,5 +1,5 @@
 -- Adds 50x recipes versions to each technology
-require('luaMacros')
+require("luaMacros")
 
 function processTech(tech, techeffects)
     -- Checks an indivdual technology's effects for recipes to unlock adding the big version recipe when found

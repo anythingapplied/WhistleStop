@@ -3,14 +3,7 @@ require("scripts.spawnFactory")
 -- Handles big machine spawn events with its loaders
 require("scripts.controlSpawnEvent")
 
---TODO: Test game with Multi-Force PvP games?
---TODO: Item-group hide from players
---TODO: Balancing: Crafting speed, power, pollution, recipe factor
---TODO: Balancing: Rarer as distance gets further? Multiple types of machines based on distance? Tech to enhance machines?
---TODO: helmod doesn't recognize productivity modules as valid for big iron recipe
---TODO: Algorithm improvement to distance check to improve performance
-
-local DEBUG = false --used for debug, users should not enable
+DEBUG = true --used for debug, users should not enable
 
 -- Stat Tracking
 global.whistlestats = {}
@@ -23,8 +16,8 @@ global.whistlelocations = {{x=0, y=0, mindist=2 * settings.global["whistle-min-d
 
 -- Registers a new location of a big factory or buffer location with a random minimum distance threshhold
 function addPoint(center)
-    local mindist = settings.global["whistle-min-distance"].value
-    table.insert(global.whistlelocations, {x=center.x, y=center.y, mindist=math.random(mindist, 2*mindist)})
+    local minSetting = settings.global["whistle-min-distance"].value
+    table.insert(global.whistlelocations, {x=center.x, y=center.y, mindist=math.random(minSetting, 2*minSetting)})
 end
 
 -- Function that will return true 'percent' of the time.
@@ -35,6 +28,10 @@ end
 -- Returns true if no big structures within minimum distance threshholds
 function distanceOkay(a)
     for k,v in pairs(global.whistlelocations) do
+        if v.mindist == nil then
+            local minSetting = settings.global["whistle-min-distance"].value
+            v.mindist = math.random(minSetting, 2*minSetting)
+        end
         if (a.x-v.x)^2 + (a.y-v.y)^2 < v.mindist^2 then
             return false
         end

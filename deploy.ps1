@@ -7,7 +7,7 @@ param (
 )
 
 # check for $Tag
-$tags = git tag
+#$tags = git tag
 
 # if ([string]::IsNullOrWhiteSpace($Tag) -or [string]::IsNullOrWhiteSpace($tags) -or -not ($tags.split([Environment]::NewLine) -contains $Tag))
 # {
@@ -15,7 +15,7 @@ $tags = git tag
 #     exit
 # }
 
-$buildInfo = Get-Content "$InfoPath" | ConvertFrom-Json
+$buildInfo = Get-Content "$InfoPath"| ConvertFrom-Json
 
 $buildInfo.info.version = $Tag
 
@@ -28,7 +28,7 @@ Write-Output "Copying files to temp location"
 Copy-Item -Path "$SourceFolder\*" -Recurse -Destination "$ReleaseName"
 $Control = $ReleaseName + "\control.lua"
 (Get-Content $Control).replace("local DEBUG = true", "local DEBUG = false") | Set-Content $Control
-ConvertTo-Json $buildInfo.info | Set-Content "$ReleaseName\info.json"
+ConvertTo-Json $buildInfo.info | % { [System.Text.RegularExpressions.Regex]::Unescape($_) } | Set-Content "$newDir\info.json" -Encoding UTF8
 
 Write-Output "Making Zip File"
 Compress-Archive -Path  $ReleaseName -DestinationPath "$ReleaseName.zip"
