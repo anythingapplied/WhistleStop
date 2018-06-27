@@ -22,14 +22,21 @@ $buildInfo.info.version = $Tag
 $ReleaseName = $buildInfo.info.name + "_" + $buildInfo.info.version
 
 Write-Output "Making Temp Directory: $ReleaseName"
-mkdir $ReleaseName
+mkdir "$ReleaseName"
 
 Write-Output "Copying files to temp location"
 Copy-Item -Path "$SourceFolder\*" -Recurse -Destination "$ReleaseName"
 $Control = $ReleaseName + "\control.lua"
-(Get-Content $Control).replace("local DEBUG = true", "local DEBUG = false") | Set-Content $Control
-ConvertTo-Json $buildInfo.info | % { [System.Text.RegularExpressions.Regex]::Unescape($_) } | Set-Content "$ReleaseName\info.json" -Encoding UTF8
+(Get-Content $Control).replace("DEBUG = true", "DEBUG = false") | Set-Content $Control
+ConvertTo-Json $buildInfo.info | % { [System.Text.RegularExpressions.Regex]::Unescape($_) } | Set-Content "$ReleaseName\info.json"
+Write-Output "Removing Previous Zip File"
+
+if (Test-Path "$ReleaseName.zip") 
+{
+    Remove-Item -Path "$ReleaseName.zip"
+}
+
 Write-Output "Making Zip File"
-Compress-Archive -Force -Path  $ReleaseName -DestinationPath "$ReleaseName.zip"
+7z.exe a "$ReleaseName.zip" "$ReleaseName"
 
 Remove-Item $ReleaseName -Recurse
