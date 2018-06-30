@@ -1,3 +1,6 @@
+Issues:
+- Some modded items not finding subgroup and not getting moved
+
 Potential Improvements
 - Test game with Multi-Force PvP games?
 - Item-group hide from players

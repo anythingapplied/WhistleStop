@@ -1,3 +1,5 @@
+-- Placing/Destroying events and loader placement
+
 local function placeLoader(entity, position, type, direction)
 	local ce = entity.surface.create_entity 
 	local fN = entity.force

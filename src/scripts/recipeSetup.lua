@@ -103,16 +103,18 @@ local function recipeSetup()
         end
         v.name = v.name .. "-big"
 
-        local valid_assembly_categories = {"crafting", "advanced-crafting", "crafting-with-fluid", "chemistry"}
+        local cat_list1 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
+        local cat_list2 = data.raw.furnace["electric-furnace"]["crafting_categories"]
+        local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
 
         -- Big furnace recipes
-        if v.category == "smelting" then
+        if inlist(v.category, cat_list2) then
             v.category = "big-smelting"
             data.raw.recipe[k .. "-big"] = v
         
         -- Big assembly recipes
         -- nil category means the same as "crafting"
-        elseif v.category == nil or inlist(v.category, valid_assembly_categories) then
+        elseif v.category == nil or inlist(v.category, cat_list1) or inlist(v.category, cat_list3) then
             v.category = "big-recipe"
             data.raw.recipe[k .. "-big"] = v
         end

@@ -17,3 +17,10 @@ require("scripts.itemGroupSetup")
 
 -- Adds 50x recipes versions to each technology
 require("scripts.techSetup")
+
+-- Adds big items to list of productivity module usable items
+require("scripts.productivityFix")
+
+
+print(inspect(data.raw["recipe-category"]))
+print(inspect(data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]))
