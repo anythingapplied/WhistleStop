@@ -1,3 +1,4 @@
+Potential Improvements
 - Test game with Multi-Force PvP games?
 - Item-group hide from players
 - Balancing: Crafting speed, power, pollution, recipe factor
@@ -5,4 +6,19 @@
 - helmod doesn't recognize productivity modules as valid for big iron recipe
 - Algorithm improvement to distance check to improve performance
 - Compatability with faster loaders
-- Fix deploy scripts destortion of >= symbol in info.json
+- Icons for item-group mod support
+
+
+Suggestions from users and other random ideas that may or may not happen
+- Create giant miners (with infinite ore patches)
+- Add giant refineries
+- Add giant beacons that increase belt speed
+- Split giant chemical plants from assembly machines
+- Make them buildable with research
+- Make crafting bonus research
+- Make research that controls number of available loaders
+- Start with 2 furnances in spawn
+- Make "destroyed" entities turn into a repairable structure
+- Make structures only destroyable by cliff explosives
+- Lock in some recipes for machines
+

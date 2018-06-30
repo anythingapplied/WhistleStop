@@ -20,6 +20,8 @@ bigfurnace.crafting_speed = 100
 bigfurnace.result_inventory_size = 2
 bigfurnace.energy_usage = "2000kW"
 bigfurnace.module_specification.module_slots = 6
+bigfurnace.map_color = {r=199, g=103, b=247}
+bigfurnace.scale_entity_info_icon = true
 
 -- Set this to an assembling machine type
 bigfurnace.type = "assembling-machine"

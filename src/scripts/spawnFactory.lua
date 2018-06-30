@@ -3,6 +3,7 @@ function clearArea(center, surface)
     for y = center.y-8, center.y+8 do --fail if any water in area
         for x = center.x-8, center.x+8 do
             if surface.get_tile(x, y).name == "water" or surface.get_tile(x, y).name == "deepwater" then
+                debugWrite("Factory at (" .. center.x .. "," .. center.y .. ") overlaps with water.  Canceling attempt.")
                 return false
             end
         end
@@ -12,6 +13,7 @@ function clearArea(center, surface)
     -- Ensures factory won't overlap with resources or cliffs
     for index, entity in pairs(surface.find_entities(area)) do
         if entity.valid and entity.type ~= "tree" then
+            debugWrite("Factory at (" .. center.x .. "," .. center.y .. ") overlaps with ores, cliffs, or other non-tree entities.  Canceling attempt.")
             return false
         end
     end
@@ -23,6 +25,7 @@ function clearArea(center, surface)
         end
     end
 
+    debugWrite("Factory at (" .. center.x .. "," .. center.y .. ") Area clear! Good to go!")
     return true
 end
 
@@ -46,6 +49,7 @@ function spawn(center, surface)
         global.whistlestats[entityname] = global.whistlestats[entityname] + 1
         local en = ce{name = entityname, position = {center.x, center.y}, force = force}
         local event = {created_entity=en, player_index=1}
+        debugWrite("Creating factory at (" .. center.x .. "," .. center.y .. ")")
         script.raise_event(defines.events.on_built_entity, event)
     end
 end

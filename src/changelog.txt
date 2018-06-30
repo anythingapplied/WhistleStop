@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Changes:
+    - Spawn attempts now automatically adjust to be more frequent if they are frequently failing due to ore, terrain, or other entity conflicts
+    - Changed map colors of big furnace and big assembling machine so they'll be different on the map
+    - Increased the recipe icon size displayed on assembling machines and furnaces
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
   Changes:
     - Furnaces now take up to 6 modules

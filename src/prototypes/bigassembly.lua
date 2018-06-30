@@ -20,6 +20,8 @@ bigassembly.crafting_speed = 40
 bigassembly.energy_usage = "1500kW"
 bigassembly.ingredient_count = 10
 bigassembly.module_specification.module_slots = 5
+bigassembly.map_color = {r=103, g=247, b=247}
+bigassembly.scale_entity_info_icon = true
 
 local function fluidBox(type, position)
     retvalue = {

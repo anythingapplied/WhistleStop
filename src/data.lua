@@ -32,7 +32,6 @@ data:extend({
     stack_size = 50
   },
 
-
   -- Big assembly recipe category
   {
     type = "recipe-category",

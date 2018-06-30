@@ -28,7 +28,7 @@ Write-Output "Copying files to temp location"
 Copy-Item -Path "$SourceFolder\*" -Recurse -Destination "$ReleaseName"
 $Control = $ReleaseName + "\control.lua"
 (Get-Content $Control).replace("DEBUG = true", "DEBUG = false") | Set-Content $Control
-ConvertTo-Json $buildInfo.info | % { [System.Text.RegularExpressions.Regex]::Unescape($_) } | Set-Content "$ReleaseName\info.json"
+ConvertTo-Json $buildInfo.info | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) } | Set-Content "$ReleaseName\info.json"
 Write-Output "Removing Previous Zip File"
 
 if (Test-Path "$ReleaseName.zip") 
