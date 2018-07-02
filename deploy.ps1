@@ -39,4 +39,5 @@ if (Test-Path "$ReleaseName.zip")
 Write-Output "Making Zip File"
 7z.exe a "$ReleaseName.zip" "$ReleaseName"
 
+Write-Output "Remove temp location"
 Remove-Item $ReleaseName -Recurse

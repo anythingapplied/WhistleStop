@@ -1,8 +1,5 @@
 local inspect = require("inspect")
 
--- Scaling factor for all recipes, time required, and ingredients
-factor = 50
-
 -- Big Furnace prototype definition
 require("prototypes.bigfurnace")
 
@@ -20,7 +17,3 @@ require("scripts.techSetup")
 
 -- Adds big items to list of productivity module usable items
 require("scripts.productivityFix")
-
-
-print(inspect(data.raw["recipe-category"]))
-print(inspect(data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]))

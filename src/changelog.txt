@@ -1,3 +1,8 @@
+Version: 0.0.5
+  Bugfixes:
+    - Recipes with product outputs exceeding stacksize now limited to prevent lost items
+    - Fixed some recipes getting tagged with the wrong subgroup
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
   Bugfixes:
     - Productivity modules now work in big factories
