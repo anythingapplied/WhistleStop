@@ -1,3 +1,7 @@
+Version: 0.0.6
+  Bugfixes:
+    - Fixed issue with AAI mod where being able able to find main_product crashes the game 
+---------------------------------------------------------------------------------------------------
 Version: 0.0.5
   Bugfixes:
     - Recipes with product outputs exceeding stacksize now limited to prevent lost items

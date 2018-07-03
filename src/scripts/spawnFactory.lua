@@ -18,9 +18,10 @@ local function clearArea(center, surface)
         end
     end
 
+    local area = {{center.x-9.8,center.y-9.8},{center.x+9.8,center.y+9.8}}
     -- If only obstacle is trees, remove the trees
     for index, entity in pairs(surface.find_entities(area)) do
-        if entity.valid and entity.type == "tree" then --don't destroy ores, cliffs might become invalid after we destroy their neighbours, so check .valid
+        if entity.valid and entity.type == "tree" then
             entity.destroy()
         end
     end

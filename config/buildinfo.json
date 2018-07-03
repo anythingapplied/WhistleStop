@@ -2,7 +2,7 @@
     "output_directory": "../mods",
     "info":{
         "name": "WhistleStopFactories",
-        "version": "0.1.0",
+        "version": "0.0.6",
         "factorio_version": "0.16",
         "title": "Whistle Stop Factories",
         "author": "Avongard",
