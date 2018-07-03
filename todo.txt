@@ -1,6 +1,5 @@
 Current Issues
-- Entities spawning over bob's ores
-- Sometimes only loaders are spawning without main structure
+- Entities spawning over ores despite logic to prevent this (ores maybe added after my check via other mods)
 
 Potential Improvements
 - Deploy script - Update forums and mod portal with latest version
@@ -15,7 +14,7 @@ Potential Improvements
 - Icons for item-group mod support
 - Recipe localization for mods
 - Switch to deepcopy from util
-
+- Prevent assembly machines from blueprinting? Leaving ghosts?
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)

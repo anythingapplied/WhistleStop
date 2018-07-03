@@ -9,7 +9,7 @@ local function placeLoader(entity, position, type, direction)
 	loader.minable = false
 end
 
-local function on_built_event(event)
+function on_built_event(event)
 	local entity = event.created_entity
 	local center = entity.position
 

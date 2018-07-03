@@ -4,7 +4,8 @@ require("scripts.spawnFactory")
 require("scripts.controlSpawnEvent")
 
 DEBUG = true -- Used for debug, users should not enable
-local debugCount = 0 -- Stops debugging messages 
+local debugCount = 0 -- Stops debugging messages
+local debugMaxCount = 0 -- Maximum debug messages, 0 for infinite
 local debugType = "Screen" -- "File" to output to .log, anything else to output to screen
 
 -- Writes to the final debug output method based on type selection
@@ -20,10 +21,10 @@ end
 function debugWrite(text)
     if DEBUG then
         debugCount = debugCount + 1
-        if debugCount < 100 then
+        if debugMaxCount == 0 or debugCount < debugMaxCount then
             debugWriteType(text)
-        elseif debugCount == 100 then 
-            debugWriteType("Message count at 100, logging stopped")
+        elseif debugCount == debugMaxCount then 
+            debugWriteType("Message count at " .. debugMaxCount .. ", logging stopped")
         end
     end
 end
@@ -55,9 +56,9 @@ end
 
 script.on_event(defines.events.on_chunk_generated,
     function (e)
-        -- Probability adjusts based on previous success.  Will spawn more if lots are being blocked by ore and water.
-        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 400
-        if probability(prob) then -- Initial probability filter to give the map a more random spread
+        -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
+        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
+        if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
             return
         end
         

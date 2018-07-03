@@ -109,21 +109,28 @@ local function findSubgroup(recipename)
     if recipe.subgroup then
         return recipe.subgroup
     end
+
+    -- Search all possible locations where the "main product" where recipes inherit their subgroup can be found
     local product
     if recipe.result then
         product = recipe.result
-    elseif recipe.results and #recipe.results == 1 then
+    elseif recipe.results and #recipe.results == 1 and recipe.results[1].name then
         product = recipe.results[1].name
+    elseif recipe.results and #recipe.results == 1 and recipe.results[1][1] then
+        product = recipe.results[1][1]
     elseif recipe.normal and recipe.normal.result then
         product = recipe.normal.result
-    elseif recipe.normal and recipe.normal.results and #recipe.normal.results == 1 then
+    elseif recipe.normal and recipe.normal.results and #recipe.normal.results == 1 and recipe.normal.results[1].name then
         product = recipe.normal.results[1].name
+    elseif recipe.normal and recipe.normal.results and #recipe.normal.results == 1 and recipe.normal.results[1][1] then
+        product = recipe.normal.results[1][1]
     elseif recipe.main_product then
         product = recipe.main_product
     else
         print("No main product found " .. recipename .. inspect(recipe))
         return
     end
+
     if dataRawLookup[product] then
         return dataRawLookup[product].subgroup
     else
@@ -131,6 +138,7 @@ local function findSubgroup(recipename)
             print("No subgroup found for " .. product)
         else
             print("No subgroup or product found for " .. recipe.name)
+            print(inspect(recipe))
         end
     end
 end

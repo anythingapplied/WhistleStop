@@ -23,6 +23,8 @@ bigassembly.module_specification.module_slots = 5
 bigassembly.map_color = {r=103, g=247, b=247}
 bigassembly.scale_entity_info_icon = true
 
+table.insert(bigassembly.resistances, {percent=100, type="poison"})  -- Prevent termite damage
+
 local function fluidBox(type, position)
     retvalue = {
             production_type = type,

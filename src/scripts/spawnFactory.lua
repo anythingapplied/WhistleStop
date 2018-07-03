@@ -18,7 +18,6 @@ local function clearArea(center, surface)
         end
     end
 
-    local area = {{center.x-9.8,center.y-9.8},{center.x+9.8,center.y+9.8}}
     -- If only obstacle is trees, remove the trees
     for index, entity in pairs(surface.find_entities(area)) do
         if entity.valid and entity.type == "tree" then
@@ -47,6 +46,6 @@ function spawn(center, surface)
         local entity = surface.create_entity{name = entityname, position = {center.x, center.y}, force = force}
         local event = {created_entity=entity, player_index=1}
         debugWrite("Creating factory at (" .. center.x .. "," .. center.y .. ")")
-        script.raise_event(defines.events.on_built_entity, event)
+        on_built_event(event)
     end
 end

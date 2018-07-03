@@ -1,6 +1,10 @@
 Version: 0.0.6
+  Changes:
+    - Big Factories are now immune to poison to prevent termite damage
   Bugfixes:
-    - Fixed issue with AAI mod where being able able to find main_product crashes the game 
+    - Fixed issue with AAI and other mods for a recipe format that wasn't accounted for causing game crash
+    - Prevented situations where only loaders spawned and not the factory which was caused by a side effect of interactions with certain mods
+    - Fixed an issue with automatic probability adjustment
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
   Bugfixes:
