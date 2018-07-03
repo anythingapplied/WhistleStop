@@ -127,7 +127,11 @@ local function findSubgroup(recipename)
     if dataRawLookup[product] then
         return dataRawLookup[product].subgroup
     else
-        print("No subgroup found for " .. product)
+        if product then
+            print("No subgroup found for " .. product)
+        else
+            print("No subgroup or product found for " .. recipe.name)
+        end
     end
 end
 
@@ -154,10 +158,10 @@ local function setValues(recipe)
     -- Recipe ingredient adjustment
     recipe.ingredients = setFactorIngredients(recipe.ingredients, factor)
 
-    -- Recipe time adjustment
+    -- Recipe time adjustment, defaulting to .5 if nil
     recipe.energy_required = (recipe.energy_required or 0.5) * factor
 
-    -- Recipe output adjustment
+    -- Recipe output adjustment, defaulting to 1 if nil
     if recipe.result then
         recipe.result_count = (recipe.result_count or 1) * factor
     else
@@ -178,8 +182,6 @@ local function recipeSetup()
         local subgroup = findSubgroup(recipe.name)
         if subgroup then
             recipe.subgroup = subgroup .. "-big"
-        else
-            print("No subgroup found for " .. recipe.name)
         end
         recipe.name = recipe.name .. "-big"
 
@@ -190,13 +192,13 @@ local function recipeSetup()
         -- Big furnace recipes
         if inlist(recipe.category, cat_list1) then
             recipe.category = "big-smelting"
-            data.raw.recipe[recipe.name .. "-big"] = recipe
+            data.raw.recipe[recipe.name] = recipe
 
         -- Big assembly recipes
         -- nil category means the same as "crafting"
         elseif recipe.category == nil or inlist(recipe.category, cat_list2) or inlist(recipe.category, cat_list3) then
             recipe.category = "big-recipe"
-            data.raw.recipe[recipe.name .. "-big"] = recipe
+            data.raw.recipe[recipe.name] = recipe
         end
     end
 end
