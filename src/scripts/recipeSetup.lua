@@ -13,23 +13,23 @@ local maxFluidBox = 1000
 
 -- Lookup table for finding subgroup and stack_size which can be in various locations in data.raw
 local dataRawLookup = {}
-for k,v in pairs(data.raw) do
-    for k2,v2 in pairs(v) do
-        dataRawLookup[k2] = dataRawLookup[k2] or {}
-        if v2.subgroup then
-            dataRawLookup[k2].subgroup = v2.subgroup
+for _, class in pairs(data.raw) do
+    for className, classData in pairs(class) do
+        dataRawLookup[className] = dataRawLookup[className] or {}
+        if classData.subgroup then
+            dataRawLookup[className].subgroup = classData.subgroup
         end
-        if v2.stack_size then
-            dataRawLookup[k2].stack_size = v2.stack_size
+        if classData.stack_size then
+            dataRawLookup[className].stack_size = classData.stack_size
         end
     end
 end
 
 -- Provides the lowest value from factor_list that works
 local function findfactor(min_value)
-    for k,v in pairs(factor_list) do
-        if v <= min_value then
-            return v
+    for _, factor in pairs(factor_list) do
+        if factor <= min_value then
+            return factor
         end
     end
     -- Edge case for some recipes that ALREADY exceed max stack size, such as creative mode mod
@@ -45,41 +45,41 @@ local function getStackSize(item)
 end
 
 -- Figures out max ingredient amount to ensure nothing goes over the max allowable of 65535
-local function maxRecipeAmount(ary)
+local function maxRecipeAmount(ingredients)
     local maxAmount = 0
-    for k,v in pairs(ary) do
-        if v.amount then
-            if v.amount > maxAmount then
-                maxAmount = v.amount
+    for _, ingredient in pairs(ingredients) do
+        if ingredient.amount then
+            if ingredient.amount > maxAmount then
+                maxAmount = ingredient.amount
             end
-        elseif v.amount_max then
-            if v.amount_max > maxAmount then
-                    maxAmount = v.amount_max
+        elseif ingredient.amount_max then
+            if ingredient.amount_max > maxAmount then
+                maxAmount = ingredient.amount_max
             end
-        elseif v[2] then
-            if v[2] > maxAmount then
-                    maxAmount = v[2]
+        elseif ingredient[2] then
+            if ingredient[2] > maxAmount then
+                maxAmount = ingredient[2]
             end
         else
-            print("Recipe with no amount registered " .. inspect(v))
+            print("Recipe with no amount registered " .. inspect(ingredient))
         end
     end
     return maxAmount
 end
 
 -- Figures out max result amount to ensure the machine doesn't try to output more than the stacksize
-local function maxRecipeOutputFactor(ary)
+local function maxRecipeOutputFactor(recipeOutputs)
     local minAmount = factor_list[1]
-    for k,v in pairs(ary) do
-        if v.amount then
-            if v.type == "fluid" then
-                minAmount = math.min(maxFluidBox / v.amount, minAmount)
+    for _, recipeOutput in pairs(recipeOutputs) do
+        if recipeOutput.amount then
+            if recipeOutput.type == "fluid" then
+                minAmount = math.min(maxFluidBox / recipeOutput.amount, minAmount)
             else
-                minAmount = math.min(getStackSize(v.name) / v.amount, minAmount)
+                minAmount = math.min(getStackSize(recipeOutput.name) / recipeOutput.amount, minAmount)
             end
         else
-            if v[2] then
-                minAmount = math.min(getStackSize(v[1]) / v[2], minAmount)
+            if recipeOutput[2] then
+                minAmount = math.min(getStackSize(recipeOutput[1]) / recipeOutput[2], minAmount)
             end
         end
     end
@@ -148,49 +148,55 @@ local function setValues(recipe)
         min_factor2 = maxRecipeOutputFactor(recipe.results)
     end
 
+    -- Final factor used to scale all values of the recipe
     local factor = findfactor(math.min(min_factor1, min_factor2))
 
+    -- Recipe ingredient adjustment
+    recipe.ingredients = setFactorIngredients(recipe.ingredients, factor)
+
+    -- Recipe time adjustment
     recipe.energy_required = (recipe.energy_required or 0.5) * factor
+
+    -- Recipe output adjustment
     if recipe.result then
         recipe.result_count = (recipe.result_count or 1) * factor
     else
         recipe.results = setFactorIngredients(recipe.results, factor)
     end
-    recipe.ingredients = setFactorIngredients(recipe.ingredients, factor)
 end
 
 local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
-    for k,v in pairs(copy(data.raw.recipe)) do
-        if v.normal then --Recipe is split into normal/expensive
-            setValues(v.normal)
-            setValues(v.expensive)
+    for _, recipe in pairs(copy(data.raw.recipe)) do
+        if recipe.normal then -- Recipe is split into normal/expensive
+            setValues(recipe.normal)
+            setValues(recipe.expensive)
         else
-            setValues(v)
+            setValues(recipe)
         end
 
-        local subgroup = findSubgroup(v.name)
+        local subgroup = findSubgroup(recipe.name)
         if subgroup then
-            v.subgroup = subgroup .. "-big"
+            recipe.subgroup = subgroup .. "-big"
         else
-            print("No subgroup found for " .. v.name)
+            print("No subgroup found for " .. recipe.name)
         end
-        v.name = v.name .. "-big"
+        recipe.name = recipe.name .. "-big"
 
         local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
         local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
         local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
 
         -- Big furnace recipes
-        if inlist(v.category, cat_list1) then
-            v.category = "big-smelting"
-            data.raw.recipe[v.name .. "-big"] = v
+        if inlist(recipe.category, cat_list1) then
+            recipe.category = "big-smelting"
+            data.raw.recipe[recipe.name .. "-big"] = recipe
 
         -- Big assembly recipes
         -- nil category means the same as "crafting"
-        elseif v.category == nil or inlist(v.category, cat_list2) or inlist(v.category, cat_list3) then
-            v.category = "big-recipe"
-            data.raw.recipe[v.name .. "-big"] = v
+        elseif recipe.category == nil or inlist(recipe.category, cat_list2) or inlist(recipe.category, cat_list3) then
+            recipe.category = "big-recipe"
+            data.raw.recipe[recipe.name .. "-big"] = recipe
         end
     end
 end
