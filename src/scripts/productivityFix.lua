@@ -2,11 +2,11 @@
 require("luaMacros")
 
 local function productivityFix()
-    for k,v in pairs(data.raw.module) do
-        if v.limitation ~= nil then
-            for k2,v2 in pairs(copy(v.limitation)) do
-                if data.raw.recipe[v2 .. "-big"] ~= nil then
-                    table.insert(v.limitation, v2 .. "-big")
+    for _, module in pairs(data.raw.module) do
+        if module.limitation then
+            for _, allowedRecipe in pairs(copy(module.limitation)) do
+                if data.raw.recipe[allowedRecipe .. "-big"] then
+                    table.insert(module.limitation, allowedRecipe .. "-big")
                 end
             end
         end

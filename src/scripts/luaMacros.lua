@@ -10,9 +10,9 @@ function copy(obj, seen)
 end
 
 -- Checks in val is in the given list
-function inlist(val, scanlist)
+function inlist(value, scanlist)
     for k,v in pairs(scanlist) do
-        if val == v then
+        if value == v then
             return true
         end
     end

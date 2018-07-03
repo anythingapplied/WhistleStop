@@ -1,7 +1,7 @@
 require("luaMacros")
 
 -- Create the item groups for the new big recipes
-function itemGroupSetup()
+local function itemGroupSetup()
     for k,v in pairs(copy(data.raw["item-group"])) do
         v.name = v.name .. "-big"
         v.order = "y" .. v.order
