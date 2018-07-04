@@ -54,34 +54,48 @@ local function distanceOkay(a)
     return true
 end
 
+local function CheckChunk(e)
+    -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
+    game.print("HELLO")
+    local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
+    if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
+        return
+    end
+    
+    -- Chunk center plus random variance so they aren't always chunk aligned
+    local center = {
+        x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
+        y=(e.area.left_top.y+e.area.right_bottom.y)/2 + math.random(-8,8)}
+
+    if not distanceOkay(center) then -- too close to other big structure
+        return
+    end
+
+    global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
+
+    if probability(0.3) then -- Insert fake big factory placeholder to cause more spreading out
+        debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
+        addPoint(center)
+        return
+    end
+
+    spawn(center, e.surface)
+    
+    debugWrite("Spawned " .. global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] .. "/" .. global.whistlestats.valid_chunk_count  .. " with probability " .. prob)
+end
+
+chunkCheckList = {}
 script.on_event(defines.events.on_chunk_generated,
-    function (e)
-        -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
-        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
-        if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
-            return
+    function(e)
+        table.insert(chunkCheckList, e)
+    end
+)
+
+script.on_nth_tick(5,
+    function(e)
+        for i=#chunkCheckList,1,-1 do
+            CheckChunk(table.remove(chunkCheckList, i))
         end
-        
-        -- Chunk center plus random variance so they aren't always chunk aligned
-        local center = {
-            x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
-            y=(e.area.left_top.y+e.area.right_bottom.y)/2 + math.random(-8,8)}
-
-        if not distanceOkay(center) then -- too close to other big structure
-            return
-        end
-
-        global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
-
-        if probability(0.3) then -- Insert fake big factory placeholder to cause more spreading out
-            debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
-            addPoint(center)
-            return
-        end
-
-        spawn(center, e.surface)
-        
-        debugWrite("Spawned " .. global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] .. "/" .. global.whistlestats.valid_chunk_count  .. " with probability " .. prob)
     end
 )
 
