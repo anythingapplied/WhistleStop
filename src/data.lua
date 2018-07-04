@@ -18,7 +18,36 @@ data:extend({
     type = "recipe-category",
     name = "big-smelting"
   },
-   
+
+  -- Big assembly tech for building it
+  {
+    type = "technology",
+    name = "advanced-material-big",
+    icon_size = 128,
+    icon = "__base__/graphics/technology/advanced-material-processing.png",
+    effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "big-furnace"
+      }
+    },
+    prerequisites = {"advanced-material-processing-2"},
+    unit =
+    {
+      count = 300,
+      ingredients =
+      {
+        {"science-pack-1", 1},
+        {"science-pack-2", 1},
+        {"science-pack-3", 1},
+        {"production-science-pack", 1}
+      },
+      time = 30
+    },
+    order = "c-c-b"
+  },
+
   -- Big assembly item definition
   {
     type = "item",
@@ -36,6 +65,35 @@ data:extend({
   {
     type = "recipe-category",
     name = "big-recipe"
+  },
+
+  -- Big assembly tech for building it
+  {
+    type = "technology",
+    name = "automation-big",
+    icon_size = 128,
+    icon = "__base__/graphics/technology/automation.png",
+    effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "big-assembly"
+      }
+    },
+    prerequisites = {"logistics-3"},
+    unit =
+    {
+      count = 450,
+      ingredients =
+      {
+        {"science-pack-1", 1},
+        {"science-pack-2", 1},
+        {"science-pack-3", 1},
+        {"production-science-pack", 1}
+      },
+      time = 60
+    },
+    order = "a-b-c"
   },
 
   })

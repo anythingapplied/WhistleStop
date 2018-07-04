@@ -28,3 +28,10 @@ Suggestions from users and other random ideas that may or may not happen
 - Make structures only destroyable by cliff explosives
 - Lock in some recipes for machines
 - Create whitelist/blacklist for lua surfaces using LuaRemote for other mods to stop these on their mod
+
+Buildable
+X Techs
+- Recipes
+- Settings
+- Localizations 
+Logic for when settings change

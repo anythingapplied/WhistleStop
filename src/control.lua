@@ -56,8 +56,14 @@ end
 
 script.on_event(defines.events.on_chunk_generated,
     function (e)
+
+        -- Ensures generating random factories while exploring is enabled in options
+        if settings.global["whistle-buildable"].value ~= "generate" and settings.global["whistle-buildable"].value ~= "both" then
+            return
+        end
+
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
-        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
+        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 100
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
             return
         end
