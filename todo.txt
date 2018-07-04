@@ -4,7 +4,6 @@ Current Issues
 Potential Improvements
 - Deploy script - Update forums and mod portal with latest version
 - Git tag hook - Run deploy script when git tag in format vX.X.X
-- Test Destructabilty - What situations do biters attack and destroy them before being able to protect them?
 - Test game with Multi-Force PvP games?
 - Item-group hide from players
 - Balancing: Crafting speed, power, pollution, recipe factor
@@ -14,7 +13,7 @@ Potential Improvements
 - Icons for item-group mod support
 - Recipe localization for mods
 - Switch to deepcopy from util
-- Prevent assembly machines from blueprinting? Leaving ghosts?
+- Loader cleanup logic? Just in case entity is destroyed without removing loaders?
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)

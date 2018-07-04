@@ -1,3 +1,7 @@
+Version: 0.0.7
+  Changes:
+    - Big Factories can no longer be deconstructed, blueprinted, or leave a ghost
+---------------------------------------------------------------------------------------------------    
 Version: 0.0.6
   Changes:
     - Big Factories are now immune to poison to prevent termite damage
