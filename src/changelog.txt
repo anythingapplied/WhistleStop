@@ -1,3 +1,9 @@
+Version: 0.0.8
+  Bugfixes:
+    - Fixed issue with Reverse Factory caused by multiple refrences to the same table
+    - Fixed issue with recipes with expensive version but not normal version or vice-versa
+    - Fixed issue where loaders stopped working
+---------------------------------------------------------------------------------------------------        
 Version: 0.0.7
   Changes:
     - Big Factories can no longer be deconstructed, blueprinted, or leave a ghost

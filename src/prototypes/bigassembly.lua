@@ -25,7 +25,7 @@ bigassembly.scale_entity_info_icon = true
 
 bigassembly.create_ghost_on_death = false
 -- Normal flags for assembly machine: {"placeable-neutral", "placeable-player", "player-creation"}
-bigassembly.flags = {"placeable-neutral", "placeable-player", "not-deconstructable", "not-blueprintable"}
+bigassembly.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
 
 table.insert(bigassembly.resistances, {percent=100, type="poison"})  -- Prevent termite damage
 

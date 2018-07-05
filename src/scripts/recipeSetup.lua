@@ -177,6 +177,10 @@ local function setValues(recipe)
     end
 end
 
+local function setValuesAll(recipe)
+
+end
+
 local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
 
@@ -189,10 +193,11 @@ local function recipeSetup()
         if cat == nil or inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
             recipe = util.table.deepcopy(recipeBase)
 
-            if recipe.normal then -- Recipe is split into normal/expensive
-                setValues(recipe.normal)
-                setValues(recipe.expensive)
-            else
+             -- Recipe is split into normal/expensive, one allowed to be blank
+            if recipe.normal or recipe.expensive then
+                if recipe.normal then setValues(recipe.normal) end
+                if recipe.expensive then setValues(recipe.expensive) end
+            elseif (recipe.result or recipe.results) and recipe.ingredients then
                 setValues(recipe)
             end
 

@@ -30,7 +30,7 @@ bigfurnace.source_inventory_size = nil
 bigfurnace.ingredient_count = 1
 
 bigfurnace.create_ghost_on_death = false
-bigfurnace.flags = {"placeable-neutral", "placeable-player", "not-deconstructable", "not-blueprintable"}
+bigfurnace.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
 
 table.insert(bigfurnace.resistances, {percent=100, type="poison"})  -- Prevent termite damage
 
