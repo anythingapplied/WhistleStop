@@ -1,5 +1,7 @@
 Current Issues
 - Entities spawning over ores despite logic to prevent this (ores maybe added after my check via other mods)
+- ReStack mod compatability issue (stack sizes don't change)
+- Reverse Factory mod compatabilityt issue (copper cable ratio wrong)
 
 Potential Improvements
 - Deploy script - Update forums and mod portal with latest version
@@ -28,3 +30,11 @@ Suggestions from users and other random ideas that may or may not happen
 - Make structures only destroyable by cliff explosives
 - Lock in some recipes for machines
 - Create whitelist/blacklist for lua surfaces using LuaRemote for other mods to stop these on their mod
+- Why doesn't iron pipes and a handful of other recipes get hidden when adding "recipe.hidden = true" to recipe creation?
+
+Buildable
+X Techs
+- Recipes
+- Settings
+- Localizations 
+Logic for when settings change
