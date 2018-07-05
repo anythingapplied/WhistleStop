@@ -103,6 +103,17 @@ local function setFactorIngredients(ary, factor)
     return ary
 end
 
+-- Checks all locations for potential main product results
+local function checkForProduct(recipe)
+    if recipe.result then
+        return recipe.result
+    elseif recipe.results and #recipe.results == 1 and recipe.results[1].name then
+        return recipe.results[1].name
+    elseif recipe.results and #recipe.results == 1 and recipe.results[1][1] then
+        return recipe.results[1][1]
+    end
+end
+
 -- Find the subgroup for a given item
 local function findSubgroup(recipename)
     local recipe = data.raw.recipe[recipename]
@@ -112,18 +123,12 @@ local function findSubgroup(recipename)
 
     -- Search all possible locations where the "main product" where recipes inherit their subgroup can be found
     local product
-    if recipe.result then
-        product = recipe.result
-    elseif recipe.results and #recipe.results == 1 and recipe.results[1].name then
-        product = recipe.results[1].name
-    elseif recipe.results and #recipe.results == 1 and recipe.results[1][1] then
-        product = recipe.results[1][1]
-    elseif recipe.normal and recipe.normal.result then
-        product = recipe.normal.result
-    elseif recipe.normal and recipe.normal.results and #recipe.normal.results == 1 and recipe.normal.results[1].name then
-        product = recipe.normal.results[1].name
-    elseif recipe.normal and recipe.normal.results and #recipe.normal.results == 1 and recipe.normal.results[1][1] then
-        product = recipe.normal.results[1][1]
+    if checkForProduct(recipe) then
+        product = checkForProduct(recipe)
+    elseif recipe.normal and checkForProduct(recipe.normal) then
+        product = checkForProduct(recipe.normal)
+    elseif recipe.expensive and checkForProduct(recipe.expensive) then
+        product = checkForProduct(recipe.expensive)
     elseif recipe.main_product then
         product = recipe.main_product
     else

@@ -6,12 +6,14 @@ require("scripts.controlSpawnEvent")
 DEBUG = true -- Used for debug, users should not enable
 local debugCount = 0 -- Stops debugging messages
 local debugMaxCount = 0 -- Maximum debug messages, 0 for infinite
-local debugType = "Screen" -- "File" to output to .log, anything else to output to screen
+local debugType = "Screen" -- "File" to output to a .log file, "Terminal" to output to terminal, anything else to output to in-game console
 
 -- Writes to the final debug output method based on type selection
 local function debugWriteType(text)
     if debugType == "File" then
         game.write_file("whistlestop_debug.log", text, true)
+    elseif debugType == "Terminal" then
+        log(text)
     else
         game.print(text)
     end
