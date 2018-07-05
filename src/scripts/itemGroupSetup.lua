@@ -2,12 +2,12 @@ require("luaMacros")
 
 -- Create the item groups for the new big recipes
 local function itemGroupSetup()
-    for k,v in pairs(copy(data.raw["item-group"])) do
+    for k,v in pairs(util.table.deepcopy(data.raw["item-group"])) do
         v.name = v.name .. "-big"
         v.order = "y" .. v.order
         data.raw["item-group"][k .. "-big"] = v
     end
-    for k,v in pairs(copy(data.raw["item-subgroup"])) do
+    for k,v in pairs(util.table.deepcopy(data.raw["item-subgroup"])) do
         v.name = v.name .. "-big"
         v.group = v.group .. "-big"
         data.raw["item-subgroup"][k .. "-big"] = v

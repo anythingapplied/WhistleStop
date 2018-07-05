@@ -21,7 +21,7 @@ local function techSetup()
     -- Cycles through techs adding unlocks for big recipes versions
     for k,v in pairs(data.raw.technology) do
         if v.effects then
-            techeffects = copy(v.effects)
+            techeffects = util.table.deepcopy(v.effects)
             processTech(k, techeffects)
         end
     end

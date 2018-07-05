@@ -179,34 +179,40 @@ end
 
 local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
-    for _, recipe in pairs(copy(data.raw.recipe)) do
-        if recipe.normal then -- Recipe is split into normal/expensive
-            setValues(recipe.normal)
-            setValues(recipe.expensive)
-        else
-            setValues(recipe)
-        end
 
-        local subgroup = findSubgroup(recipe.name)
-        if subgroup then
-            recipe.subgroup = subgroup .. "-big"
-        end
-        recipe.name = recipe.name .. "-big"
+    local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
+    local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
+    local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
 
-        local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
-        local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
-        local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
+    for _, recipeBase in pairs(data.raw.recipe) do
+        local cat = recipeBase.category
+        if cat == nil or inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
+            recipe = util.table.deepcopy(recipeBase)
 
-        -- Big furnace recipes
-        if inlist(recipe.category, cat_list1) then
-            recipe.category = "big-smelting"
-            data.raw.recipe[recipe.name] = recipe
+            if recipe.normal then -- Recipe is split into normal/expensive
+                setValues(recipe.normal)
+                setValues(recipe.expensive)
+            else
+                setValues(recipe)
+            end
 
-        -- Big assembly recipes
-        -- nil category means the same as "crafting"
-        elseif recipe.category == nil or inlist(recipe.category, cat_list2) or inlist(recipe.category, cat_list3) then
-            recipe.category = "big-recipe"
-            data.raw.recipe[recipe.name] = recipe
+            local subgroup = findSubgroup(recipe.name)
+            if subgroup then
+                recipe.subgroup = subgroup .. "-big"
+            end
+            recipe.name = recipe.name .. "-big"
+
+            -- Big furnace recipes
+            if inlist(recipe.category, cat_list1) then
+                recipe.category = "big-smelting"
+                data.raw.recipe[recipe.name] = recipe
+
+            -- Big assembly recipes
+            -- nil category means the same as "crafting"
+            elseif recipe.category == nil or inlist(recipe.category, cat_list2) or inlist(recipe.category, cat_list3) then
+                recipe.category = "big-recipe"
+                data.raw.recipe[recipe.name] = recipe
+            end
         end
     end
 end

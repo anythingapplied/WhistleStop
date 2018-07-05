@@ -1,7 +1,7 @@
 require("scripts.luaMacros")
 
 -- Big Assembly item specification
-local bigassembly = copy(data.raw["assembling-machine"]["assembling-machine-3"])
+local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
 
 bigassembly.name = "big-assembly"
 bigassembly.icon = "__WhistleStopFactories__/graphics/icons/big-assembly.png"

@@ -1,7 +1,7 @@
 require("scripts.luaMacros")
 
 -- Big furnace item specification
-local bigfurnace = copy(data.raw.furnace["electric-furnace"])
+local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])
 
 bigfurnace.name = "big-furnace"
 
