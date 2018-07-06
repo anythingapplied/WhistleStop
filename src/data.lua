@@ -38,4 +38,9 @@ data:extend({
     name = "big-recipe"
   },
 
+  {
+    type = "recipe-category",
+    name = "big-chem"
+  },
+   
   })

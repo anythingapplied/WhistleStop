@@ -1,6 +1,5 @@
 -- Creates 50x versions of each recipe from selected categories
 require("luaMacros")
-local inspect = require("inspect")
 
 -- List of factors to try in case of ingredient limitations or stacksize limitations, in order of what is tried
 local factor_list = {50, 40, 30, 20, 10, 5, 2, 1}
@@ -40,7 +39,7 @@ local function getStackSize(item)
     if dataRawLookup[item].stack_size then
         return dataRawLookup[item].stack_size
     end
-    print("No stacksize found for " .. item)
+    log("No stacksize found for " .. item)
     return 100
 end
 
@@ -48,20 +47,12 @@ end
 local function maxRecipeAmount(ingredients)
     local maxAmount = 0
     for _, ingredient in pairs(ingredients) do
-        if ingredient.amount then
-            if ingredient.amount > maxAmount then
-                maxAmount = ingredient.amount
-            end
-        elseif ingredient.amount_max then
-            if ingredient.amount_max > maxAmount then
-                maxAmount = ingredient.amount_max
-            end
-        elseif ingredient[2] then
-            if ingredient[2] > maxAmount then
-                maxAmount = ingredient[2]
-            end
+        local amount = ingredient.amount or ingredient.amount_max or ingredient[2]
+
+        if amount then
+            maxAmount = math.max(maxAmount, amount)
         else
-            print("Recipe with no amount registered " .. inspect(ingredient))
+            log("Recipe with no amount registered " .. inspect(ingredient))
         end
     end
     return maxAmount
@@ -93,11 +84,13 @@ local function setFactorIngredients(ary, factor)
             v.amount = v.amount * factor
         elseif v.amount_max then
             v.amount_max = v.amount_max * factor
-            v.amount_min = v.amount_min * factor
+            if v.amount_min then
+                v.amount_min = v.amount_min * factor
+            end
         elseif v[2] then
             v[2] = v[2] * factor
         else
-            print("Recipe with no amount registered " .. inspect(v))
+            log("Recipe with no amount registered " .. inspect(v))
         end
     end
     return ary
@@ -122,17 +115,13 @@ local function findSubgroup(recipename)
     end
 
     -- Search all possible locations where the "main product" where recipes inherit their subgroup can be found
-    local product
-    if checkForProduct(recipe) then
-        product = checkForProduct(recipe)
-    elseif recipe.normal and checkForProduct(recipe.normal) then
-        product = checkForProduct(recipe.normal)
-    elseif recipe.expensive and checkForProduct(recipe.expensive) then
-        product = checkForProduct(recipe.expensive)
-    elseif recipe.main_product then
-        product = recipe.main_product
-    else
-        print("No main product found " .. recipename .. inspect(recipe))
+    local product = checkForProduct(recipe)
+    product = product or checkForProduct(recipe.normal)
+    product = product or checkForProduct(recipe.expensive)
+    product = product or recipe.main_product
+
+    if product == nil then
+        log("No main product found " .. recipename .. inspect(recipe))
         return
     end
 
@@ -140,10 +129,10 @@ local function findSubgroup(recipename)
         return dataRawLookup[product].subgroup
     else
         if product then
-            print("No subgroup found for " .. product)
+            log("No subgroup found for " .. product)
         else
-            print("No subgroup or product found for " .. recipe.name)
-            print(inspect(recipe))
+            log("No subgroup or product found for " .. recipe.name)
+            log(inspect(recipe))
         end
     end
 end
@@ -212,17 +201,22 @@ local function recipeSetup()
             end
             recipe.name = recipe.name .. "-big"
 
+            recipe.category = recipe.category or "crafting" -- blank recipes categories are considered "crafting"
+            
             -- Big furnace recipes
             if inlist(recipe.category, cat_list1) then
                 recipe.category = "big-smelting"
-                data.raw.recipe[recipe.name] = recipe
 
             -- Big assembly recipes
-            -- nil category means the same as "crafting"
-            elseif recipe.category == nil or inlist(recipe.category, cat_list2) or inlist(recipe.category, cat_list3) then
+            elseif inlist(recipe.category, cat_list2) then
                 recipe.category = "big-recipe"
-                data.raw.recipe[recipe.name] = recipe
+            
+            -- Chemical Furnace Recipes, but currently applied to assembling machine too
+            elseif inlist(recipe.category, cat_list3) then
+                recipe.category = "big-chem"
             end
+
+            data.raw.recipe[recipe.name] = recipe
         end
     end
 end

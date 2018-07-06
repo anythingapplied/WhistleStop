@@ -14,7 +14,7 @@ bigassembly.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
 bigassembly.selection_box = {{-8.8, -9}, {8.8, 9}}
 bigassembly.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
 
-bigassembly.crafting_categories = {"big-recipe"}
+bigassembly.crafting_categories = {"big-recipe", "big-chem"}
 bigassembly.crafting_speed = 40
 
 bigassembly.energy_usage = "1500kW"
