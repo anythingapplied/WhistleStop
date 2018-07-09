@@ -1,7 +1,6 @@
 Current Issues
 - Entities spawning over ores despite logic to prevent this (ores maybe added after my check via other mods)
-- ReStack mod compatability issue (stack sizes don't change)
-- Reverse Factory mod compatabilityt issue (copper cable ratio wrong)
+- Spawning with belts only (no factory) if triggering an event also in subteranean mod
 
 Potential Improvements
 - Deploy script - Update forums and mod portal with latest version
@@ -14,8 +13,9 @@ Potential Improvements
 - Compatability with faster loaders
 - Icons for item-group mod support
 - Recipe localization for mods
-- Switch to deepcopy from util
 - Loader cleanup logic? Just in case entity is destroyed without removing loaders?
+- Hide tech unlocks by using hidden techs or using on_tech event to unlock instead
+- CanPlaceEntity function?
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)

@@ -98,18 +98,20 @@ end
 
 -- Checks all locations for potential main product results
 local function checkForProduct(recipe)
-    if recipe.result then
+    if type(recipe) ~= 'table' then
+        return
+    elseif recipe.result then
         return recipe.result
-    elseif recipe.results and #recipe.results == 1 and recipe.results[1].name then
+    elseif type(recipe.results) == 'table' and #recipe.results == 1 and type(recipe.results[1]) == 'table' and recipe.results[1].name then
         return recipe.results[1].name
-    elseif recipe.results and #recipe.results == 1 and recipe.results[1][1] then
+    elseif type(recipe.results) == 'table' and #recipe.results == 1 and type(recipe.results[1]) == 'table' and recipe.results[1][1] then
         return recipe.results[1][1]
     end
 end
 
 -- Find the subgroup for a given item
-local function findSubgroup(recipename)
-    local recipe = data.raw.recipe[recipename]
+local function findSubgroup(recipe)
+    if type(recipe) ~= 'table' then return end
     if recipe.subgroup then
         return recipe.subgroup
     end
@@ -125,20 +127,15 @@ local function findSubgroup(recipename)
         return
     end
 
-    if dataRawLookup[product] then
+    if dataRawLookup[product] and dataRawLookup[product].subgroup then
         return dataRawLookup[product].subgroup
-    else
-        if product then
-            log("No subgroup found for " .. product)
-        else
-            log("No subgroup or product found for " .. recipe.name)
-            log(inspect(recipe))
-        end
     end
+    log("No subgroup found for " .. product)
 end
 
 -- Adjusts counts on all variables by factor.  Does nothing if factor would go over max ingredient amount.
 local function setValues(recipe)
+    if type(recipe) ~= 'table' then return end
     -- Highest factor that would excede the maximum ingredient limit
     local min_factor1 = maxIngredientCount / maxRecipeAmount(recipe.ingredients)
 
@@ -171,10 +168,6 @@ local function setValues(recipe)
     end
 end
 
-local function setValuesAll(recipe)
-
-end
-
 local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
 
@@ -182,41 +175,42 @@ local function recipeSetup()
     local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
     local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
 
-    for _, recipeBase in pairs(data.raw.recipe) do
-        local cat = recipeBase.category
-        if cat == nil or inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
-            recipe = util.table.deepcopy(recipeBase)
-
-             -- Recipe is split into normal/expensive, one allowed to be blank
-            if recipe.normal or recipe.expensive then
-                if recipe.normal then setValues(recipe.normal) end
-                if recipe.expensive then setValues(recipe.expensive) end
-            elseif (recipe.result or recipe.results) and recipe.ingredients then
-                setValues(recipe)
-            end
-
-            local subgroup = findSubgroup(recipe.name)
-            if subgroup then
-                recipe.subgroup = subgroup .. "-big"
-            end
-            recipe.name = recipe.name .. "-big"
-
-            recipe.category = recipe.category or "crafting" -- blank recipes categories are considered "crafting"
+    for _, recipeBase in pairs(util.table.deepcopy(data.raw.recipe)) do
+        if type(recipeBase) == 'table' then
             
-            -- Big furnace recipes
-            if inlist(recipe.category, cat_list1) then
-                recipe.category = "big-smelting"
+            local cat = recipeBase.category or "crafting" -- Blank recipes categories are considered "crafting"
+            if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
+                recipe = util.table.deepcopy(recipeBase)
+                
+                -- Recipe is split into normal/expensive, one allowed to be blank
+                if recipe.normal or recipe.expensive then
+                    if recipe.normal then setValues(recipe.normal) end
+                    if recipe.expensive then setValues(recipe.expensive) end
+                elseif (recipe.result or recipe.results) and recipe.ingredients then
+                    setValues(recipe)
+                end
 
-            -- Big assembly recipes
-            elseif inlist(recipe.category, cat_list2) then
-                recipe.category = "big-recipe"
-            
-            -- Chemical Furnace Recipes, but currently applied to assembling machine too
-            elseif inlist(recipe.category, cat_list3) then
-                recipe.category = "big-chem"
+                local subgroup = findSubgroup(recipe)
+                if subgroup then
+                    recipe.subgroup = subgroup .. "-big"
+                end
+                recipe.name = recipe.name .. "-big"
+                
+                -- Big furnace recipes
+                if inlist(cat, cat_list1) then
+                    recipe.category = "big-smelting"
+
+                -- Big assembly recipes
+                elseif inlist(cat, cat_list2) then
+                    recipe.category = "big-recipe"
+                
+                -- Chemical Furnace Recipes, but currently applied to assembling machine too
+                elseif inlist(cat, cat_list3) then
+                    recipe.category = "big-chem"
+                end
+                
+                data.raw.recipe[recipe.name] = recipe
             end
-
-            data.raw.recipe[recipe.name] = recipe
         end
     end
 end

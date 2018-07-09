@@ -1,4 +1,7 @@
 --checks for spawning validity and if valid, clears space for the spawn
+
+inspect = require("inspect")
+
 local function clearArea(center, surface)
     for y = center.y-8, center.y+8 do --fail if any water in area
         for x = center.x-8, center.x+8 do
@@ -43,7 +46,9 @@ function spawn(center, surface)
         end
         
         global.whistlestats[entityname] = (global.whistlestats[entityname] or 0) + 1
-        local entity = surface.create_entity{name = entityname, position = {center.x, center.y}, force = force}
+        
+        local entity = surface.create_entity{name = entityname, position = center, force = force}
+        
         local event = {created_entity=entity, player_index=1}
         debugWrite("Creating factory at (" .. center.x .. "," .. center.y .. ")")
         on_built_event(event)
