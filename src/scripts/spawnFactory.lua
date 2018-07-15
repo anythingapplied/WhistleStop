@@ -32,23 +32,17 @@ local function clearArea(center, surface)
     return true
 end
 
-function spawn(center, surface)
+function spawn(center, surface, entityname)
     local force = game.forces.player
-    local assembly_to_furnace_ratio = 1.2  -- How many assembly machines you want per furnace spawn
 
-    if clearArea(center, surface) then
+    if surface.can_place_entity{name=entityname, position=center, force=force} and clearArea(center, surface) then
         addPoint(center)
-
-        if probability(1/(1+assembly_to_furnace_ratio)) then
-            entityname = "big-furnace"
-        else
-            entityname = "big-assembly"
-        end
         
         global.whistlestats[entityname] = (global.whistlestats[entityname] or 0) + 1
         
-        local entity = surface.create_entity{name = entityname, position = center, force = force}
-        
+        local entity = surface.create_entity{name=entityname, position=center, force=force}
+        global.whistlestops[entity] = {position=center, type=entityname, entity=entity, surface=surface, loaders={}, distance_factor=math.random()}
+
         local event = {created_entity=entity, player_index=1}
         debugWrite("Creating factory at (" .. center.x .. "," .. center.y .. ")")
         on_built_event(event)

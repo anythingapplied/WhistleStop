@@ -56,8 +56,35 @@ local function distanceOkay(a)
     return true
 end
 
+local function positionRandomMove(position, amount)
+    return {x=position.x + math.random(-amount, amount), y=position.y + math.random(-amount, amount)}
+end
+
+-- The ideal propotions of different kinds of machine for end game
+local goal_proportion = {}
+goal_proportion["buffer"] = 30
+goal_proportion["big-furnace"] = 35
+goal_proportion["big-assembly"] = 35
+goal_proportion["big-refinery"] = 2
+
+-- Offsets to trick the game into thinking your starting amounts of machines are at certain levels.
+-- Higher numbers will push spawning off until more factories are discovered, negative numbers will spawn more earlier
+local initial_boost = {}
+initial_boost["buffer"] = 0
+initial_boost["big-furnace"] = 0
+initial_boost["big-assembly"] = 0
+initial_boost["big-refinery"] = 0
+
+-- Calculate sums of all sets of points for probability calculation
+local total_proportion = 0
+local total_boost = 0
+for k,v in pairs({'buffer', 'big-furnace', 'big-assembly', 'big-refinery'}) do
+    total_proportion = total_proportion + goal_proportion[v]
+    total_boost = total_boost + initial_boost[v]
+end
+
 script.on_event(defines.events.on_chunk_generated,
-    function (e)
+    function(event)
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
         local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
@@ -66,8 +93,8 @@ script.on_event(defines.events.on_chunk_generated,
         
         -- Chunk center plus random variance so they aren't always chunk aligned
         local center = {
-            x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
-            y=(e.area.left_top.y+e.area.right_bottom.y)/2 + math.random(-8,8)}
+            x=(event.area.left_top.x+event.area.right_bottom.x)/2,
+            y=(event.area.left_top.y+event.area.right_bottom.y)/2}
 
         if not distanceOkay(center) then -- too close to other big structure
             return
@@ -75,15 +102,33 @@ script.on_event(defines.events.on_chunk_generated,
 
         global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
 
-        if probability(0.3) then -- Insert fake big factory placeholder to cause more spreading out
-            debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
-            addPoint(center)
-            return
+        -- Calculate sums of all sets of points for probability calculation
+        local total_historical = 0
+        for k,v in pairs({'buffer', 'big-furnace', 'big-assembly', 'big-refinery'}) do
+            total_historical = total_historical + global.whistlestats[v]
         end
 
-        spawn(center, e.surface)
+        -- Tries to make sure you'll have exactly you're ideal target by the time you hit goal_target number of machines
+        -- and uses the distribution of what would need to be spawned between now and then as your probability of spawning each
+        local goal_target = (total_historical + total_boost) + goal_addition
+        local adjusted_probability = {}
+        local adjusted_probability_total = 0
+        for k,v in pairs({'buffer', 'big-furnace', 'big-assembly', 'big-refinery'}) do
+            adjusted_probability[v] = goal_target * goal_proportion[v] / total_proportion - global.whistlestats[v] - initial_boost[v]
+            adjusted_probability_total = adjusted_probability_total + adjusted_probability[v]
+        end
         
-        debugWrite("Spawned " .. global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] .. "/" .. global.whistlestats.valid_chunk_count  .. " with probability " .. prob)
+        local selection_var = math.random()
+        if selector_var <= adjusted_probability["buffer"]/adjusted_probability_total then
+            debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
+            addPoint(center)
+        elseif selector_var <= (adjusted_probability["buffer"] + adjusted_probability["big-furnace"])/adjusted_probability_total then
+            spawn(positionRandomMove(center, 7) , e.surface, "big-furnace")
+        elseif selector_var <= (adjusted_probability["buffer"] + adjusted_probability["big-furnace"] + adjusted_probability["big-assembly"])/adjusted_probability_total then
+            spawn(positionRandomMove(center, 7), e.surface, "big-assembly")
+        else
+            spawn(positionRandomMove(center, 2), e.surface, "big-refinery")
+        end
     end
 )
 
@@ -93,11 +138,28 @@ script.on_init(
         
         -- Tracks location of big factory and or buffer locations, starting with a buffer location at spawn
         global.whistlelocations = {{x=0, y=0, mindist=2 * settings.global["whistle-min-distance"].value}}
+        global.whistlestops = {}
 
         -- Stat Tracking
         global.whistlestats = {}
+        global.whistlestats["buffer"] = 0
         global.whistlestats["big-furnace"] = 0
         global.whistlestats["big-assembly"] = 0
+        global.whistlestats["big-refinery"] = 0
         global.whistlestats.valid_chunk_count = 0
     end
+)
+
+script.on_nth_tick(10*60, 
+    function(event)
+        for k,v in pairs(global.whistlestops) do
+            if not v.entity.valid then
+                clean_up(v.surface, v.position)
+            end
+        end
+    end
+)
+
+script.on_configuration_changed(
+    function 
 )

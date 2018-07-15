@@ -1,13 +1,24 @@
+Version: 0.1.0
+  Changes:
+    ? Added Oil Refinery
+    ? Change ratio of spawning to change over time starting with more assemblers
+    ? Made min-distance setting more dynamic so that it will even affect distance from existing buildings
+  Bugfixes:
+    - Fixed issue where factories could spawn on the edge of a chunk
+    - Added more edge-case testing to avoid crashes from bad data from other mods
+    ? Added additional logic to further avoid spawning over ores
+    ? Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
+---------------------------------------------------------------------------------------------------
 Version: 0.0.8
   Bugfixes:
     - Fixed issue with Reverse Factory caused by multiple refrences to the same table
     - Fixed issue with recipes with expensive version but not normal version or vice-versa
     - Fixed issue where loaders stopped working
----------------------------------------------------------------------------------------------------        
+---------------------------------------------------------------------------------------------------
 Version: 0.0.7
   Changes:
     - Big Factories can no longer be deconstructed, blueprinted, or leave a ghost
----------------------------------------------------------------------------------------------------    
+---------------------------------------------------------------------------------------------------
 Version: 0.0.6
   Changes:
     - Big Factories are now immune to poison to prevent termite damage

@@ -7,6 +7,7 @@ local function placeLoader(entity, position, type, direction)
 	local loader = ce{name="express-loader", position=position, force=fN, type=type, direction=direction}
 	loader.destructible = false
 	loader.minable = false
+	table.insert(global.whistlestops[entity].loaders, loader)
 end
 
 function on_built_event(event)
@@ -49,14 +50,21 @@ script.on_event(defines.events.on_built_entity, on_built_event)
 script.on_event(defines.events.on_robot_built_entity, on_built_event)
 script.on_event(defines.events.script_raised_built, on_built_event)
 
+-- Removed the loaders
+function clean_up(surface, center)
+	debugWrite("Cleaning up big factory loaders at " .. center.x .. "," .. center.y)
+	local area = {{center.x-8.8, center.y-8.8}, {center.x+8.8, center.y+8.8}}
+	for _, entity in pairs(surface.find_entities_filtered{area=area, name="express-loader"}) do
+		if not entity.destructible and not entity.minable then
+			entity.destroy()
+		end
+	end
+end
+
 -- Destroying a big assembly machine
 local function on_destroy_event(event)
 	if event.entity.name == "big-furnace" or event.entity.name == "big-assembly" then
-		local center = event.entity.position
-		local area = {{center.x-8.8, center.y-8.8}, {center.x+8.8, center.y+8.8}}
-		for _, entity in pairs(event.entity.surface.find_entities_filtered{area=area, name="express-loader"}) do
-			entity.destroy()
-		end
+		clean_up(event.entity.surface, event.entity.position)
 	end	
 end
 

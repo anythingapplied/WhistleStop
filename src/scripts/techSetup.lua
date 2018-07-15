@@ -9,11 +9,12 @@ local function techSetup()
             local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
             local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
             local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
+            local cat_list4 = data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"]
             
             for _, effect in pairs(techeffects) do
                 if type(effect) == 'table' and effect.type == "unlock-recipe" then
                     cat = data.raw.recipe[effect.recipe].category or "crafting"
-                    if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
+                    if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) or inlist(cat, cat_list4) then
                         table.insert(data.raw.technology[k].effects, {recipe=effect.recipe .. "-big", type="unlock-recipe"})
                     end
                 end

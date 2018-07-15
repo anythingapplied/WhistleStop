@@ -42,5 +42,24 @@ data:extend({
     type = "recipe-category",
     name = "big-chem"
   },
+  
+  -- Big refinery item definition
+  {
+    type = "item",
+    name = "big-refinery",
+    icon = "__base__/graphics/icons/oil-refinery.png",
+    icon_size = 32,
+    flags = {"goes-to-quickbar"},
+    subgroup = "production-machine",
+    order = "d[refinery]",
+    place_result = "big-assembly",
+    stack_size = 10
+  },
+
+  -- Big refinery recipe category
+  {
+    type = "recipe-category",
+    name = "big-refinery"
+  },
    
   })

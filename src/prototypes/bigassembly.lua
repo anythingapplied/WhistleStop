@@ -6,7 +6,7 @@ local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembli
 bigassembly.name = "big-assembly"
 bigassembly.icon = "__WhistleStopFactories__/graphics/icons/big-assembly.png"
 
-bigassembly.minable = nil
+bigassembly.minable = {hardness = 0, minable = false, mining_time = 0}
 bigassembly.fast_replaceable_group = nil
 bigassembly.dying_explosion = "big-explosion"
 
@@ -26,7 +26,7 @@ bigassembly.scale_entity_info_icon = true
 bigassembly.create_ghost_on_death = false
 -- Normal flags for assembly machine: {"placeable-neutral", "placeable-player", "player-creation"}
 bigassembly.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-
+table.insert(bigassembly.collision_mask, "resource-layer")
 table.insert(bigassembly.resistances, {percent=100, type="poison"})  -- Prevent termite damage
 
 local function fluidBox(type, position)
@@ -68,4 +68,4 @@ for k,v in pairs(bigassembly.animation.layers) do
     bumpUp(v.hr_version, 3)
 end
 
-data.raw["assembling-machine"]["big-assembly"] = bigassembly
+data.raw["assembling-machine"][bigassembly.name] = bigassembly

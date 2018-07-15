@@ -4,10 +4,9 @@ require("scripts.luaMacros")
 local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])
 
 bigfurnace.name = "big-furnace"
-
 bigfurnace.icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
 
-bigfurnace.minable = nil
+bigfurnace.minable = {hardness = 0, minable = false, mining_time = 0}
 bigfurnace.fast_replaceable_group = nil
 bigfurnace.dying_explosion = "big-explosion"
 
@@ -17,7 +16,7 @@ bigfurnace.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
 
 bigfurnace.crafting_categories = {"big-smelting"}
 bigfurnace.crafting_speed = 100
-bigfurnace.result_inventory_size = 2
+
 bigfurnace.energy_usage = "2000kW"
 bigfurnace.module_specification.module_slots = 6
 bigfurnace.map_color = {r=199, g=103, b=247}
@@ -31,7 +30,7 @@ bigfurnace.ingredient_count = 1
 
 bigfurnace.create_ghost_on_death = false
 bigfurnace.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-
+table.insert(bigfurnace.collision_mask, "resource-layer")
 table.insert(bigfurnace.resistances, {percent=100, type="poison"})  -- Prevent termite damage
 
 -- Scale graphics by a factor and correct animation speed
@@ -57,4 +56,4 @@ for k,v in pairs(bigfurnace.working_visualisations) do
     v.animation.hr_version.shift[2] = v.animation.hr_version.shift[2] * 2 - .5
 end
 
-data.raw["assembling-machine"]["big-furnace"] = bigfurnace
+data.raw["assembling-machine"][bigfurnace.name] = bigfurnace

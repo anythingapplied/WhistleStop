@@ -2,7 +2,17 @@ Current Issues
 - Entities spawning over ores despite logic to prevent this (ores maybe added after my check via other mods)
 - Spawning with belts only (no factory) if triggering an event also in subteranean mod
 
+Notes from 0.17 preview list:
+- energy_source = "void" - Make mod that completely removes power?
+- no-inserter-pickup/no-inserter-dropoff for big machines?
+
 Potential Improvements
+- GRID ALIGN to train tracks
+- Stop Blueprinting loaders
+- Set map icon?
+resource layer collisions?
+rotation with loaders?
+
 - Deploy script - Update forums and mod portal with latest version
 - Git tag hook - Run deploy script when git tag in format vX.X.X
 - Test game with Multi-Force PvP games?
@@ -16,6 +26,11 @@ Potential Improvements
 - Loader cleanup logic? Just in case entity is destroyed without removing loaders?
 - Hide tech unlocks by using hidden techs or using on_tech event to unlock instead
 - CanPlaceEntity function?
+- Animation
+    - Get rid of animation will let me use higher resolution since max rez is size of sprite sheet
+    - Also would further increase UPS/FPS
+- Destroy loaders based on list?
+
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)

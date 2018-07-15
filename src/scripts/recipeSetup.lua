@@ -174,12 +174,13 @@ local function recipeSetup()
     local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
     local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
     local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
+    local cat_list4 = data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"]
 
     for _, recipeBase in pairs(util.table.deepcopy(data.raw.recipe)) do
         if type(recipeBase) == 'table' then
             
             local cat = recipeBase.category or "crafting" -- Blank recipes categories are considered "crafting"
-            if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
+            if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) or inlist(cat, cat_list4) then
                 recipe = util.table.deepcopy(recipeBase)
                 
                 -- Recipe is split into normal/expensive, one allowed to be blank
@@ -204,9 +205,13 @@ local function recipeSetup()
                 elseif inlist(cat, cat_list2) then
                     recipe.category = "big-recipe"
                 
-                -- Chemical Furnace Recipes, but currently applied to assembling machine too
+                -- Chemical furnace recipes, but currently applied to big assembling machine
                 elseif inlist(cat, cat_list3) then
                     recipe.category = "big-chem"
+
+                -- Oil refinery recipes
+                elseif inlist(cat, cat_list4) then
+                    recipe.category = "big-oil"
                 end
                 
                 data.raw.recipe[recipe.name] = recipe
