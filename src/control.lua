@@ -161,5 +161,7 @@ script.on_nth_tick(10*60,
 )
 
 script.on_configuration_changed(
-    function 
+    function(configData)
+
+    end
 )

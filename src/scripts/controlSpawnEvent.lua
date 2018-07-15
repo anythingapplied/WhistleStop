@@ -6,7 +6,7 @@ local function placeLoader(entity, position, type, direction)
 
 	local loader = ce{name="express-loader", position=position, force=fN, type=type, direction=direction}
 	loader.destructible = false
-	loader.minable = false
+	loader.minable = {hardness = 0, minable = false, mining_time = 0}
 	table.insert(global.whistlestops[entity].loaders, loader)
 end
 
