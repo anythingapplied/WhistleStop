@@ -52,7 +52,7 @@ data:extend({
     flags = {"goes-to-quickbar"},
     subgroup = "production-machine",
     order = "d[refinery]",
-    place_result = "big-assembly",
+    place_result = "big-refinery",
     stack_size = 10
   },
 
@@ -61,5 +61,17 @@ data:extend({
     type = "recipe-category",
     name = "big-refinery"
   },
-   
+
+  -- Big loader item definition
+  {
+    type = "item",
+    name = "express-loader-big",
+    icon = "__base__/graphics/icons/express-loader.png",
+    icon_size = 32,
+    flags = {"goes-to-quickbar", "hidden"},
+    subgroup = "belt",
+    order = "d[loader]-c[express-loader-big]",
+    place_result = "express-loader-big",
+    stack_size = 50
+  },
   })

@@ -6,8 +6,11 @@ require("prototypes.bigfurnace")
 -- Big Assembly prototype definition
 require("prototypes.bigassembly")
 
--- Big Assembly prototype definition
+-- Big Refinery prototype definition
 require("prototypes.bigrefinery")
+
+-- Big Loader prototype definition
+require("prototypes.bigloader")
 
 -- Creates 50x versions of each recipe from selected categories
 require("scripts.recipeSetup")

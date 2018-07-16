@@ -1,12 +1,10 @@
-require("scripts.luaMacros")
-
--- Big furnace item specification
+-- Big furnace prototype definition
 local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])
 
 bigfurnace.name = "big-furnace"
 bigfurnace.icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
 
-bigfurnace.minable = {hardness = 0, minable = false, mining_time = 0}
+bigfurnace.minable = nil
 bigfurnace.fast_replaceable_group = nil
 bigfurnace.dying_explosion = "big-explosion"
 
@@ -30,6 +28,7 @@ bigfurnace.ingredient_count = 1
 
 bigfurnace.create_ghost_on_death = false
 bigfurnace.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
+bigfurnace.collision_mask = bigfurnace.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
 table.insert(bigfurnace.collision_mask, "resource-layer")
 table.insert(bigfurnace.resistances, {percent=100, type="poison"})  -- Prevent termite damage
 

@@ -2,6 +2,8 @@
 require("scripts.spawnFactory")
 -- Handles big machine spawn events with its loaders
 require("scripts.controlSpawnEvent")
+-- Selects next spawn type using probability distribution
+chooseNextSpawnType = require("scripts.chooseNextSpawnType")
 
 DEBUG = true -- Used for debug, users should not enable
 local debugCount = 0 -- Stops debugging messages
@@ -31,25 +33,21 @@ function debugWrite(text)
     end
 end
 
--- Registers a new location of a big factory or buffer location with a random minimum distance threshhold
-function addPoint(center)
-    local minSetting = settings.global["whistle-min-distance"].value
-    table.insert(global.whistlelocations, {x=center.x, y=center.y, mindist=math.random(minSetting, 2*minSetting)})
-end
-
 -- Function that will return true 'percent' of the time.
 function probability(percent)
     return math.random() <= percent
 end
 
 -- Returns true if no big structures within minimum distance threshholds
-local function distanceOkay(a)
-    for k,v in pairs(global.whistlelocations) do
-        if v.mindist == nil then
-            local minSetting = settings.global["whistle-min-distance"].value
-            v.mindist = math.random(minSetting, 2*minSetting)
+local function distanceOkay(point)
+    local minSetting = settings.global["whistle-min-distance"].value
+    for k,v in pairs(global.bufferpoints) do
+        if (point.x - v.position.x)^2 + (point.y - v.position.y) < (minSetting * (1 + v.distance_factor))^2 then
+            return false
         end
-        if (a.x-v.x)^2 + (a.y-v.y)^2 < v.mindist^2 then
+    end
+    for k,v in pairs(global.whistlestops) do
+        if (point.x - v.position.x)^2 + (point.y - v.position.y) < (minSetting * (1 + v.distance_factor))^2 then
             return false
         end
     end
@@ -60,31 +58,8 @@ local function positionRandomMove(position, amount)
     return {x=position.x + math.random(-amount, amount), y=position.y + math.random(-amount, amount)}
 end
 
--- The ideal propotions of different kinds of machine for end game
-local goal_proportion = {}
-goal_proportion["buffer"] = 30
-goal_proportion["big-furnace"] = 35
-goal_proportion["big-assembly"] = 35
-goal_proportion["big-refinery"] = 2
-
--- Offsets to trick the game into thinking your starting amounts of machines are at certain levels.
--- Higher numbers will push spawning off until more factories are discovered, negative numbers will spawn more earlier
-local initial_boost = {}
-initial_boost["buffer"] = 0
-initial_boost["big-furnace"] = 0
-initial_boost["big-assembly"] = 0
-initial_boost["big-refinery"] = 0
-
--- Calculate sums of all sets of points for probability calculation
-local total_proportion = 0
-local total_boost = 0
-for k,v in pairs({'buffer', 'big-furnace', 'big-assembly', 'big-refinery'}) do
-    total_proportion = total_proportion + goal_proportion[v]
-    total_boost = total_boost + initial_boost[v]
-end
-
 script.on_event(defines.events.on_chunk_generated,
-    function(event)
+    function (event)
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
         local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
@@ -100,44 +75,23 @@ script.on_event(defines.events.on_chunk_generated,
             return
         end
 
-        global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
-
-        -- Calculate sums of all sets of points for probability calculation
-        local total_historical = 0
-        for k,v in pairs({'buffer', 'big-furnace', 'big-assembly', 'big-refinery'}) do
-            total_historical = total_historical + global.whistlestats[v]
-        end
-
-        -- Tries to make sure you'll have exactly you're ideal target by the time you hit goal_target number of machines
-        -- and uses the distribution of what would need to be spawned between now and then as your probability of spawning each
-        local goal_target = (total_historical + total_boost) + goal_addition
-        local adjusted_probability = {}
-        local adjusted_probability_total = 0
-        for k,v in pairs({'buffer', 'big-furnace', 'big-assembly', 'big-refinery'}) do
-            adjusted_probability[v] = goal_target * goal_proportion[v] / total_proportion - global.whistlestats[v] - initial_boost[v]
-            adjusted_probability_total = adjusted_probability_total + adjusted_probability[v]
-        end
-        
-        local selection_var = math.random()
-        if selector_var <= adjusted_probability["buffer"]/adjusted_probability_total then
+        local nextSpawnType = chooseNextSpawnType()
+        if nextSpawnType == "buffer" then
             debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
-            addPoint(center)
-        elseif selector_var <= (adjusted_probability["buffer"] + adjusted_probability["big-furnace"])/adjusted_probability_total then
-            spawn(positionRandomMove(center, 7) , e.surface, "big-furnace")
-        elseif selector_var <= (adjusted_probability["buffer"] + adjusted_probability["big-furnace"] + adjusted_probability["big-assembly"])/adjusted_probability_total then
-            spawn(positionRandomMove(center, 7), e.surface, "big-assembly")
+            table.insert(global.bufferpoints, {position=center, distance_factor=math.random()})
         else
-            spawn(positionRandomMove(center, 2), e.surface, "big-refinery")
+            debugWrite("Creating " .. nextSpawnType .." point close to (" .. center.x .. "," .. center.y .. ")")
+            spawn(center, event.surface, nextSpawnType)
         end
     end
 )
 
 script.on_init(
-    function()
+    function ()
         math.randomseed(game.surfaces[1].map_gen_settings.seed) --set the random seed to the map seed, so ruins are the same-ish with each generation.
         
         -- Tracks location of big factory and or buffer locations, starting with a buffer location at spawn
-        global.whistlelocations = {{x=0, y=0, mindist=2 * settings.global["whistle-min-distance"].value}}
+        global.bufferpoints = {{position={x=0, y=0}, distance_factor=1}}
         global.whistlestops = {}
 
         -- Stat Tracking
@@ -151,7 +105,7 @@ script.on_init(
 )
 
 script.on_nth_tick(10*60, 
-    function(event)
+    function (event)
         for k,v in pairs(global.whistlestops) do
             if not v.entity.valid then
                 clean_up(v.surface, v.position)
@@ -161,7 +115,7 @@ script.on_nth_tick(10*60,
 )
 
 script.on_configuration_changed(
-    function(configData)
+    function (configData)
 
     end
 )

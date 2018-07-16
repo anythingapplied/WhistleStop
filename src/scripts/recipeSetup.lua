@@ -98,20 +98,20 @@ end
 
 -- Checks all locations for potential main product results
 local function checkForProduct(recipe)
-    if type(recipe) ~= 'table' then
+    if type(recipe) ~= "table" then
         return
     elseif recipe.result then
         return recipe.result
-    elseif type(recipe.results) == 'table' and #recipe.results == 1 and type(recipe.results[1]) == 'table' and recipe.results[1].name then
+    elseif type(recipe.results) == "table" and #recipe.results == 1 and type(recipe.results[1]) == "table" and recipe.results[1].name then
         return recipe.results[1].name
-    elseif type(recipe.results) == 'table' and #recipe.results == 1 and type(recipe.results[1]) == 'table' and recipe.results[1][1] then
+    elseif type(recipe.results) == "table" and #recipe.results == 1 and type(recipe.results[1]) == "table" and recipe.results[1][1] then
         return recipe.results[1][1]
     end
 end
 
 -- Find the subgroup for a given item
 local function findSubgroup(recipe)
-    if type(recipe) ~= 'table' then return end
+    if type(recipe) ~= "table" then return end
     if recipe.subgroup then
         return recipe.subgroup
     end
@@ -135,7 +135,7 @@ end
 
 -- Adjusts counts on all variables by factor.  Does nothing if factor would go over max ingredient amount.
 local function setValues(recipe)
-    if type(recipe) ~= 'table' then return end
+    if type(recipe) ~= "table" then return end
     -- Highest factor that would excede the maximum ingredient limit
     local min_factor1 = maxIngredientCount / maxRecipeAmount(recipe.ingredients)
 
@@ -177,7 +177,7 @@ local function recipeSetup()
     local cat_list4 = data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"]
 
     for _, recipeBase in pairs(util.table.deepcopy(data.raw.recipe)) do
-        if type(recipeBase) == 'table' then
+        if type(recipeBase) == "table" then
             
             local cat = recipeBase.category or "crafting" -- Blank recipes categories are considered "crafting"
             if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) or inlist(cat, cat_list4) then
@@ -211,7 +211,7 @@ local function recipeSetup()
 
                 -- Oil refinery recipes
                 elseif inlist(cat, cat_list4) then
-                    recipe.category = "big-oil"
+                    recipe.category = "big-refinery"
                 end
                 
                 data.raw.recipe[recipe.name] = recipe
