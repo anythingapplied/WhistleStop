@@ -9,5 +9,5 @@
         "homepage": "https://forums.factorio.com/viewtopic.php?t=61205",
         "contact": "n/a",
         "description": "Spawns massive furnaces and assembly machines around the map to make the game all building trains to connect them",
-        "dependencies": ["base >= 0.16"] }
+        "dependencies": ["base >= 0.16", "? rso-mod"] }
 }

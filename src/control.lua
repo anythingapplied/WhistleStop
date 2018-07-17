@@ -1,12 +1,17 @@
 local inspect = require("inspect")
+
 -- Provides spawn function which checks for valid spawn location and requests spawning
 require("scripts.spawnFactory")
+
 -- Handles big machine spawn events with its loaders
 require("scripts.controlSpawnEvent")
--- Misc helper functions
-require("scripts.luaMacros")
+
 -- Selects next spawn type using probability distribution
 chooseNextSpawnType = require("scripts.chooseNextSpawnType")
+
+-- Contains migration function for game and global variables
+require("scripts.migrations")
+
 
 DEBUG = true -- Used for debug, users should not enable
 local debugCount = 0 -- Stops debugging messages
@@ -42,46 +47,44 @@ function probability(percent)
 end
 
 -- Returns true if no big structures within minimum distance threshholds
-local function distanceOkay(point)
+local function distanceOkay(point, surface_index)
     local minSetting = settings.global["whistle-min-distance"].value
     for k,v in pairs(global.bufferpoints) do
-        if (point.x - v.position.x)^2 + (point.y - v.position.y) < (minSetting * (1 + v.distance_factor))^2 then
-            return false
-        end
-    end
-    for k,v in pairs(global.whistlestops) do
-        if (point.x - v.position.x)^2 + (point.y - v.position.y) < (minSetting * (1 + v.distance_factor))^2 then
-            return false
+        if surface_index == v.surface_index then
+            if (point.x - v.position.x)^2 + (point.y - v.position.y)^2 < (minSetting * (1 + v.distance_factor))^2 then
+                return false
+            end
         end
     end
     return true
 end
 
-local function positionRandomMove(position, amount)
-    return {x=position.x + math.random(-amount, amount), y=position.y + math.random(-amount, amount)}
-end
-
 script.on_event(defines.events.on_chunk_generated,
     function (event)
+        if event.surface.index ~= 1 then  -- Only spawn on normal surface
+            return
+        end
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
         local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
             return
         end
+
+        global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
         
-        -- Chunk center plus random variance so they aren't always chunk aligned
+        -- Chunk center
         local center = {
             x=(event.area.left_top.x+event.area.right_bottom.x)/2,
             y=(event.area.left_top.y+event.area.right_bottom.y)/2}
 
-        if not distanceOkay(center) then -- too close to other big structure
+        if not distanceOkay(center, event.surface.index) then -- too close to other big structure
             return
         end
 
         local nextSpawnType = chooseNextSpawnType()
         if nextSpawnType == "buffer" then
             debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
-            table.insert(global.bufferpoints, {position=center, distance_factor=math.random()})
+            table.insert(global.bufferpoints, {position=center, surface_index=event.surface.index, distance_factor=math.random()})
         else
             debugWrite("Attempting " .. nextSpawnType .." point close to (" .. center.x .. "," .. center.y .. ")")
             spawn(center, event.surface, nextSpawnType)
@@ -94,17 +97,16 @@ script.on_init(
         math.randomseed(game.surfaces[1].map_gen_settings.seed) --set the random seed to the map seed, so ruins are the same-ish with each generation.
         
         -- Tracks location of big factory and or buffer locations, starting with a buffer location at spawn
-        global.bufferpoints = {{position={x=0, y=0}, distance_factor=1}}
+        global.bufferpoints = {{position={x=0, y=0}, surfaces=game.surfaces["nauvis"].index, distance_factor=1}}
         global.whistlestops = {}
         -- Specification:
-        -- position=center
-        -- type=entityname
-        -- entity=entity
-        -- surface=surface
-        -- distance_factor=math.random()
-        -- direction=entity.direction
-        -- recipe=current recipe name
-        -- tag=tag_number
+            -- position=center
+            -- type=entityname
+            -- entity=entity
+            -- surface=surface
+            -- direction=entity.direction
+            -- recipe=current recipe name
+            -- tag=tag_number
 
         -- Stat Tracking
         global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count = 0}
@@ -120,7 +122,6 @@ script.on_nth_tick(6*60,
                 clean_up(v.surface, v.position)
                 global.whistlestops[k] = nil
             end
-            
 
             -- Creates tag for entities that have a set recipe
             local recipe = v.entity.get_recipe()
@@ -154,6 +155,9 @@ script.on_nth_tick(6*60,
 
 script.on_configuration_changed(
     function (configData)
-
+        old_version = split(configData.mod_changes[script.mod_name].old_version, ".")
+        if old_version[2] <= 0 then
+            migration_to_1()
+        end
     end
 )

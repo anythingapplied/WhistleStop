@@ -45,7 +45,8 @@ function spawn(center, surface, entityname)
         global.whistlestats[entityname] = global.whistlestats[entityname] + 1
         
         local entity = surface.create_entity{name=entityname, position=center, force=force}
-        table.insert(global.whistlestops, {position=center, type=entityname, entity=entity, surface=surface, distance_factor=math.random(), direction=entity.direction, recipe=nil, tag=nil})
+        table.insert(global.whistlestops, {position=center, type=entityname, entity=entity, surface=surface, direction=entity.direction, recipe=nil, tag=nil})
+        table.insert(global.bufferpoints, {position=center, surface_index=surface.index, distance_factor=math.random()})
 
         local event = {created_entity=entity, player_index=1}
         debugWrite("Creating factory at (" .. center.x .. "," .. center.y .. ")")

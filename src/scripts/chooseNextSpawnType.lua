@@ -7,7 +7,7 @@
 
 building_list = {"buffer", "big-furnace", "big-assembly", "big-refinery"}
 -- The ideal propotions of different kinds of machine for end game
-local goal_proportion = {["buffer"] = 30, ["big-furnace"] = 35, ["big-assembly"] = 35, ["big-refinery"] = 200}
+local goal_proportion = {["buffer"] = 30, ["big-furnace"] = 35, ["big-assembly"] = 35, ["big-refinery"] = 2}
 
 -- Offsets to trick the game into thinking your starting amounts of machines are at certain levels.
 -- Higher numbers will push spawning off until more factories are discovered, negative numbers will spawn more earlier

@@ -1,16 +1,18 @@
 Version: 0.1.0
   Changes:
     - Added Oil Refinery (rare)
-    - Tags with item icons added to map when setting recipes
-    - Big factories now spawn on the 2x2 grid to match blueprints with rails
+    - Setting recipes now automatically creates map tags with the item's icon
+    - Big factories now spawn on the 2x2 grid to match blueprints that have rails
     - Loaders now rotate with big factories (added always-on pipes to make this work)
-    ? Change ratio of spawning to change over time starting with more assemblers
-    ? Made min-distance setting more dynamic so that it will even affect distance from existing buildings
+    - Limit spawning to the normal surface
+    - Change ratio of spawning to change over time. First two spawns are furnances, but then the game focuses on assemblers
+      until eventually finding a balance
+    - Made min-distance setting more dynamic so that it will even affect distance from existing buildings
   Bugfixes:
     - Fixed issue where factories could spawn on the edge of a chunk
     - Added more edge-case testing to avoid crashes from bad data from other mods
-    ? Added additional logic to further avoid spawning over ores
-    ? Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
+    - Added additional logic to further avoid spawning over ores
+    - Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
     - Loaders no longer in blueprints 
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
