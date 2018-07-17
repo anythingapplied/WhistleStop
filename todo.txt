@@ -1,7 +1,8 @@
 Current Issues
 - Entities spawning over ores despite logic to prevent this (ores maybe added after my check via other mods)
 - Spawning with belts only (no factory) if triggering an event also in subteranean mod
-
+- Direction on loaders for rotation
+- Stop clean up after first time
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?
 - no-inserter-pickup/no-inserter-dropoff for big machines?
@@ -12,6 +13,7 @@ Potential Improvements
 - Set map icon?
 resource layer collisions?
 rotation with loaders?
+- Transport belts instead of destroy/recreate?
 
 - Deploy script - Update forums and mod portal with latest version
 - Git tag hook - Run deploy script when git tag in format vX.X.X

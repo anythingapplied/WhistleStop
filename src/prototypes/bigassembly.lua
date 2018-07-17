@@ -50,7 +50,7 @@ bigassembly.fluid_boxes = {
     fluidBox("input", {-9, -1}),
     fluidBox("output", {9, 1}),
     fluidBox("output", {-1, 9}),
-    off_when_no_fluid_recipe = true
+    -- off_when_no_fluid_recipe = true -- Allows for rotation
 }
 
 -- Scale graphics by a factor and correct animation speed

@@ -1,8 +1,9 @@
 Version: 0.1.0
   Changes:
-    - Added Oil Refinery (Very rare)
-    - Tags added to map when setting recipes
-    ? Loaders now rotate with big factories
+    - Added Oil Refinery (rare)
+    - Tags with item icons added to map when setting recipes
+    - Big factories now spawn on the 2x2 grid to match blueprints with rails
+    - Loaders now rotate with big factories (added always-on pipes to make this work)
     ? Change ratio of spawning to change over time starting with more assemblers
     ? Made min-distance setting more dynamic so that it will even affect distance from existing buildings
   Bugfixes:

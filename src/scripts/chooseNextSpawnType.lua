@@ -7,19 +7,11 @@
 
 building_list = {"buffer", "big-furnace", "big-assembly", "big-refinery"}
 -- The ideal propotions of different kinds of machine for end game
-local goal_proportion = {}
-goal_proportion["buffer"] = 30
-goal_proportion["big-furnace"] = 35
-goal_proportion["big-assembly"] = 35
-goal_proportion["big-refinery"] = 2
+local goal_proportion = {["buffer"] = 30, ["big-furnace"] = 35, ["big-assembly"] = 35, ["big-refinery"] = 200}
 
 -- Offsets to trick the game into thinking your starting amounts of machines are at certain levels.
 -- Higher numbers will push spawning off until more factories are discovered, negative numbers will spawn more earlier
-local initial_boost = {}
-initial_boost["buffer"] = 0
-initial_boost["big-furnace"] = 0
-initial_boost["big-assembly"] = -30
-initial_boost["big-refinery"] = 2
+local initial_boost = {["buffer"] = 0, ["big-furnace"] = 0, ["big-assembly"] = -30, ["big-refinery"] = 2}
 
 -- Calculate sums of all sets of points for probability calculation
 local total_proportion = 0
@@ -30,7 +22,7 @@ for k,v in pairs(building_list) do
 end
 
 local function chooseNextSpawnType()
-    if global.whistlestats["big-furnace"] < 2 then  -- First two spawns will be furnances, for convience
+    if global.whistlestats["big-furnace"] < 2 then  -- First two spawns will be furnaces, for convience
         return "big-furnace"
     end
     
@@ -58,8 +50,7 @@ local function chooseNextSpawnType()
             return v
         end
     end
-    log()
-    return "buffer"
+    return "buffer" -- Final catch that shouldn't be needed
 end
 
 return chooseNextSpawnType

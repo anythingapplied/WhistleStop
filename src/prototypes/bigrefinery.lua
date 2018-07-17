@@ -45,7 +45,6 @@ local function fluidBox(type, position)
 end
 
 bigrefinery.fluid_boxes = {
-
     fluidBox("input", {-6, 15}),
     fluidBox("input", {6, 15}),
     fluidBox("output", {-12, -15}),

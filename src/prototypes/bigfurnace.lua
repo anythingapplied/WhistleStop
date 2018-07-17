@@ -32,6 +32,27 @@ bigfurnace.collision_mask = bigfurnace.collision_mask or {"item-layer", "object-
 table.insert(bigfurnace.collision_mask, "resource-layer")
 table.insert(bigfurnace.resistances, {percent=100, type="poison"})  -- Prevent termite damage
 
+local function fluidBox(type, position)
+    retvalue = {
+            production_type = type,
+            pipe_picture = assembler3pipepictures(),
+            pipe_covers = pipecoverspictures(),
+            base_area = 10,
+            pipe_connections = {{ type=type, position=position }},
+            secondary_draw_orders = { north = -1 }
+        }
+    if type == "input" then
+        retvalue.base_level = -1
+    else
+        retvalue.base_level = 1
+    end
+    return retvalue
+end
+
+bigfurnace.fluid_boxes = {
+    fluidBox("input", {-9, 0})
+}
+
 -- Scale graphics by a factor and correct animation speed
 local function bumpUp(animation, factor)
     animation.scale = factor

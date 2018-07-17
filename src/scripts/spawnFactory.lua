@@ -35,12 +35,17 @@ end
 function spawn(center, surface, entityname)
     local force = game.forces.player
 
+    if entityname ~= "big-refinery" then
+        -- Move center for smaller buildings, so that it won't always be in the exact center of chunks
+        -- Still making sure not to cross the edge of the chunk
+        center = {x=center.x - 1 + math.random(-3,4)*2, y=center.y - 1 + math.random(-3,4)*2}
+    end
     if surface.can_place_entity{name=entityname, position=center, force=force} and clearArea(center, surface) then
         
-        global.whistlestats[entityname] = (global.whistlestats[entityname] or 0) + 1
+        global.whistlestats[entityname] = global.whistlestats[entityname] + 1
         
         local entity = surface.create_entity{name=entityname, position=center, force=force}
-        table.insert(global.whistlestops, {position=center, type=entityname, entity=entity, surface=surface, distance_factor=math.random()})
+        table.insert(global.whistlestops, {position=center, type=entityname, entity=entity, surface=surface, distance_factor=math.random(), direction=entity.direction, recipe=nil, tag=nil})
 
         local event = {created_entity=entity, player_index=1}
         debugWrite("Creating factory at (" .. center.x .. "," .. center.y .. ")")
