@@ -1,7 +1,10 @@
--- Big furnace prototype definition
-local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])
+require("scripts.luaMacros")
 
-bigfurnace.name = "big-furnace"
+-- Big furnace item specification
+local bigfurnace = copy(data.raw.furnace["electric-furnace"])
+
+bigfurnace.name = "big-furnace-placeable"
+
 bigfurnace.icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
 
 bigfurnace.minable = nil
@@ -14,7 +17,7 @@ bigfurnace.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
 
 bigfurnace.crafting_categories = {"big-smelting"}
 bigfurnace.crafting_speed = 100
-
+bigfurnace.result_inventory_size = 2
 bigfurnace.energy_usage = "2000kW"
 bigfurnace.module_specification.module_slots = 6
 bigfurnace.map_color = {r=199, g=103, b=247}
@@ -25,33 +28,6 @@ bigfurnace.type = "assembling-machine"
 bigfurnace.result_inventory_size = nil
 bigfurnace.source_inventory_size = nil
 bigfurnace.ingredient_count = 1
-
-bigfurnace.create_ghost_on_death = false
-bigfurnace.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-bigfurnace.collision_mask = bigfurnace.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-table.insert(bigfurnace.collision_mask, "resource-layer")
-table.insert(bigfurnace.resistances, {percent=100, type="poison"})  -- Prevent termite damage
-
-local function fluidBox(type, position)
-    retvalue = {
-            production_type = type,
-            pipe_picture = assembler3pipepictures(),
-            pipe_covers = pipecoverspictures(),
-            base_area = 10,
-            pipe_connections = {{ type=type, position=position }},
-            secondary_draw_orders = { north = -1 }
-        }
-    if type == "input" then
-        retvalue.base_level = -1
-    else
-        retvalue.base_level = 1
-    end
-    return retvalue
-end
-
-bigfurnace.fluid_boxes = {
-    fluidBox("input", {-9, 0})
-}
 
 -- Scale graphics by a factor and correct animation speed
 local function bumpUp(animation, factor)
@@ -76,4 +52,14 @@ for k,v in pairs(bigfurnace.working_visualisations) do
     v.animation.hr_version.shift[2] = v.animation.hr_version.shift[2] * 2 - .5
 end
 
-data.raw["assembling-machine"][bigfurnace.name] = bigfurnace
+data.raw["assembling-machine"]["big-furnace-placeable"] = bigfurnace
+
+local bigfurnace2 = copy(bigfurnace)
+
+bigfurnace2.name = "big-furnace"
+bigfurnace2.create_ghost_on_death = false
+bigfurnace2.flags = {"placeable-neutral", "placeable-player", "not-deconstructable", "not-blueprintable"}
+
+table.insert(bigfurnace2.resistances, {percent=100, type="poison"})  -- Prevent termite damage
+
+data.raw["assembling-machine"]["big-furnace"] = bigfurnace2

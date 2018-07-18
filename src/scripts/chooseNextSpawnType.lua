@@ -11,7 +11,7 @@ local goal_proportion = {["buffer"] = 30, ["big-furnace"] = 35, ["big-assembly"]
 
 -- Offsets to trick the game into thinking your starting amounts of machines are at certain levels.
 -- Higher numbers will push spawning off until more factories are discovered, negative numbers will spawn more earlier
-local initial_boost = {["buffer"] = 0, ["big-furnace"] = 0, ["big-assembly"] = -30, ["big-refinery"] = 2}
+local initial_boost = {["buffer"] = 0, ["big-furnace"] = 0, ["big-assembly"] = -30, ["big-refinery"] = 1}
 
 -- Calculate sums of all sets of points for probability calculation
 local total_proportion = 0

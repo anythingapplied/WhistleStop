@@ -19,7 +19,6 @@ script.on_event(defines.events.on_player_rotated_entity,
 	function (event)
 		local entity = event.entity
 		clean_up(entity.surface, entity.position)
-		log("Direction: " .. tostring(entity.direction))
 		on_built_event({created_entity=entity})
 	end
 )

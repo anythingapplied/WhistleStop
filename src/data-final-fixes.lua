@@ -1,25 +1,13 @@
 inspect = require("inspect")
 
--- Big Furnace prototype definition
-require("prototypes.bigfurnace")
-
--- Big Assembly prototype definition
-require("prototypes.bigassembly")
-
--- Big Refinery prototype definition
-require("prototypes.bigrefinery")
-
--- Big Loader prototype definition
-require("prototypes.bigloader")
-
 -- Creates 50x versions of each recipe from selected categories
 require("scripts.recipeSetup")
 
 -- Create the item groups for these new recipes
 require("scripts.itemGroupSetup")
 
--- Adds 50x recipes versions to each technology
-require("scripts.techSetup")
-
 -- Adds big items to list of productivity module usable items
 require("scripts.productivityFix")
+
+-- Update Loader speed to fastest available loaders or belts in current mod set
+require("scripts.updateLoaderSpeed")
