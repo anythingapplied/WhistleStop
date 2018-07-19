@@ -6,6 +6,9 @@ require("scripts.spawnFactory")
 -- Handles big machine spawn events with its loaders
 require("scripts.controlSpawnEvent")
 
+-- Lists points used to determine if a new factory is far enough away from previous factories
+require("scripts.bufferPoints")
+
 -- Selects next spawn type using probability distribution
 chooseNextSpawnType = require("scripts.chooseNextSpawnType")
 
@@ -43,38 +46,6 @@ end
 -- Function that will return true 'percent' of the time.
 function probability(percent)
     return math.random() <= percent
-end
-
-local grid_size = 500
-
--- Returns true if no big structures within minimum distance threshholds
-local function distanceOkay(point, surface_index)
-    local minSetting = settings.global["whistle-min-distance"].value
-    if not global.bufferpoints2[surface_index] then -- No other points on that surface found
-        return true
-    end
-    for x=math.floor((point.x - 2*minSetting) / grid_size),math.floor((point.x + 2*minSetting) / grid_size) do
-        for y=math.floor((point.y - 2*minSetting) / grid_size),math.floor((point.y + 2*minSetting) / grid_size) do
-            if global.bufferpoints2[surface_index][x] and global.bufferpoints2[surface_index][x][y] then
-                for k,v in pairs(global.bufferpoints2[surface_index][x][y]) do
-                    if (point.x - v.position.x)^2 + (point.y - v.position.y)^2 < (minSetting * (1 + v.distance_factor))^2 then
-                        return false
-                    end
-                end
-            end
-        end
-    end
-    return true
-end
-
-local function addBuffer(position, surface_index, distance_factor)
-    local distance_factor = distance_factor or math.random()
-    global.bufferpoints2[surface_index] = global.bufferpoints2[surface_index] or {}
-    local xgrid = math.floor(position.x / grid_size)
-    global.bufferpoints2[surface_index][xgrid] = global.bufferpoints2[surface_index][xgrid] or {}
-    local ygrid = math.floor(position.y / grid_size)
-    global.bufferpoints2[surface_index][xgrid][ygrid] = global.bufferpoints2[surface_index][xgrid][ygrid] or {}
-    table.insert(global.bufferpoints2[surface_index][xgrid][ygrid], {position=position, surface_index=surface_index, distance_factor=distance_factor})
 end
 
 script.on_event(defines.events.on_chunk_generated,

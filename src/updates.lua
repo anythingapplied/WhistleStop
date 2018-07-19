@@ -1,3 +1,8 @@
+-- Lists points used to determine if a new factory is far enough away from previous factories
+require("scripts.bufferPoints")
+
+-- Handles big machine spawn events with its loaders
+require("scripts.controlSpawnEvent")
 
 Updates = {}
 local current_version = 1
@@ -13,7 +18,6 @@ Updates.run = function()
         global.whistlelocations = global.whistlelocations or {} -- Old
         global.whistlestops = global.whistlestops or {} -- New
         global.bufferpoints = global.bufferpoints or {} -- New
-        global.bufferpoints2 = global.bufferpoints2 or {} -- New
 
         local minSetting = settings.global["whistle-min-distance"].value
         -- Migration to new location tracking
@@ -24,14 +28,14 @@ Updates.run = function()
             addBuffer(center, 1, distance_factor)
 
             local entity = nil
-            for _, entity_found in pairs(surface.find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly"}}) do
+            for _, entity_found in pairs(game.surfaces[1].find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly"}}) do
                 entity = entity_found
             end
 
             if entity and entity.valid then
                 table.insert(global.whistlestops, {position=center, type=entity.name, entity=entity, surface=entity.surface, direction=entity.direction, recipe=nil, tag=nil})
             else
-                clean_up(entity.surface, center)
+                clean_up(game.surfaces[1], center)
             end
         end
 
