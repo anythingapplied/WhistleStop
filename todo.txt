@@ -1,8 +1,4 @@
 Current Issues
-- Entities spawning over ores despite logic to prevent this (ores maybe added after my check via other mods)
-- Spawning with belts only (no factory) if triggering an event also in subteranean mod
-- Direction on loaders for rotation
-- Stop clean up after first time
 
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?
@@ -10,9 +6,7 @@ Notes from 0.17 preview list:
 
 Potential Improvements
 -experiment with number spawned to make sure it is consistent with old version
-- Have buffer points check for collisions?
 resource layer collisions?
-rotation with loaders?
 - Transport belts instead of destroy/recreate?
 - algorithm improvevements for distance and nth tick
 - Deploy script - Update forums and mod portal with latest version
@@ -21,13 +15,7 @@ rotation with loaders?
 - Item-group hide from players
 - Balancing: Crafting speed, power, pollution, recipe factor
 - Balancing: Rarer as distance gets further? Multiple types of machines based on distance? Tech to enhance machines?
-- Algorithm improvement to distance check to improve performance
-- Compatability with faster loaders
 - Icons for item-group mod support
-- Recipe localization for mods
-- Loader cleanup logic? Just in case entity is destroyed without removing loaders?
-- Hide tech unlocks by using hidden techs or using on_tech event to unlock instead
-- CanPlaceEntity function?
 - Animation
     - Get rid of animation will let me use higher resolution since max rez is size of sprite sheet
     - Also would further increase UPS/FPS
@@ -36,13 +24,11 @@ rotation with loaders?
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)
-- Add giant refineries
 - Add giant beacons that increase belt speed
 - Split giant chemical plants from assembly machines
 - Make them buildable with research
 - Make crafting bonus research (To increase power consumption would have to make a number of prototypes for each possible power level)
 - Make research that controls number of available loaders
-- Start with 2 furnances in spawn
 - Make "destroyed" entities turn into a repairable structure
 - Make structures only destroyable by cliff explosives
 - Lock in some recipes for machines
