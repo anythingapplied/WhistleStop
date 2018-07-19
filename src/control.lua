@@ -45,17 +45,36 @@ function probability(percent)
     return math.random() <= percent
 end
 
+local grid_size = 500
+
 -- Returns true if no big structures within minimum distance threshholds
 local function distanceOkay(point, surface_index)
     local minSetting = settings.global["whistle-min-distance"].value
-    for k,v in pairs(global.bufferpoints) do
-        if surface_index == v.surface_index then
-            if (point.x - v.position.x)^2 + (point.y - v.position.y)^2 < (minSetting * (1 + v.distance_factor))^2 then
-                return false
+    if not global.bufferpoints2[surface_index] then -- No other points on that surface found
+        return true
+    end
+    for x=math.floor((point.x - 2*minSetting) / grid_size),math.floor((point.x + 2*minSetting) / grid_size) do
+        for y=math.floor((point.y - 2*minSetting) / grid_size),math.floor((point.y + 2*minSetting) / grid_size) do
+            if global.bufferpoints2[surface_index][x] and global.bufferpoints2[surface_index][x][y] then
+                for k,v in pairs(global.bufferpoints2[surface_index][x][y]) do
+                    if (point.x - v.position.x)^2 + (point.y - v.position.y)^2 < (minSetting * (1 + v.distance_factor))^2 then
+                        return false
+                    end
+                end
             end
         end
     end
     return true
+end
+
+local function addBuffer(position, surface_index, distance_factor)
+    local distance_factor = distance_factor or math.random()
+    global.bufferpoints2[surface_index] = global.bufferpoints2[surface_index] or {}
+    local xgrid = math.floor(position.x / grid_size)
+    global.bufferpoints2[surface_index][xgrid] = global.bufferpoints2[surface_index][xgrid] or {}
+    local ygrid = math.floor(position.y / grid_size)
+    global.bufferpoints2[surface_index][xgrid][ygrid] = global.bufferpoints2[surface_index][xgrid][ygrid] or {}
+    table.insert(global.bufferpoints2[surface_index][xgrid][ygrid], {position=position, surface_index=surface_index, distance_factor=distance_factor})
 end
 
 script.on_event(defines.events.on_chunk_generated,
@@ -111,11 +130,10 @@ script.on_event(defines.events.on_chunk_generated,
 script.on_init(
     function ()
         math.randomseed(game.surfaces[1].map_gen_settings.seed) --set the random seed to the map seed, so ruins are the same-ish with each generation.
-        
-        Updates.init()
-
+    
         -- Tracks location of big factory and or buffer locations, starting with a buffer location at spawn
-        global.bufferpoints = {{position={x=0, y=0}, surface_index=1, distance_factor=1}}
+        global.bufferpoints = {}
+        addBuffer({x=0, y=0}, 1, 1)
         global.whistlestops = {}
         -- Specification:
             -- position=center
@@ -128,6 +146,8 @@ script.on_init(
 
         -- Stat Tracking
         global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count = 0}
+
+        Updates.init()
     end
 )
 

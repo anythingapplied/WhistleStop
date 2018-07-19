@@ -11,6 +11,7 @@ Version: 0.1.0
       until eventually finding a balance
     - Made min-distance setting more dynamic so that it will even affect distance from existing buildings
     - Big recipes unlocks are now hidden from the technology screen to avoid clutter
+    - Improved algorithm for minimum distance checking to be much more efficient
   Bugfixes:
     - Fixed issue where factories could spawn on the edge of a chunk
     - Added more edge-case testing to avoid crashes from bad data from other mods

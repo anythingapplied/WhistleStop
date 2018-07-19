@@ -13,6 +13,7 @@ Updates.run = function()
         global.whistlelocations = global.whistlelocations or {} -- Old
         global.whistlestops = global.whistlestops or {} -- New
         global.bufferpoints = global.bufferpoints or {} -- New
+        global.bufferpoints2 = global.bufferpoints2 or {} -- New
 
         local minSetting = settings.global["whistle-min-distance"].value
         -- Migration to new location tracking
@@ -20,7 +21,7 @@ Updates.run = function()
 
             distance_factor = math.max(0, math.min(1, (v.mindist - minSetting)/minSetting))
             center = {x=v.x, y=v.y}
-            table.insert(global.bufferpoints, {position=center, surface_index=1, distance_factor=distance_factor})
+            addBuffer(center, 1, distance_factor)
 
             local entity = nil
             for _, entity_found in pairs(surface.find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly"}}) do

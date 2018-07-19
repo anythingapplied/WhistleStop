@@ -5,6 +5,7 @@ Notes from 0.17 preview list:
 - no-inserter-pickup/no-inserter-dropoff for big machines?
 
 Potential Improvements
+- Create dummy recipe for tags to use
 -experiment with number spawned to make sure it is consistent with old version
 resource layer collisions?
 - Transport belts instead of destroy/recreate?

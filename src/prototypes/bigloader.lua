@@ -4,6 +4,7 @@ local function create_bigloader(name)
     local bigloader = util.table.deepcopy(data.raw["loader"]["express-loader"])
 
     bigloader.name = name
+    bigloader.localised_name = {"entity-name.express-loader"}
     bigloader.minable = nil
     bigloader.destructible = false
     bigloader.fast_replaceable_group = nil
