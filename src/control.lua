@@ -125,7 +125,6 @@ script.on_init(
 script.on_nth_tick(6*60, 
     function (event)
         for k,v in pairs(global.whistlestops) do
-
             -- Removes loaders for any entities that were destroyed by other mods without triggering destroy_entity event
             if not v.entity.valid then
                 clean_up(v.surface, v.position)
@@ -137,14 +136,18 @@ script.on_nth_tick(6*60,
                     if recipe.name ~= v.recipe then
                         debugWrite("Recipe Change at (" .. v.position.x .. "," .. v.position.y .. ")")
                         v.recipe = recipe.name
-                        if #recipe.products >= 1 then
-                            local product = recipe.products[1]
-                            for k2,v2 in pairs(v.entity.force.find_chart_tags(v.surface, {{v.position.x-1, v.position.y-1}, {v.position.x+1, v.position.y+1}})) do
-                                v2.destroy()
-                            end
-                            local tag = v.entity.force.add_chart_tag(v.surface, {icon=product, position=v.position})
-                            v.tag = tag.tag_number
+                        for k2,v2 in pairs(v.entity.force.find_chart_tags(v.surface, {{v.position.x-1, v.position.y-1}, {v.position.x+1, v.position.y+1}})) do
+                            v2.destroy()
                         end
+                        local product = nil
+                        if game.item_prototypes[v.recipe .. "_tagicon"] then
+                            product = {name=v.recipe .. "_tagicon", type="item"}
+                        else
+                            product = recipe.products[1]
+                        end
+
+                        local tag = v.entity.force.add_chart_tag(v.surface, {icon=product, position=v.position})
+                        v.tag = tag.tag_number
                     end
                 else
                     if v.recipe then -- recipe is now blank, but was set in previous scan, so delete tag

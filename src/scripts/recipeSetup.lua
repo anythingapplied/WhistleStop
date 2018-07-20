@@ -191,6 +191,8 @@ local function recipeSetup()
                     setValues(recipe)
                 end
 
+                recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                
                 local subgroup = findSubgroup(recipe)
                 if subgroup then
                     recipe.subgroup = subgroup .. "-big"

@@ -5,7 +5,7 @@ local function create_bigloader(name)
 
     bigloader.name = name
     bigloader.localised_name = {"entity-name.express-loader"}
-    bigloader.minable = nil
+    bigloader.minable = {hardness = 0, minable = false, mining_time = 0}
     bigloader.destructible = false
     bigloader.fast_replaceable_group = nil
 
