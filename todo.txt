@@ -1,4 +1,7 @@
 Current Issues
+- Express-loaders to Express-loaders-big
+- Why was factory on Whistle.save in the list multiple times?
+
 
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?

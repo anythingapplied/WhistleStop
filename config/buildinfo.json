@@ -1,5 +1,5 @@
 {
-    "output_directory": "../mods",
+    "output_directory": "../../Google Drive/Factorio Mod Testing/mods",
     "info":{
         "name": "WhistleStopFactories",
         "version": "0.1.0",
