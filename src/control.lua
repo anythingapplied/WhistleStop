@@ -1,7 +1,19 @@
+inspect = require("inspect")
+
 -- Provides spawn function which checks for valid spawn location and requests spawning
 require("scripts.spawnFactory")
+
 -- Handles big machine spawn events with its loaders
 require("scripts.controlSpawnEvent")
+
+-- Lists points used to determine if a new factory is far enough away from previous factories
+require("scripts.bufferPoints")
+
+-- Selects next spawn type using probability distribution
+chooseNextSpawnType = require("scripts.chooseNextSpawnType")
+
+-- Contains migration function for game and global variables
+local Updates = require("updates")
 
 DEBUG = true -- Used for debug, users should not enable
 local debugCount = 0 -- Stops debugging messages
@@ -31,73 +43,159 @@ function debugWrite(text)
     end
 end
 
--- Registers a new location of a big factory or buffer location with a random minimum distance threshhold
-function addPoint(center)
-    local minSetting = settings.global["whistle-min-distance"].value
-    table.insert(global.whistlelocations, {x=center.x, y=center.y, mindist=math.random(minSetting, 2*minSetting)})
-end
-
 -- Function that will return true 'percent' of the time.
 function probability(percent)
     return math.random() <= percent
 end
 
--- Returns true if no big structures within minimum distance threshholds
-local function distanceOkay(a)
-    for k,v in pairs(global.whistlelocations) do
-        if v.mindist == nil then
-            local minSetting = settings.global["whistle-min-distance"].value
-            v.mindist = math.random(minSetting, 2*minSetting)
-        end
-        if (a.x-v.x)^2 + (a.y-v.y)^2 < v.mindist^2 then
-            return false
-        end
-    end
-    return true
-end
-
 script.on_event(defines.events.on_chunk_generated,
-    function (e)
+    function (event)
+        if event.surface.index ~= 1 then  -- Only spawn on normal surface
+            return
+        end
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
-        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
+        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] + global.whistlestats["big-refinery"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
             return
         end
         
-        -- Chunk center plus random variance so they aren't always chunk aligned
+        -- Chunk center
         local center = {
-            x=(e.area.left_top.x+e.area.right_bottom.x)/2 + math.random(-8,8),
-            y=(e.area.left_top.y+e.area.right_bottom.y)/2 + math.random(-8,8)}
+            x=(event.area.left_top.x+event.area.right_bottom.x)/2,
+            y=(event.area.left_top.y+event.area.right_bottom.y)/2}
 
-        if not distanceOkay(center) then -- too close to other big structure
+        if not distanceOkay(center, event.surface.index) then -- too close to other big structure
             return
         end
 
         global.whistlestats.valid_chunk_count = global.whistlestats.valid_chunk_count + 1
 
-        if probability(0.3) then -- Insert fake big factory placeholder to cause more spreading out
-            debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
-            addPoint(center)
-            return
+        if not global.nextSpawnType then -- Keeps trying the same spawn type until successful
+            global.nextSpawnType = chooseNextSpawnType()
         end
+        if global.nextSpawnType == "buffer" then
+            debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
+            addBuffer(center, event.surface.index)
+            global.whistlestats.buffer = global.whistlestats.buffer + 1
+            global.nextSpawnType = nil
+        else
+            if global.nextSpawnType ~= "big-refinery" then
+                -- Move center for smaller buildings, so that it won't always be in the exact center of chunks
+                -- Still making sure not to cross the edge of the chunk
+                center = {x=center.x - 1 + math.random(-3,4)*2, y=center.y - 1 + math.random(-3,4)*2}
+            end
 
-        spawn(center, e.surface)
-        
-        debugWrite("Spawned " .. global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] .. "/" .. global.whistlestats.valid_chunk_count  .. " with probability " .. prob)
+            local success = spawn(center, event.surface, global.nextSpawnType)
+            if success then
+                debugWrite("Creating " .. global.nextSpawnType .. " at (" .. center.x .. "," .. center.y .. ").  Counts = " .. inspect(global.whistlestats))
+                addBuffer(center, event.surface.index)
+                global.whistlestats[global.nextSpawnType] = global.whistlestats[global.nextSpawnType] + 1
+                global.nextSpawnType = nil
+            else
+                debugWrite("Failed creating " .. global.nextSpawnType .."  at (" .. center.x .. "," .. center.y .. ")")
+            end
+        end
     end
 )
 
 script.on_init(
-    function()
+    function ()
         math.randomseed(game.surfaces[1].map_gen_settings.seed) --set the random seed to the map seed, so ruins are the same-ish with each generation.
-        
+    
         -- Tracks location of big factory and or buffer locations, starting with a buffer location at spawn
-        global.whistlelocations = {{x=0, y=0, mindist=2 * settings.global["whistle-min-distance"].value}}
+        global.bufferpoints = {}
+        addBuffer({x=0, y=0}, 1, 1)
+        global.whistlestops = {}
+        -- Specification:
+            -- position=center
+            -- type=entityname
+            -- entity=entity
+            -- surface=surface
+            -- direction=entity.direction (used to compare to see if updated)
+            -- recipe=current recipe name (used to compare to see if updated)
+            -- tag=tag_number
 
         -- Stat Tracking
-        global.whistlestats = {}
-        global.whistlestats["big-furnace"] = 0
-        global.whistlestats["big-assembly"] = 0
-        global.whistlestats.valid_chunk_count = 0
+        global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count=0}
+
+        Updates.init()
+    end
+)
+
+script.on_nth_tick(6*60, 
+    function (event)
+        for k,v in pairs(global.whistlestops) do
+            -- Removes loaders for any entities that were destroyed by other mods without triggering destroy_entity event
+            if not v.entity.valid then
+                clean_up(v.surface, v.position)
+                global.whistlestops[k] = nil
+            elseif settings.global["whistle-enable-tagging"].value then
+                -- Creates tag for entities that have a set recipe
+                local recipe = v.entity.get_recipe()
+                if type(recipe) == "table" then
+                    if recipe.name ~= v.recipe then
+                        debugWrite("Recipe Change at (" .. v.position.x .. "," .. v.position.y .. ")")
+                        v.recipe = recipe.name
+                        for k2,v2 in pairs(v.entity.force.find_chart_tags(v.surface, {{v.position.x-1, v.position.y-1}, {v.position.x+1, v.position.y+1}})) do
+                            v2.destroy()
+                        end
+                        local product = nil
+                        if game.item_prototypes[v.recipe .. "_tagicon"] then
+                            product = {name=v.recipe .. "_tagicon", type="item"}
+                        else
+                            product = recipe.products[1]
+                        end
+
+                        local tag = v.entity.force.add_chart_tag(v.surface, {icon=product, position=v.position})
+                        v.tag = tag.tag_number
+                    end
+                else
+                    if v.recipe then -- recipe is now blank, but was set in previous scan, so delete tag
+                        debugWrite("Recipe Removed at (" .. v.position.x .. "," .. v.position.y .. ")")
+                        v.recipe = nil
+                        for k2,v2 in pairs(v.entity.force.find_chart_tags(v.surface, {{v.position.x-1, v.position.y-1}, {v.position.x+1, v.position.y+1}})) do
+                            v2.destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end
+)
+
+script.on_configuration_changed(
+    function (configData)
+        Updates.run()
+    end
+)
+
+-- Unlock big recipe versions when technology is researched
+script.on_event(defines.events.on_research_finished,
+    function (event)
+        local force = event.research.force
+        for _, effect in pairs(event.research.effects) do
+            if type(effect) == 'table' and effect.type == "unlock-recipe" then
+                if force.recipes[effect.recipe .. "-big"] then
+                    force.recipes[effect.recipe .. "-big"].enabled = true
+                end
+            end
+        end
+
+    end
+)
+
+script.on_event(defines.events.on_technology_effects_reset,
+    function (event)
+        for k,v in pairs(event.force.technologies) do
+            if v.researched then
+                for _, effect in pairs(v.effects) do
+                    if type(effect) == 'table' and effect.type == "unlock-recipe" then
+                        if event.force.recipes[effect.recipe .. "-big"] then
+                            event.force.recipes[effect.recipe .. "-big"].enabled = true
+                        end
+                    end
+                end
+            end
+        end
     end
 )

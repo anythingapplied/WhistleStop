@@ -1,6 +1,4 @@
 -- Adds big items to list of productivity module usable items
-require("luaMacros")
-
 local function productivityFix()
     seen = {} -- ensures you don't fix the same unique table multiple times
     for _, module in pairs(data.raw.module) do

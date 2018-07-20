@@ -98,20 +98,20 @@ end
 
 -- Checks all locations for potential main product results
 local function checkForProduct(recipe)
-    if type(recipe) ~= 'table' then
+    if type(recipe) ~= "table" then
         return
     elseif recipe.result then
         return recipe.result
-    elseif type(recipe.results) == 'table' and #recipe.results == 1 and type(recipe.results[1]) == 'table' and recipe.results[1].name then
+    elseif type(recipe.results) == "table" and #recipe.results == 1 and type(recipe.results[1]) == "table" and recipe.results[1].name then
         return recipe.results[1].name
-    elseif type(recipe.results) == 'table' and #recipe.results == 1 and type(recipe.results[1]) == 'table' and recipe.results[1][1] then
+    elseif type(recipe.results) == "table" and #recipe.results == 1 and type(recipe.results[1]) == "table" and recipe.results[1][1] then
         return recipe.results[1][1]
     end
 end
 
 -- Find the subgroup for a given item
 local function findSubgroup(recipe)
-    if type(recipe) ~= 'table' then return end
+    if type(recipe) ~= "table" then return end
     if recipe.subgroup then
         return recipe.subgroup
     end
@@ -135,7 +135,7 @@ end
 
 -- Adjusts counts on all variables by factor.  Does nothing if factor would go over max ingredient amount.
 local function setValues(recipe)
-    if type(recipe) ~= 'table' then return end
+    if type(recipe) ~= "table" then return end
     -- Highest factor that would excede the maximum ingredient limit
     local min_factor1 = maxIngredientCount / maxRecipeAmount(recipe.ingredients)
 
@@ -174,22 +174,36 @@ local function recipeSetup()
     local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
     local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
     local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
+    local cat_list4 = data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"]
 
     for _, recipeBase in pairs(util.table.deepcopy(data.raw.recipe)) do
-        if type(recipeBase) == 'table' then
+        if type(recipeBase) == "table" then
             
             local cat = recipeBase.category or "crafting" -- Blank recipes categories are considered "crafting"
-            if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) then
+            if inlist(cat, cat_list1) or inlist(cat, cat_list2) or inlist(cat, cat_list3) or inlist(cat, cat_list4) then
                 recipe = util.table.deepcopy(recipeBase)
                 
                 -- Recipe is split into normal/expensive, one allowed to be blank
                 if recipe.normal or recipe.expensive then
-                    if recipe.normal then setValues(recipe.normal) end
-                    if recipe.expensive then setValues(recipe.expensive) end
+                    if recipe.normal then
+                        setValues(recipe.normal)
+                        if not recipe.normal.main_product and type(recipe.normal.results) == "table" and #recipe.normal.results > 1 then
+                            recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                        end
+                    end
+                    if recipe.expensive then
+                        setValues(recipe.expensive)
+                        if not recipe.expensive.main_product and type(recipe.expensive.results) == "table" and #recipe.expensive.results > 1 then
+                            recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                        end
+                    end
                 elseif (recipe.result or recipe.results) and recipe.ingredients then
                     setValues(recipe)
+                    if not recipe.main_product and type(recipe.results) == "table" and #recipe.results > 1 then
+                        recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                    end
                 end
-
+                
                 local subgroup = findSubgroup(recipe)
                 if subgroup then
                     recipe.subgroup = subgroup .. "-big"
@@ -204,9 +218,13 @@ local function recipeSetup()
                 elseif inlist(cat, cat_list2) then
                     recipe.category = "big-recipe"
                 
-                -- Chemical Furnace Recipes, but currently applied to assembling machine too
+                -- Chemical furnace recipes, but currently applied to big assembling machine
                 elseif inlist(cat, cat_list3) then
                     recipe.category = "big-chem"
+
+                -- Oil refinery recipes
+                elseif inlist(cat, cat_list4) then
+                    recipe.category = "big-refinery"
                 end
                 
                 data.raw.recipe[recipe.name] = recipe

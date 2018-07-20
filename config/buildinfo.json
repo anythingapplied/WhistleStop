@@ -1,13 +1,12 @@
 {
-    "output_directory": "../mods",
+    "output_directory": "../../../Google Drive/Factorio Mod Testing/mods",
     "info":{
         "name": "WhistleStopFactories",
-        "version": "0.0.9",
+        "version": "0.1.0",
         "factorio_version": "0.16",
         "title": "Whistle Stop Factories",
         "author": "Avongard",
         "homepage": "https://forums.factorio.com/viewtopic.php?t=61205",
-        "contact": "n/a",
-        "description": "Spawns massive furnaces and assembly machines around the map to make the game all building trains to connect them",
-        "dependencies": ["base >= 0.16"] }
+        "description": "Spawns massive furnaces and assembly machines around the map to make the game all about building trains to connect them",
+        "dependencies": ["base >= 0.16", "? rso-mod"] }
 }
