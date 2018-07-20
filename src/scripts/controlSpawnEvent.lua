@@ -32,8 +32,8 @@ function on_built_event(event)
 			placeLoader(entity, -7.5, i, "input", 2)
 			placeLoader(entity, -7.5, -i, "input", 2)
 			-- Right side loaders
-			placeLoader(entity, 7, i, "output", 2)
-			placeLoader(entity, 7, -i, "output", 2)
+			placeLoader(entity, 7.5, i, "output", 2)
+			placeLoader(entity, 7.5, -i, "output", 2)
 		end
 	elseif entity.name == "big-assembly" then
 		-- Left side loaders
