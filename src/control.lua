@@ -1,4 +1,4 @@
-local inspect = require("inspect")
+inspect = require("inspect")
 
 -- Provides spawn function which checks for valid spawn location and requests spawning
 require("scripts.spawnFactory")
@@ -54,7 +54,7 @@ script.on_event(defines.events.on_chunk_generated,
             return
         end
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
-        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"]) / 10
+        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] + global.whistlestats["big-refinery"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
             return
         end
@@ -75,7 +75,7 @@ script.on_event(defines.events.on_chunk_generated,
         end
         if global.nextSpawnType == "buffer" then
             debugWrite("Creating buffer point at (" .. center.x .. "," .. center.y .. ")")
-            table.insert(global.bufferpoints, {position=center, surface_index=event.surface.index, distance_factor=math.random()})
+            addBuffer(center, event.surface.index)
             global.whistlestats.buffer = global.whistlestats.buffer + 1
             global.nextSpawnType = nil
         else
@@ -88,7 +88,7 @@ script.on_event(defines.events.on_chunk_generated,
             local success = spawn(center, event.surface, global.nextSpawnType)
             if success then
                 debugWrite("Creating " .. global.nextSpawnType .. " at (" .. center.x .. "," .. center.y .. ").  Counts = " .. inspect(global.whistlestats))
-                table.insert(global.bufferpoints, {position=center, surface_index=event.surface.index, distance_factor=math.random()})
+                addBuffer(center, event.surface.index)
                 global.whistlestats[global.nextSpawnType] = global.whistlestats[global.nextSpawnType] + 1
                 global.nextSpawnType = nil
             else
@@ -116,7 +116,7 @@ script.on_init(
             -- tag=tag_number
 
         -- Stat Tracking
-        global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count = 0}
+        global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count=0}
 
         Updates.init()
     end

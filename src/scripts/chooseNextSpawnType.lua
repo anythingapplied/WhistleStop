@@ -40,6 +40,7 @@ local function chooseNextSpawnType()
     for k,v in pairs(building_list) do
         adjusted_probability[v] = math.max(0, goal_target * goal_proportion[v] / total_proportion - global.whistlestats[v] - initial_boost[v])
         adjusted_probability_total = adjusted_probability_total + adjusted_probability[v]
+        -- debugWrite(v .. " " .. adjusted_probability[v])
     end
     
     local selection_var = math.random()

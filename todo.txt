@@ -1,7 +1,7 @@
 Current Issues
-- Express-loaders to Express-loaders-big
-- Why was factory on Whistle.save in the list multiple times?
-
+- Move info_icon up?
+- Refineries too rare?
+- Adding 5 dim, means no basic oil recipe?
 
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?
