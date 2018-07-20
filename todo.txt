@@ -12,7 +12,8 @@ Notes from 0.17 preview list:
 
 Potential Improvements
 - Fix tag images to use main_product once that gets added to the api.
-- Shift recipe icon upwards?
+- Recipe Localizations
+- Shift recipe icon upwards
 -experiment with number spawned to make sure it is consistent with old version
 resource layer collisions?
 - Teleport the transport belts instead of destroy/recreate?
