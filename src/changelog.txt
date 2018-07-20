@@ -8,17 +8,16 @@ Version: 0.1.0
     - Loader's speed now matches the fastest loaders or belts possible in your current game
     - Limited spawning to the main surface
     - Change ratio of spawning to change over time. First two spawns are furnances, but then the game focuses on assemblers
-      until eventually finding a balance
-    - Made min-distance setting more dynamic so that it will even affect distance from existing buildings
+      until eventually finding a balance similar to whats required for an equal amount of all of the science packs
     - Big recipes unlocks are now hidden from the technology screen to avoid clutter
-    - Improved algorithm for minimum distance checking to be much more efficient
+    - Improved algorithm for minimum distance checking to be much more efficient, also changing setting affects current buildings
   Bugfixes:
     - Fixed issue where factories could spawn on the edge of a chunk
     - Added more edge-case testing to avoid crashes from bad data from other mods
     - Added additional logic to further avoid spawning over ores, rso is optional dependency now
     - Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
-    - Loaders under factories no longer copied into blueprints
-    - Better localization for mods so "Unknown Key" doesn't show up for item-groups
+    - Loaders under factories no longer copied into blueprints,a,
+    - Better localization for mods so "Unknown Key" doesn't show up for item-groups or recipes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
   Bugfixes:

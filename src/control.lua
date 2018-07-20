@@ -184,3 +184,18 @@ script.on_event(defines.events.on_research_finished,
     end
 )
 
+script.on_event(defines.events.on_technology_effects_reset,
+    function (event)
+        for k,v in pairs(event.force.technologies) do
+            if v.researched then
+                for _, effect in pairs(v.effects) do
+                    if type(effect) == 'table' and effect.type == "unlock-recipe" then
+                        if event.force.recipes[effect.recipe .. "-big"] then
+                            event.force.recipes[effect.recipe .. "-big"].enabled = true
+                        end
+                    end
+                end
+            end
+        end
+    end
+)

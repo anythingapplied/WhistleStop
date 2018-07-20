@@ -1,35 +1,26 @@
-Current Issues
-- Move info_icon up?
-- Refineries too rare?
-- Adding 5 dim, means no basic oil recipe?
-- Check it loads with full mod pack, including upgrade
-- Loaders still on old images even when updated?
-- load recipe icons as items for tags?
-
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?
-- no-inserter-pickup/no-inserter-dropoff for big machines?
+- no-inserter-pickup/no-inserter-dropoff for big machines? - Maybe not... if people want to use inserters bad enough, I say let them.
+
+Awaiting factorio features:
+- On_Recipe_Change event
+- main_product property exposed (for better tag images)
+- Hide Recipes from main character screen
 
 Potential Improvements
-- Fix tag images to use main_product once that gets added to the api.
-- Recipe Localizations
 - Shift recipe icon upwards
--experiment with number spawned to make sure it is consistent with old version
-resource layer collisions?
 - Teleport the transport belts instead of destroy/recreate?
 - algorithm improvevements nth tick (factoriossmo queue logic?)
 - Deploy script - Update forums and mod portal with latest version
 - Git tag hook - Run deploy script when git tag in format vX.X.X
 - Test game with Multi-Force PvP games?
-- Item-group hide from players
 - Balancing: Crafting speed, power, pollution, recipe factor
 - Balancing: Rarer as distance gets further? Multiple types of machines based on distance? Tech to enhance machines?
-- Icons for item-group mod support
+- Icons for item-group mod support? (Awaiting hide ability so this is pointless)
 - Animation
     - Get rid of animation will let me use higher resolution since max rez is size of sprite sheet
     - Also would further increase UPS/FPS
 - Destroy loaders based on list?
-
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)

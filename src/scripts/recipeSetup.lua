@@ -185,14 +185,25 @@ local function recipeSetup()
                 
                 -- Recipe is split into normal/expensive, one allowed to be blank
                 if recipe.normal or recipe.expensive then
-                    if recipe.normal then setValues(recipe.normal) end
-                    if recipe.expensive then setValues(recipe.expensive) end
+                    if recipe.normal then
+                        setValues(recipe.normal)
+                        if not recipe.normal.main_product and type(recipe.normal.results) == "table" and #recipe.normal.results > 1 then
+                            recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                        end
+                    end
+                    if recipe.expensive then
+                        setValues(recipe.expensive)
+                        if not recipe.expensive.main_product and type(recipe.expensive.results) == "table" and #recipe.expensive.results > 1 then
+                            recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                        end
+                    end
                 elseif (recipe.result or recipe.results) and recipe.ingredients then
                     setValues(recipe)
+                    if not recipe.main_product and type(recipe.results) == "table" and #recipe.results > 1 then
+                        recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
+                    end
                 end
-
-                -- recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
-
+                
                 local subgroup = findSubgroup(recipe)
                 if subgroup then
                     recipe.subgroup = subgroup .. "-big"
