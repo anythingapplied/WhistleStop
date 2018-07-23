@@ -59,16 +59,18 @@ local function create_bigassembly(name, energy, speed)
 
     -- Scale graphics by a factor and correct animation speed
     local function bumpUp(animation, factor)
-        animation.scale = factor
+        animation.shift = util.table.deepcopy(animation.shift)
+        animation.shift[1] = animation.shift[1] * factor   
+        animation.shift[2] = animation.shift[2] * factor
+
+        animation.scale = (animation.scale or 1) * factor
         animation.animation_speed = 0.05
-        for k,v in pairs(animation.shift) do
-            animation.shift[k] = v * factor
-        end
     end
 
+    local scaleFactor = 6
     for k,v in pairs(bigassembly.animation.layers) do
-        bumpUp(v, 6)
-        bumpUp(v.hr_version, 3)
+        bumpUp(v, scaleFactor)
+        bumpUp(v.hr_version, scaleFactor)
     end
 
     data.raw["assembling-machine"][name] = bigassembly

@@ -59,25 +59,22 @@ local function create_bigfurnace(name, energy, speed)
 
     -- Scale graphics by a factor and correct animation speed
     local function bumpUp(animation, factor)
-        animation.scale = factor
+        animation.shift = util.table.deepcopy(animation.shift)
+        animation.shift[1] = animation.shift[1] * factor   
+        animation.shift[2] = animation.shift[2] * factor
+
+        animation.scale = (animation.scale or 1) * factor
         animation.animation_speed = 0.01
-        for k,v in pairs(animation.shift) do
-            animation.shift[k] = v * factor
-        end
     end
 
-    local scaleFactor = 2.7
+    local scaleFactor = 5.4
     for k,v in pairs(bigfurnace.animation.layers) do
-        bumpUp(v, 2 * scaleFactor)
+        bumpUp(v, scaleFactor)
         bumpUp(v.hr_version, scaleFactor)
     end
     for k,v in pairs(bigfurnace.working_visualisations) do
-        bumpUp(v.animation, 2 * scaleFactor)
+        bumpUp(v.animation, scaleFactor)
         bumpUp(v.animation.hr_version, scaleFactor)
-        -- Extra manual adjustment needed for HR version working visuals.
-        -- Not sure why needed, but won't be right if you change scaleFactor
-        v.animation.hr_version.shift[1] = v.animation.hr_version.shift[1] * 2
-        v.animation.hr_version.shift[2] = v.animation.hr_version.shift[2] * 2 - .5
     end
 
     data.raw["assembling-machine"][name] = bigfurnace

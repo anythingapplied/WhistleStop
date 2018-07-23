@@ -64,7 +64,6 @@ script.on_event(defines.events.script_raised_built, on_built_event)
 
 -- Removed the loaders
 function clean_up(surface, center)
-	log(inspect(center))
 	debugWrite("Cleaning up big factory loaders at " .. center.x .. "," .. center.y)
 	local area = {{center.x-8.8, center.y-8.8}, {center.x+8.8, center.y+8.8}}
 	for _, entity in pairs(surface.find_entities_filtered{area=area, name="express-loader-big"}) do

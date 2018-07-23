@@ -56,16 +56,19 @@ local function create_bigrefinery(name, energy, speed)
     }
     -- Scale graphics by a factor and correct animation speed
     local function bumpUp(animation, factor)
-        animation.scale = factor
+        animation.shift = util.table.deepcopy(animation.shift)
+        animation.shift[1] = animation.shift[1] * factor   
+        animation.shift[2] = animation.shift[2] * factor
+
+        animation.scale = (animation.scale or 1) * factor
         animation.animation_speed = 0.05
-        animation.shift[1] = animation.shift[1] + 3.05
-        animation.shift[2] = animation.shift[2] + .6
     end
 
+    local scaleFactor = 5.8
     for _, direction in pairs({"north", "east", "south", "west"}) do
         for k,v in pairs(bigrefinery.animation[direction].layers) do
-            bumpUp(v, 5.8)
-            bumpUp(v.hr_version, 2.9)
+            bumpUp(v, scaleFactor)
+            bumpUp(v.hr_version, scaleFactor)
         end
     end
 

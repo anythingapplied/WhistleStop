@@ -5,7 +5,7 @@ require("scripts.bufferPoints")
 require("scripts.controlSpawnEvent")
 
 Updates = {}
-local current_version = 1
+local current_version = 2
 
 Updates.init = function()
 	global.update_version = current_version
@@ -53,6 +53,12 @@ Updates.run = function()
 
         global.whistlelocations = nil
     end
+    if global.update_version <= 2 then
+        for _, force in pairs(game.forces) do
+            force.reset_technology_effects()
+        end
+    end
+    
 	global.update_version = current_version
 end
 
