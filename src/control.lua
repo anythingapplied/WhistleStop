@@ -116,7 +116,7 @@ script.on_init(
             -- tag=tag_number
 
         -- Stat Tracking
-        global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count=0}
+        global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, ["big-chemplant"]=0, valid_chunk_count=0}
 
         Updates.init()
     end
