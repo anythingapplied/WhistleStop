@@ -17,9 +17,11 @@ end
 
 script.on_event(defines.events.on_player_rotated_entity,
 	function (event)
-		local entity = event.entity
-		clean_up(entity.surface, entity.position)
-		on_built_event({created_entity=entity})
+		if event.entity.name == "big-furnace" or event.entity.name == "big-assembly" then
+			local entity = event.entity
+			clean_up(entity.surface, entity.position)
+			on_built_event({created_entity=entity})
+		end
 	end
 )
 

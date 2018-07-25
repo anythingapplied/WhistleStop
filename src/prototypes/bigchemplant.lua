@@ -1,4 +1,5 @@
 -- Big Assembly prototype and item definition
+require("scripts.luaMacros")
 
 local function create_bigchemplant(name, energy, speed)
     local bigchemplant = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
@@ -51,12 +52,14 @@ local function create_bigchemplant(name, energy, speed)
     end
 
     bigchemplant.fluid_boxes = {
-        fluidBox("input", {-7, -9}),
-        fluidBox("input", {7, -9}),
-        fluidBox("output", {-7, 9}),
-        fluidBox("output", {7, 9}),
+        fluidBox("input", {-5, -9}),
+        fluidBox("input", {5, -9}),
+        fluidBox("output", {-5, 9}),
+        fluidBox("output", {5, 9}),
         -- off_when_no_fluid_recipe = true -- Allows for rotation
     }
+
+    adjustVisuals(bigchemplant, 5, 1/20)
 
     data.raw["assembling-machine"][name] = bigchemplant
 

@@ -1,4 +1,5 @@
 -- Big Assembly prototype and item definition
+require("scripts.luaMacros")
 
 local function create_bigassembly(name, energy, speed)
     local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
@@ -57,21 +58,7 @@ local function create_bigassembly(name, energy, speed)
         -- off_when_no_fluid_recipe = true -- Allows for rotation
     }
 
-    -- Scale graphics by a factor and correct animation speed
-    local function bumpUp(animation, factor)
-        animation.shift = util.table.deepcopy(animation.shift)
-        animation.shift[1] = animation.shift[1] * factor   
-        animation.shift[2] = animation.shift[2] * factor
-
-        animation.scale = (animation.scale or 1) * factor
-        animation.animation_speed = 0.05
-    end
-
-    local scaleFactor = 6
-    for k,v in pairs(bigassembly.animation.layers) do
-        bumpUp(v, scaleFactor)
-        bumpUp(v.hr_version, scaleFactor)
-    end
+    adjustVisuals(bigassembly, 6, 1/20)
 
     data.raw["assembling-machine"][name] = bigassembly
 

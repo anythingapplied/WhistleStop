@@ -2,6 +2,7 @@ Version: 0.1.1
   Bugfixes:
     - High resolution Refinery now has corrected offsets so looks correct now in high resolution mode
     - Reset the tech effects which makes sure previously unlocked recipes have their big versions unlocked
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
   Changes:
     - Added Oil Refinery (rare)

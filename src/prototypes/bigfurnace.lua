@@ -1,4 +1,5 @@
 -- Big furnace prototype and item definition
+require("scripts.luaMacros")
 
 local function create_bigfurnace(name, energy, speed)
     local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])
@@ -58,24 +59,26 @@ local function create_bigfurnace(name, energy, speed)
     }
 
     -- Scale graphics by a factor and correct animation speed
-    local function bumpUp(animation, factor)
-        animation.shift = util.table.deepcopy(animation.shift)
-        animation.shift[1] = animation.shift[1] * factor   
-        animation.shift[2] = animation.shift[2] * factor
+    -- local function bumpUp(animation, factor)
+    --     animation.shift = util.table.deepcopy(animation.shift)
+    --     animation.shift[1] = animation.shift[1] * factor   
+    --     animation.shift[2] = animation.shift[2] * factor
 
-        animation.scale = (animation.scale or 1) * factor
-        animation.animation_speed = 0.01
-    end
+    --     animation.scale = (animation.scale or 1) * factor
+    --     animation.animation_speed = 0.01
+    -- end
 
-    local scaleFactor = 5.4
-    for k,v in pairs(bigfurnace.animation.layers) do
-        bumpUp(v, scaleFactor)
-        bumpUp(v.hr_version, scaleFactor)
-    end
-    for k,v in pairs(bigfurnace.working_visualisations) do
-        bumpUp(v.animation, scaleFactor)
-        bumpUp(v.animation.hr_version, scaleFactor)
-    end
+    -- local scaleFactor = 5.4
+    -- for k,v in pairs(bigfurnace.animation.layers) do
+    --     bumpUp(v, scaleFactor)
+    --     bumpUp(v.hr_version, scaleFactor)
+    -- end
+    -- for k,v in pairs(bigfurnace.working_visualisations) do
+    --     bumpUp(v.animation, scaleFactor)
+    --     bumpUp(v.animation.hr_version, scaleFactor)
+    -- end
+
+    adjustVisuals(bigfurnace, 5.4, 1/20)
 
     data.raw["assembling-machine"][name] = bigfurnace
 

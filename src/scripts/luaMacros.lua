@@ -9,7 +9,7 @@ function inlist(value, scanlist)
     return false
 end
 
-local scalePosition(position, factor)
+local function scalePosition(position, factor)
     local x = position.x or position[1]
     local y = position.y or position[2]
     if x and y then
@@ -28,7 +28,7 @@ local function bumpUp(animation, scaleFactor, animationFactor)
         animation.shift = scalePosition(animation.shift, scaleFactor)
     end
 
-    animation.scale = (animation.scale or 1) * factor
+    animation.scale = (animation.scale or 1) * scaleFactor
     if type(animation.frame_count) == "number" and animation.frame_count > 1 then
         animation.animation_speed = (animation.animation_speed or 1) * animationFactor
     end
@@ -55,7 +55,7 @@ function adjustVisuals(machine, scaleFactor, animationFactor)
                 end
             end
         end
-        if type(machin.animation.layers) == "table"
+        if type(machine.animation.layers) == "table" then
             for k,v in pairs(machine.animation.layers) do
                 bumpFullAnimation(v, scaleFactor, animationFactor)
             end
