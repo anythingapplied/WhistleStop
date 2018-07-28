@@ -8,6 +8,7 @@ Awaiting factorio features:
 - Hide Recipes from main character screen
 
 Potential Improvements
+- Remove extra tech resets?
 - Shift recipe icon upwards
 - Teleport the transport belts instead of destroy/recreate?
 - algorithm improvevements nth tick (factoriossmo queue logic?)

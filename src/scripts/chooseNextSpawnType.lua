@@ -22,9 +22,6 @@ for k,v in pairs(building_list) do
 end
 
 local function chooseNextSpawnType()
-    if true then -- TEMP
-        return "big-chemplant"
-    end
     if global.whistlestats["big-furnace"] < 2 then  -- First two spawns will be furnaces, for convenience
         return "big-furnace"
     end

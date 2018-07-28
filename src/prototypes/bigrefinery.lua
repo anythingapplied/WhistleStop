@@ -1,5 +1,5 @@
 -- Big furnace prototype and item definition
-require("scripts.luaMacros")
+require("adjustVisuals")
 
 local function create_bigrefinery(name, energy, speed)
     local bigrefinery = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"])
@@ -55,23 +55,6 @@ local function create_bigrefinery(name, energy, speed)
         fluidBox("output", {0, -15}),
         fluidBox("output", {12, -15})
     }
-    -- Scale graphics by a factor and correct animation speed
-    -- local function bumpUp(animation, factor)
-    --     animation.shift = util.table.deepcopy(animation.shift)
-    --     animation.shift[1] = animation.shift[1] * factor   
-    --     animation.shift[2] = animation.shift[2] * factor
-
-    --     animation.scale = (animation.scale or 1) * factor
-    --     animation.animation_speed = 0.05
-    -- end
-
-    -- local scaleFactor = 5.8
-    -- for _, direction in pairs({"north", "east", "south", "west"}) do
-    --     for k,v in pairs(bigrefinery.animation[direction].layers) do
-    --         bumpUp(v, scaleFactor)
-    --         bumpUp(v.hr_version, scaleFactor)
-    --     end
-    -- end
 
     adjustVisuals(bigrefinery, 5.8, 1/20)
 

@@ -1,5 +1,5 @@
 -- Big Assembly prototype and item definition
-require("scripts.luaMacros")
+require("adjustVisuals")
 
 local function create_bigchemplant(name, energy, speed)
     local bigchemplant = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])

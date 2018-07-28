@@ -1,5 +1,5 @@
 -- Big Assembly prototype and item definition
-require("scripts.luaMacros")
+require("adjustVisuals")
 
 local function create_bigassembly(name, energy, speed)
     local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
@@ -58,7 +58,7 @@ local function create_bigassembly(name, energy, speed)
         -- off_when_no_fluid_recipe = true -- Allows for rotation
     }
 
-    adjustVisuals(bigassembly, 6, 1/20)
+    adjustVisuals(bigassembly, 6, 1/32)
 
     data.raw["assembling-machine"][name] = bigassembly
 

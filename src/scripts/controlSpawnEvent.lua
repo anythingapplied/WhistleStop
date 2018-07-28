@@ -1,4 +1,7 @@
 inspect = require("inspect")
+
+require("luaMacros")
+
 -- Placing/Destroying events and loader placement
 
 local offset1 = {[0]=1, [2]=0, [4]=-1, [6]=0}
@@ -18,9 +21,12 @@ end
 script.on_event(defines.events.on_player_rotated_entity,
 	function (event)
 		if event.entity.name == "big-furnace" or event.entity.name == "big-assembly" then
-			local entity = event.entity
-			clean_up(entity.surface, entity.position)
-			on_built_event({created_entity=entity})
+			local position = event.entity.position
+			local area = {{position.x-8.8, position.y-8.8}, {position.x+8.8, position.y+8.8}}
+			for _, entity in pairs(event.entity.surface.find_entities_filtered{area=area, name="express-loader-big"}) do
+				entity.destroy()
+			end
+			on_built_event({created_entity=event.entity})
 		end
 	end
 )
@@ -66,16 +72,16 @@ script.on_event(defines.events.script_raised_built, on_built_event)
 
 -- Removed the loaders
 function clean_up(surface, center)
-	debugWrite("Cleaning up big factory loaders at " .. center.x .. "," .. center.y)
+	debugWrite("Cleaning up big factory loaders and beacons at " .. center.x .. "," .. center.y)
 	local area = {{center.x-8.8, center.y-8.8}, {center.x+8.8, center.y+8.8}}
-	for _, entity in pairs(surface.find_entities_filtered{area=area, name="express-loader-big"}) do
+	for _, entity in pairs(surface.find_entities_filtered{area=area, name={"express-loader-big", "big-beacon-1", "big-beacon-2"}}) do
 		entity.destroy()
 	end
 end
 
--- Destroying a big assembly machine
+-- Destroying leftover loaders and beacons
 local function on_destroy_event(event)
-	if event.entity.name == "big-furnace" or event.entity.name == "big-assembly" then
+	if inlist(event.entity.name, {"big-furnace", "big-assembly", "big-refinery", "big-chemplant"}) then
 		clean_up(event.entity.surface, event.entity.position)
 	end	
 end
