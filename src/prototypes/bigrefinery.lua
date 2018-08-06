@@ -1,16 +1,14 @@
 -- Big furnace prototype and item definition
 require("adjustVisuals")
 
+commonAdjustments = require("commonAdjustments")
+
 local function create_bigrefinery(name, energy, speed)
     local bigrefinery = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"])
 
     bigrefinery.name = name
     -- bigrefinery.icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
-    bigrefinery.localised_name = {"entity-name.big-refinery"}
-
-    bigrefinery.minable = nil
-    bigrefinery.fast_replaceable_group = nil
-    bigrefinery.dying_explosion = "big-explosion"
+    bigrefinery.localised_name = {"entity-name.wsf-big-refinery"}
 
     bigrefinery.collision_box = {{-14.5, -14.5}, {14.5, 14.5}}
     bigrefinery.selection_box = {{-15, -15}, {15, 15}}
@@ -22,16 +20,8 @@ local function create_bigrefinery(name, energy, speed)
     bigrefinery.energy_usage = energy
     bigrefinery.module_specification.module_slots = 6
     bigrefinery.map_color = {r=199, g=199, b=247}
-    bigrefinery.scale_entity_info_icon = true
 
-    bigrefinery.create_ghost_on_death = false
-    bigrefinery.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-    bigrefinery.collision_mask = bigrefinery.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-    table.insert(bigrefinery.collision_mask, "resource-layer")
-    bigrefinery.resistances = bigrefinery.resistances or {}
-    table.insert(bigrefinery.resistances, {percent=100, type="poison"})  -- Prevent termite damage
-
-    bigrefinery.has_backer_name = nil
+    commonAdjustments(bigrefinery)
 
     local function fluidBox(type, position)
         retvalue = {

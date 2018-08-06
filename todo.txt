@@ -1,3 +1,11 @@
+Current Issues:
+Issues with skan-advanced-mining
+custom speed modules
+techs to add speed modules
+Adjust pipe
+test updating from .8 and 1.1
+
+
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?
 - no-inserter-pickup/no-inserter-dropoff for big machines? - Maybe not... if people want to use inserters bad enough, I say let them.
@@ -8,7 +16,9 @@ Awaiting factorio features:
 - Hide Recipes from main character screen
 
 Potential Improvements
-- Remove extra tech resets?
+- Migrate - Items (tags), recipes, item-groups, crafting categories?
+- Foriegn object handling hidden at the end of loaders
+- Add support for bob's chemical furnace and other furnace
 - Shift recipe icon upwards
 - Teleport the transport belts instead of destroy/recreate?
 - algorithm improvevements nth tick (factoriossmo queue logic?)
@@ -22,6 +32,7 @@ Potential Improvements
     - Get rid of animation will let me use higher resolution since max rez is size of sprite sheet
     - Also would further increase UPS/FPS
 - Destroy loaders based on list?
+- 5 loaders on top side, 5 on bottom of the right side of assemblers
 
 Suggestions from users and other random ideas that may or may not happen
 - Create giant miners (with infinite ore patches)

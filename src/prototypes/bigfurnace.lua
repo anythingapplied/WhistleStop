@@ -1,17 +1,15 @@
 -- Big furnace prototype and item definition
 require("adjustVisuals")
 
+commonAdjustments = require("commonAdjustments")
+
 local function create_bigfurnace(name, energy, speed)
     local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])
     local icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
 
     bigfurnace.name = name
     bigfurnace.icon = icon
-    bigfurnace.localised_name = {"entity-name.big-furnace"}
-
-    bigfurnace.minable = nil
-    bigfurnace.fast_replaceable_group = nil
-    bigfurnace.dying_explosion = "big-explosion"
+    bigfurnace.localised_name = {"entity-name.wsf-big-furnace"}
 
     bigfurnace.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
     bigfurnace.selection_box = {{-8.8, -9}, {8.8, 9}}
@@ -23,7 +21,6 @@ local function create_bigfurnace(name, energy, speed)
     bigfurnace.energy_usage = energy
     bigfurnace.module_specification.module_slots = 6
     bigfurnace.map_color = {r=199, g=103, b=247}
-    bigfurnace.scale_entity_info_icon = true
 
     -- Set this to an assembling machine type
     bigfurnace.type = "assembling-machine"
@@ -31,11 +28,7 @@ local function create_bigfurnace(name, energy, speed)
     bigfurnace.source_inventory_size = nil
     bigfurnace.ingredient_count = 1
 
-    bigfurnace.create_ghost_on_death = false
-    bigfurnace.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-    bigfurnace.collision_mask = bigfurnace.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-    table.insert(bigfurnace.collision_mask, "resource-layer")
-    table.insert(bigfurnace.resistances, {percent=100, type="poison"})  -- Prevent termite damage
+    commonAdjustments(bigfurnace)
 
     local function fluidBox(type, position)
         retvalue = {

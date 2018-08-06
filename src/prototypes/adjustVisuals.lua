@@ -65,5 +65,5 @@ function adjustVisuals(machine, scaleFactor, animationFactor)
                 end
             end
         end
-    end    
+    end
 end

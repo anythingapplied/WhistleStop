@@ -1,17 +1,15 @@
 -- Big Assembly prototype and item definition
 require("adjustVisuals")
 
+commonAdjustments = require("commonAdjustments")
+
 local function create_bigchemplant(name, energy, speed)
     local bigchemplant = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
     -- local icon = "__WhistleStopFactories__/graphics/icons/big-assembly.png"
 
     bigchemplant.name = name
     -- bigchemplant.icon = icon
-    bigchemplant.localised_name = {"entity-name.big-chemplant"}
-
-    bigchemplant.minable = nil
-    bigchemplant.fast_replaceable_group = nil
-    bigchemplant.dying_explosion = "big-explosion"
+    bigchemplant.localised_name = {"entity-name.wsf-big-chemplant"}
 
     bigchemplant.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
     bigchemplant.selection_box = {{-8.8, -9}, {8.8, 9}}
@@ -24,15 +22,8 @@ local function create_bigchemplant(name, energy, speed)
     bigchemplant.ingredient_count = 10
     bigchemplant.module_specification.module_slots = 5
     bigchemplant.map_color = {r=103, g=247, b=103}
-    bigchemplant.scale_entity_info_icon = true
 
-    bigchemplant.create_ghost_on_death = false
-    -- Normal flags for assembly machine: {"placeable-neutral", "placeable-player", "player-creation"}
-    bigchemplant.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-    bigchemplant.collision_mask = bigchemplant.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-    table.insert(bigchemplant.collision_mask, "resource-layer")
-    bigchemplant.resistances = bigchemplant.resistances or {}
-    table.insert(bigchemplant.resistances, {percent=100, type="poison"})  -- Prevent termite damage
+    commonAdjustments(bigchemplant)
 
     local function fluidBox(type, position)
         retvalue = {

@@ -5,13 +5,13 @@
 -- the goal and will spawn less initially (with positive boost) or start with a negative
 -- boost to give them a higher likelyhood, but only initially.
 
-building_list = {"buffer", "big-furnace", "big-assembly", "big-refinery"}
+building_list = {"buffer", "wsf-big-furnace", "wsf-big-assembly", "wsf-big-refinery"}
 -- The ideal propotions of different kinds of machine for end game
-local goal_proportion = {["buffer"] = 35, ["big-furnace"] = 35, ["big-assembly"] = 35, ["big-refinery"] = 2}
+local goal_proportion = {["buffer"] = 35, ["wsf-big-furnace"] = 35, ["wsf-big-assembly"] = 35, ["wsf-big-refinery"] = 2}
 
 -- Offsets to trick the game into thinking your starting amounts of machines are at certain levels.
 -- Higher numbers will push spawning off until more factories are discovered, negative numbers will spawn more earlier
-local initial_boost = {["buffer"] = 0, ["big-furnace"] = 0, ["big-assembly"] = -30, ["big-refinery"] = 0}
+local initial_boost = {["buffer"] = 0, ["wsf-big-furnace"] = 0, ["wsf-big-assembly"] = -30, ["wsf-big-refinery"] = 0}
 
 -- Calculate sums of all sets of points for probability calculation
 local total_proportion = 0
@@ -22,8 +22,8 @@ for k,v in pairs(building_list) do
 end
 
 local function chooseNextSpawnType()
-    if global.whistlestats["big-furnace"] < 2 then  -- First two spawns will be furnaces, for convenience
-        return "big-furnace"
+    if global.whistlestats["wsf-big-furnace"] < 2 then  -- First two spawns will be furnaces, for convenience
+        return "wsf-big-furnace"
     end
     
     -- Calculate sums of all sets of points for probability calculation
@@ -40,7 +40,6 @@ local function chooseNextSpawnType()
     for k,v in pairs(building_list) do
         adjusted_probability[v] = math.max(0, goal_target * goal_proportion[v] / total_proportion - global.whistlestats[v] - initial_boost[v])
         adjusted_probability_total = adjusted_probability_total + adjusted_probability[v]
-        -- debugWrite(v .. " " .. adjusted_probability[v])
     end
     
     local selection_var = math.random()

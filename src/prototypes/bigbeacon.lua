@@ -4,11 +4,10 @@ local function create_bigfurnace(name, collision_box)
     {
         type = "beacon",
         name = name,
-        localization = {"entity-name.big-beacon"},
+        localization = {"entity-name.wsf-beacon"},
         icon = "__base__/graphics/icons/beacon.png",
         icon_size = 32,
         flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable", "not-on-map", "hide-alt-info"},
-        destructible = false,
         collision_mask = {},
         minable = {hardness = 0, minable = false, mining_time = 0},
         collision_box = collision_box,
@@ -35,10 +34,9 @@ local function create_bigfurnace(name, collision_box)
         },
         radius_visualisation_picture =
         {
-            filename = "__base__/graphics/entity/beacon/beacon-radius-visualization.png",
-            priority = "extra-high-no-scale",
-            width = 10,
-            height = 10
+            filename = "__WhistleStopFactories__/graphics/FFFFFF-0.png",
+            width = 1,
+            height = 1
         },
         supply_area_distance = -3,
         energy_source =

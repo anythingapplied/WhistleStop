@@ -1,17 +1,15 @@
 -- Big Assembly prototype and item definition
 require("adjustVisuals")
 
+commonAdjustments = require("commonAdjustments")
+
 local function create_bigassembly(name, energy, speed)
     local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
     local icon = "__WhistleStopFactories__/graphics/icons/big-assembly.png"
 
     bigassembly.name = name
     bigassembly.icon = icon
-    bigassembly.localised_name = {"entity-name.big-assembly"}
-
-    bigassembly.minable = nil
-    bigassembly.fast_replaceable_group = nil
-    bigassembly.dying_explosion = "big-explosion"
+    bigassembly.localised_name = {"entity-name.wsf-big-assembly"}
 
     bigassembly.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
     bigassembly.selection_box = {{-8.8, -9}, {8.8, 9}}
@@ -24,14 +22,8 @@ local function create_bigassembly(name, energy, speed)
     bigassembly.ingredient_count = 10
     bigassembly.module_specification.module_slots = 5
     bigassembly.map_color = {r=103, g=247, b=247}
-    bigassembly.scale_entity_info_icon = true
 
-    bigassembly.create_ghost_on_death = false
-    -- Normal flags for assembly machine: {"placeable-neutral", "placeable-player", "player-creation"}
-    bigassembly.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-    bigassembly.collision_mask = bigassembly.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-    table.insert(bigassembly.collision_mask, "resource-layer")
-    table.insert(bigassembly.resistances, {percent=100, type="poison"})  -- Prevent termite damage
+    commonAdjustments(bigassembly)
 
     local function fluidBox(type, position)
         retvalue = {
@@ -51,10 +43,10 @@ local function create_bigassembly(name, energy, speed)
     end
 
     bigassembly.fluid_boxes = {
-        fluidBox("input", {1, -9}),
-        fluidBox("input", {-9, -1}),
-        fluidBox("output", {9, 1}),
-        fluidBox("output", {-1, 9}),
+        fluidBox("input", {0, -9}),
+        fluidBox("input", {-9, 0}),
+        fluidBox("output", {9, 0}),
+        fluidBox("output", {0, 9}),
         -- off_when_no_fluid_recipe = true -- Allows for rotation
     }
 
