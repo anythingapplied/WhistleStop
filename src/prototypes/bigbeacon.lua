@@ -46,15 +46,9 @@ local function create_bigfurnace(name, collision_box)
             render_no_power_icon = false,
             render_no_network_icon = false
         },
-        --vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0 },
         energy_usage = "1kW",
-        distribution_effectivity = 2,
-        module_specification =
-        {
-            module_slots = 20,
-            --module_info_icon_shift = {0, 0.5},
-            --module_info_multi_row_initial_height_modifier = -0.3
-        }
+        distribution_effectivity = 5,
+        module_specification = {module_slots=12}
     }
     })
 

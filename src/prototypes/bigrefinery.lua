@@ -50,7 +50,6 @@ local function create_bigrefinery(name, energy, speed)
 
     data.raw["assembling-machine"][name] = bigrefinery
 
-
     local bigrefinery_item = util.table.deepcopy(data.raw.item["oil-refinery"])
 
     bigrefinery_item.name = name

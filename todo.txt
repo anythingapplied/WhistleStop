@@ -4,6 +4,7 @@ custom speed modules
 techs to add speed modules
 Adjust pipe
 test updating from .8 and 1.1
+loaders remove speed modules? Do they still connect to furnace?
 
 
 Notes from 0.17 preview list:
