@@ -176,15 +176,6 @@ script.on_event(defines.events.on_research_finished,
                 end
             end
         end
-        if event.research.name == "whistlestop-speed-1" or event.research.name == "whistlestop-speed-2" then
-            local inventory
-            for k,v in pairs(global.whistlestops) do
-                inventory = v.beacon.get_module_inventory()
-                inventory.remove{name="wsf-speed-module", count=100}
-                inventory.insert{name="wsf-speed-module", count=event.research.level}
-            end
-            global.speed_tech_level = event.research.level
-        end
     end
 )
 

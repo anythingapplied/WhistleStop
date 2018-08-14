@@ -1,6 +1,5 @@
 ## Version: 0.1.2
 ### Changes
-- Added technology for speed (and energy consumption) increases for big factories
 - Gave big structures more health and resistances
 - Adjust big assembly pipe and loader locations to be more symmetrical (only for newly spawned factories)
 - Bobs Recipe Support - Big Furnaces now supports Bob's Metal Mixing and Chemical Furnace. Assembling machines support Bob's Electrolyser

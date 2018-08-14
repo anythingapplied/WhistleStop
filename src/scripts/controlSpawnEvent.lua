@@ -87,44 +87,11 @@ local function placeAllLoaders(entity)
 	end
 end
 
-local function placeBeacon(entity)
-	local beacon = entity.surface.create_entity{name="wsf-beacon", position=entity.position, force=entity.force}
-	beacon.destructible = false
-
-	local powerpole = entity.surface.create_entity{name="wsf-powerpole", position=entity.position, force=entity.force}
-	powerpole.destructible = false
-
-	local accumulator
-	if entity.name == "wsf-big-refinery" then
-		accumulator = entity.surface.create_entity{name="wsf-accumulator-2", position=entity.position, force=entity.force}
-	else
-		accumulator = entity.surface.create_entity{name="wsf-accumulator-1", position=entity.position, force=entity.force}
-	end
-	accumulator.destructible = false
-
-	if global.speed_tech_level then
-		beacon.get_module_inventory().insert{name="wsf-speed-module", count=global.speed_tech_level}
-	end
-	
-	global.whistlestops[entity.unit_number].beacon = beacon
-	global.whistlestops[entity.unit_number].accumulator = accumulator
-	global.whistlestops[entity.unit_number].powerpole = powerpole
-end
-
 local function destroyLoaders(unit_number)
 	for k,v in pairs(global.whistlestops[unit_number].loaderlist) do
 		v.destroy()
 	end
 	global.whistlestops[unit_number].loaderlist = {}
-end
-
-local function destroyBeacon(unit_number)
-	global.whistlestops[unit_number].beacon.destroy()
-	global.whistlestops[unit_number].accumulator.destroy()
-	global.whistlestops[unit_number].powerpole.destroy()
-	global.whistlestops[unit_number].beacon = nil
-	global.whistlestops[unit_number].accumulator = nil
-	global.whistlestops[unit_number].powerpole = nil
 end
 
 script.on_event(defines.events.on_player_rotated_entity,
@@ -143,21 +110,19 @@ local function on_built_event(event)
 	end
 
 	global.whistlestops[entity.unit_number] = {position=entity.position, type=entity.name, entity=entity, surface=entity.surface, direction=entity.direction,
-		recipe=nil, tag=nil, loaderlist={}, beacon=nil, pre_loader_tech=nil}
+		recipe=nil, tag=nil, loaderlist={}}
 
 	placeAllLoaders(entity)
-	placeBeacon(entity)
 end
 
 script.on_event(defines.events.on_built_entity, on_built_event)
 script.on_event(defines.events.on_robot_built_entity, on_built_event)
 script.on_event(defines.events.script_raised_built, on_built_event)
 
--- Destroying leftover loaders and beacons
+-- Destroying leftover loaders
 function on_destroy_event(event)
 	if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		destroyLoaders(event.entity.unit_number)
-		destroyBeacon(event.entity.unit_number)
 		global.whistlestops[event.entity.unit_number] = nil
 	end	
 end

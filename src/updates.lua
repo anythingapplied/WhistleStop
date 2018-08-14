@@ -74,7 +74,6 @@ Updates.run = function()
                 end
 
                 script.raise_event(defines.events.script_raised_built, {created_entity=v.entity, player_index=1})
-                global.whistlestops[entity.unit_number].pre_loader_tech = true -- keeps all loaders
             end
         end
     end
