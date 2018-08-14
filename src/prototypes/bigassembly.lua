@@ -42,13 +42,21 @@ local function create_bigassembly(name, energy, speed)
         return retvalue
     end
 
-    bigassembly.fluid_boxes = {
-        fluidBox("input", {0, -9}),
-        fluidBox("input", {-9, 0}),
-        fluidBox("output", {9, 0}),
-        fluidBox("output", {0, 9}),
-        -- off_when_no_fluid_recipe = true -- Allows for rotation
-    }
+    if name == "wsf-big-assembly-old" then
+        bigassembly.fluid_boxes = {
+            fluidBox("input", {1, -9}),
+            fluidBox("input", {-9, -1}),
+            fluidBox("output", {9, 1}),
+            fluidBox("output", {-1, 9}),
+        }
+    else
+        bigassembly.fluid_boxes = {
+            fluidBox("input", {0, -9}),
+            fluidBox("input", {-9, 0}),
+            fluidBox("output", {9, 0}),
+            fluidBox("output", {0, 9}),
+        }
+    end
 
     adjustVisuals(bigassembly, 6, 1/32)
 

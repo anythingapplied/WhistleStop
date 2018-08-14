@@ -26,7 +26,7 @@ local function create_bigfurnace(name, energy, speed)
     bigfurnace.type = "assembling-machine"
     bigfurnace.result_inventory_size = nil
     bigfurnace.source_inventory_size = nil
-    bigfurnace.ingredient_count = 1
+    bigfurnace.ingredient_count = 2
 
     commonAdjustments(bigfurnace)
 

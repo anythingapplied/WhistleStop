@@ -6,9 +6,6 @@ require("scripts.recipeSetup")
 -- Create the item groups for these new recipes
 require("scripts.itemGroupSetup")
 
--- Adds 50x recipes versions to each technology
--- require("scripts.techSetup")
-
 -- Adds big items to list of productivity module usable items
 require("scripts.productivityFix")
 

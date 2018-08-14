@@ -172,7 +172,10 @@ local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
 
     local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
+    table.insert(cat_list1, "chemical-furnace")  -- Support for Bobs chemical furnaces
+    table.insert(cat_list1, "mixing-furnace") -- Support for Bobs mixing furnaces
     local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
+    table.insert(cat_list1, "electrolysis") -- Support for Bobs electrolysis
     local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
     local cat_list4 = data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"]
 

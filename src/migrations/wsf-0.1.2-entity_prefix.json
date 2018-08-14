@@ -3,15 +3,15 @@
     [
         ["express-loader-big", "wsf-factory-loader"],
         ["big-furnace", "wsf-big-furnace"],
-        ["big-assembly", "wsf-big-assembly"],
+        ["big-assembly", "wsf-big-assembly-old"],
         ["big-refinery", "wsf-big-refinery"]
     ],
     "item":
     [
         ["express-loader-big", "wsf-factory-loader"],
         ["big-furnace", "wsf-big-furnace"],
-        ["big-assembly", "wsf-big-assembly"],
+        ["big-assembly", "wsf-big-assembly-old"],
         ["big-refinery", "wsf-big-refinery"]
     ]
-  }
+}
   

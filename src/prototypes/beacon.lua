@@ -1,5 +1,5 @@
 
-local function create_bigfurnace(name, collision_box)
+local function create_beacon(name)
     data:extend({
     {
         type = "beacon",
@@ -10,7 +10,7 @@ local function create_bigfurnace(name, collision_box)
         flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable", "not-on-map", "hide-alt-info"},
         collision_mask = {},
         minable = {hardness = 0, minable = false, mining_time = 0},
-        collision_box = collision_box,
+        collision_box = {{-.1, -.1}, {.1, .1}},
         allowed_effects = {"consumption", "speed"},
         base_picture =
         {
@@ -46,20 +46,21 @@ local function create_bigfurnace(name, collision_box)
             render_no_power_icon = false,
             render_no_network_icon = false
         },
-        energy_usage = "1kW",
+        energy_usage = "60W",
         distribution_effectivity = 5,
         module_specification = {module_slots=12}
     }
     })
 
-    local bigbeacon_item = util.table.deepcopy(data.raw.item["beacon"])
+    local beacon_item = util.table.deepcopy(data.raw.item["beacon"])
 
-    bigbeacon_item.name = name
-    bigbeacon_item.order = "b[" .. name .. "]"
-    bigbeacon_item.place_result = name
+    beacon_item.name = name
+    beacon_item.order = "b[" .. name .. "]"
+    beacon_item.place_result = name
+    beacon_item.flags = {"hidden"}
 
-    data.raw.item[name] = bigbeacon_item
+    data.raw.item[name] = beacon_item
 
 end
 
-return create_bigfurnace
+return create_beacon

@@ -53,27 +53,62 @@ local function loadersForBigAssembly(entity)
 	end
 end
 
+local function loadersForBigAssemblyOld(entity)
+	local loaderlist = global.whistlestops[entity.unit_number].loaderlist
+
+	-- Left side loaders
+	for i=-6,6 do
+		if i ~= -1 then
+			placeLoader(entity, -7.5, i, "input", 2)
+		end
+	end
+
+	-- Right side loaders
+	for i=2,5 do
+		table.insert(loaderlist, placeLoader(entity, 7.5, i, "output", 2))
+		table.insert(loaderlist, placeLoader(entity, 7.5, -i, "output", 2))
+	end
+
+	for i=2,6 do
+		-- Bottom loaders
+		table.insert(loaderlist, placeLoader(entity, -i, 7.5, "input", 0))
+		-- Top loaders
+		table.insert(loaderlist, placeLoader(entity, -i, -7.5, "input", 4))
+	end
+end
+
 local function placeAllLoaders(entity)
 	if entity.name == "wsf-big-furnace" then
 		loadersForBigFurnace(entity)
 	elseif entity.name == "wsf-big-assembly" then
 		loadersForBigAssembly(entity)
+	elseif entity.name == "wsf-big-assembly-old" then
+		loadersForBigAssemblyOld(entity)
 	end
 end
 
 local function placeBeacon(entity)
-	local beacon
+	local beacon = entity.surface.create_entity{name="wsf-beacon", position=entity.position, force=entity.force}
+	beacon.destructible = false
+
+	local powerpole = entity.surface.create_entity{name="wsf-powerpole", position=entity.position, force=entity.force}
+	powerpole.destructible = false
+
+	local accumulator
 	if entity.name == "wsf-big-refinery" then
-		beacon = entity.surface.create_entity{name="wsf-beacon-2", position=entity.position, force=entity.force}
+		accumulator = entity.surface.create_entity{name="wsf-accumulator-2", position=entity.position, force=entity.force}
 	else
-		beacon = entity.surface.create_entity{name="wsf-beacon-1", position=entity.position, force=entity.force}
+		accumulator = entity.surface.create_entity{name="wsf-accumulator-1", position=entity.position, force=entity.force}
 	end
+	accumulator.destructible = false
 
 	if global.speed_tech_level then
 		beacon.get_module_inventory().insert{name="wsf-speed-module", count=global.speed_tech_level}
 	end
 	
 	global.whistlestops[entity.unit_number].beacon = beacon
+	global.whistlestops[entity.unit_number].accumulator = accumulator
+	global.whistlestops[entity.unit_number].powerpole = powerpole
 end
 
 local function destroyLoaders(unit_number)
@@ -85,7 +120,11 @@ end
 
 local function destroyBeacon(unit_number)
 	global.whistlestops[unit_number].beacon.destroy()
+	global.whistlestops[unit_number].accumulator.destroy()
+	global.whistlestops[unit_number].powerpole.destroy()
 	global.whistlestops[unit_number].beacon = nil
+	global.whistlestops[unit_number].accumulator = nil
+	global.whistlestops[unit_number].powerpole = nil
 end
 
 script.on_event(defines.events.on_player_rotated_entity,
@@ -104,7 +143,7 @@ local function on_built_event(event)
 	end
 
 	global.whistlestops[entity.unit_number] = {position=entity.position, type=entity.name, entity=entity, surface=entity.surface, direction=entity.direction,
-		recipe=nil, tag=nil, loaderlist={}, beacon=nil}
+		recipe=nil, tag=nil, loaderlist={}, beacon=nil, pre_loader_tech=nil}
 
 	placeAllLoaders(entity)
 	placeBeacon(entity)
@@ -115,10 +154,11 @@ script.on_event(defines.events.on_robot_built_entity, on_built_event)
 script.on_event(defines.events.script_raised_built, on_built_event)
 
 -- Destroying leftover loaders and beacons
-local function on_destroy_event(event)
+function on_destroy_event(event)
 	if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-refinery", "wsf-big-chemplant"}) then
-		destroyLoaders(entity.unit_number)
-		destroyBeacon(entity.unit_number)
+		destroyLoaders(event.entity.unit_number)
+		destroyBeacon(event.entity.unit_number)
+		global.whistlestops[event.entity.unit_number] = nil
 	end	
 end
 

@@ -36,6 +36,7 @@ Potential Improvements
 - 5 loaders on top side, 5 on bottom of the right side of assemblers
 
 Suggestions from users and other random ideas that may or may not happen
+- Random selection of available recipes?
 - Create giant miners (with infinite ore patches)
 - Add giant beacons that increase belt speed
 - Split giant chemical plants from assembly machines

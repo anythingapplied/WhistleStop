@@ -50,9 +50,6 @@ end
 
 script.on_event(defines.events.on_chunk_generated,
     function (event)
-        if event.surface.index ~= 1 then  -- Only spawn on normal surface
-            return
-        end
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
         local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["wsf-big-furnace"] + global.whistlestats["wsf-big-assembly"] + global.whistlestats["wsf-big-refinery"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
@@ -127,8 +124,7 @@ script.on_nth_tick(6*60,
         for k,v in pairs(global.whistlestops) do
             -- Removes loaders for any entities that were destroyed by other mods without triggering destroy_entity event
             if not v.entity.valid then
-                clean_up(v.surface, v.position)
-                global.whistlestops[k] = nil
+                on_destroy_event({entity={name=v.type, unit_number=k}})
             elseif settings.global["whistle-enable-tagging"].value then
                 -- Creates tag for entities that have a set recipe
                 local recipe = v.entity.get_recipe()

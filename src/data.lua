@@ -74,6 +74,55 @@ data:extend({
     max_level = 12
   },
 
+    -- Speed Technologies
+
+    {
+      type = "technology",
+      name = "whistlestop-loader-1",
+      icon_size = 128,
+      icon = "__base__/graphics/technology/logistics.png",
+      prerequisites = {"logistics-2"},
+      unit =
+      {
+        count = 200,
+        ingredients =
+        {
+          {"science-pack-1", 1},
+          {"science-pack-2", 1},
+          {"science-pack-3", 1},
+          {"production-science-pack", 1}
+        },
+        time = 30
+      },
+      order = "a-f-d",
+      upgrade = "true"
+    },
+  
+    {
+      type = "technology",
+      name = "whistlestop-loader-2",
+      icon_size = 128,
+      icon = "__base__/graphics/technology/logistics.png",
+      prerequisites = {"whistlestop-loader-1"},
+      unit =
+      {
+        count_formula = "100+100*L",
+        ingredients =
+        {
+          {"science-pack-1", 1},
+          {"science-pack-2", 1},
+          {"science-pack-3", 1},
+          {"production-science-pack", 1},
+          {"high-tech-science-pack", 1}
+        },
+        time = 30
+      },
+      order = "a-f-d",
+      upgrade = "true",
+      max_level = 12
+    },
+  
+
   -- Speed Module
   {
     type = "module",
