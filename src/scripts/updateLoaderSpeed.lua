@@ -11,7 +11,7 @@ for k,v in pairs(searchList) do
     end
 end
 
-data.raw.loader["express-loader-big"].speed = fastestBeltSpeed
+data.raw.loader["wsf-factory-loader"].speed = fastestBeltSpeed
 
 -- Keeps animation speed constant so the belts won't look frozen or other wierd animation quirks
-data.raw.loader["express-loader-big"].animation_speed_coefficient = data.raw.loader["express-loader"].animation_speed_coefficient * data.raw.loader["express-loader"].speed / fastestBeltSpeed
+data.raw.loader["wsf-factory-loader"].animation_speed_coefficient = data.raw.loader["express-loader"].animation_speed_coefficient * data.raw.loader["express-loader"].speed / fastestBeltSpeed

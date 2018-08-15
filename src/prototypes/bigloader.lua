@@ -1,4 +1,5 @@
 -- Big loader prototype and item definition
+require("util")
 
 local function create_bigloader(name)
     local bigloader = util.table.deepcopy(data.raw["loader"]["express-loader"])
@@ -6,7 +7,6 @@ local function create_bigloader(name)
     bigloader.name = name
     bigloader.localised_name = {"entity-name.express-loader"}
     bigloader.minable = {hardness = 0, minable = false, mining_time = 0}
-    bigloader.destructible = false
     bigloader.fast_replaceable_group = nil
 
     bigloader.create_ghost_on_death = false

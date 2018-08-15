@@ -50,11 +50,8 @@ end
 
 script.on_event(defines.events.on_chunk_generated,
     function (event)
-        if event.surface.index ~= 1 then  -- Only spawn on normal surface
-            return
-        end
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
-        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["big-furnace"] + global.whistlestats["big-assembly"] + global.whistlestats["big-refinery"]) / 10
+        local prob = (20 + global.whistlestats.valid_chunk_count) / (10 + global.whistlestats["wsf-big-furnace"] + global.whistlestats["wsf-big-assembly"] + global.whistlestats["wsf-big-refinery"]) / 10
         if not probability(prob) then -- Initial probability filter to give the map a more random spread and reduce cpu work
             return
         end
@@ -79,7 +76,7 @@ script.on_event(defines.events.on_chunk_generated,
             global.whistlestats.buffer = global.whistlestats.buffer + 1
             global.nextSpawnType = nil
         else
-            if global.nextSpawnType ~= "big-refinery" then
+            if global.nextSpawnType ~= "wsf-big-refinery" then
                 -- Move center for smaller buildings, so that it won't always be in the exact center of chunks
                 -- Still making sure not to cross the edge of the chunk
                 center = {x=center.x - 1 + math.random(-3,4)*2, y=center.y - 1 + math.random(-3,4)*2}
@@ -116,7 +113,7 @@ script.on_init(
             -- tag=tag_number
 
         -- Stat Tracking
-        global.whistlestats = {buffer=0, ["big-furnace"]=0, ["big-assembly"]=0, ["big-refinery"]=0, valid_chunk_count=0}
+        global.whistlestats = {buffer=0, ["wsf-big-furnace"]=0, ["wsf-big-assembly"]=0, ["wsf-big-refinery"]=0, ["wsf-big-chemplant"]=0, valid_chunk_count=0}
 
         Updates.init()
     end
@@ -127,8 +124,8 @@ script.on_nth_tick(6*60,
         for k,v in pairs(global.whistlestops) do
             -- Removes loaders for any entities that were destroyed by other mods without triggering destroy_entity event
             if not v.entity.valid then
-                clean_up(v.surface, v.position)
-                global.whistlestops[k] = nil
+                debugWrite("Factory not properly cleaned up at " .. v.position.x .. "," .. v.position.y .. ".  Cleaning now.")
+                on_destroy_event({entity={name=v.type, unit_number=k}})
             elseif settings.global["whistle-enable-tagging"].value then
                 -- Creates tag for entities that have a set recipe
                 local recipe = v.entity.get_recipe()
@@ -180,7 +177,6 @@ script.on_event(defines.events.on_research_finished,
                 end
             end
         end
-
     end
 )
 

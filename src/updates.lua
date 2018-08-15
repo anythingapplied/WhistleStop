@@ -1,11 +1,10 @@
 -- Lists points used to determine if a new factory is far enough away from previous factories
 require("scripts.bufferPoints")
-
--- Handles big machine spawn events with its loaders
 require("scripts.controlSpawnEvent")
+require("util")
 
 Updates = {}
-local current_version = 2
+local current_version = 3
 
 Updates.init = function()
 	global.update_version = current_version
@@ -34,11 +33,10 @@ Updates.run = function()
             distance_factor = math.max(0, math.min(1, (v.mindist - minSetting)/minSetting))
             center = {x=v.x, y=v.y}
             addBuffer(center, 1, distance_factor)
-
-            for _, entity in pairs(game.surfaces[1].find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly"}}) do
+            
+            for _, entity in pairs(game.surfaces[1].find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly", "wsf-big-furnace", "wsf-big-assembly-old"}}) do
                 if entity and entity.valid then
                     table.insert(global.whistlestops, {position=center, type=entity.name, entity=entity, surface=entity.surface, direction=entity.direction, recipe=nil, tag=nil})
-                    on_built_event({created_entity=entity}) -- Places new loaders back down
                 end
             end
         end
@@ -58,7 +56,29 @@ Updates.run = function()
             force.reset_technology_effects()
         end
     end
-    
+    if global.update_version <= 3 then
+        global.whistlestats["wsf-big-furnace"] = global.whistlestats["big-furnace"]
+        global.whistlestats["wsf-big-assembly"] = global.whistlestats["big-assembly"]
+        global.whistlestats["wsf-big-refinery"] = global.whistlestats["big-refinery"]
+        global.whistlestats["big-furnace"] = nil
+        global.whistlestats["big-assembly"] = nil
+        global.whistlestats["big-refinery"] = nil
+
+        local entitylist = util.table.deepcopy(global.whistlestops)
+
+        global.whistlestops = {}
+
+        for k,v in pairs(entitylist) do
+            if v.entity.valid then
+                local area = {{v.position.x-8.8, v.position.y-8.8}, {v.position.x+8.8, v.position.y+8.8}}
+                for _, loader in pairs(v.entity.surface.find_entities_filtered{area=area, name="wsf-factory-loader"}) do
+                    loader.destroy()
+                end
+
+                on_built_event({created_entity=v.entity, player_index=1})
+            end
+        end
+    end
 	global.update_version = current_version
 end
 

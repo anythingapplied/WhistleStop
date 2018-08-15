@@ -1,4 +1,8 @@
 -- Big Assembly prototype and item definition
+require("adjustVisuals")
+require("util")
+
+commonAdjustments = require("commonAdjustments")
 
 local function create_bigassembly(name, energy, speed)
     local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
@@ -6,11 +10,7 @@ local function create_bigassembly(name, energy, speed)
 
     bigassembly.name = name
     bigassembly.icon = icon
-    bigassembly.localised_name = {"entity-name.big-assembly"}
-
-    bigassembly.minable = nil
-    bigassembly.fast_replaceable_group = nil
-    bigassembly.dying_explosion = "big-explosion"
+    bigassembly.localised_name = {"entity-name.wsf-big-assembly"}
 
     bigassembly.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
     bigassembly.selection_box = {{-8.8, -9}, {8.8, 9}}
@@ -23,14 +23,8 @@ local function create_bigassembly(name, energy, speed)
     bigassembly.ingredient_count = 10
     bigassembly.module_specification.module_slots = 5
     bigassembly.map_color = {r=103, g=247, b=247}
-    bigassembly.scale_entity_info_icon = true
 
-    bigassembly.create_ghost_on_death = false
-    -- Normal flags for assembly machine: {"placeable-neutral", "placeable-player", "player-creation"}
-    bigassembly.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-    bigassembly.collision_mask = bigassembly.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-    table.insert(bigassembly.collision_mask, "resource-layer")
-    table.insert(bigassembly.resistances, {percent=100, type="poison"})  -- Prevent termite damage
+    commonAdjustments(bigassembly)
 
     local function fluidBox(type, position)
         retvalue = {
@@ -49,29 +43,23 @@ local function create_bigassembly(name, energy, speed)
         return retvalue
     end
 
-    bigassembly.fluid_boxes = {
-        fluidBox("input", {1, -9}),
-        fluidBox("input", {-9, -1}),
-        fluidBox("output", {9, 1}),
-        fluidBox("output", {-1, 9}),
-        -- off_when_no_fluid_recipe = true -- Allows for rotation
-    }
-
-    -- Scale graphics by a factor and correct animation speed
-    local function bumpUp(animation, factor)
-        animation.shift = util.table.deepcopy(animation.shift)
-        animation.shift[1] = animation.shift[1] * factor   
-        animation.shift[2] = animation.shift[2] * factor
-
-        animation.scale = (animation.scale or 1) * factor
-        animation.animation_speed = 0.05
+    if name == "wsf-big-assembly-old" then
+        bigassembly.fluid_boxes = {
+            fluidBox("input", {1, -9}),
+            fluidBox("input", {-9, -1}),
+            fluidBox("output", {9, 1}),
+            fluidBox("output", {-1, 9}),
+        }
+    else
+        bigassembly.fluid_boxes = {
+            fluidBox("input", {0, -9}),
+            fluidBox("input", {-9, 0}),
+            fluidBox("output", {9, 0}),
+            fluidBox("output", {0, 9}),
+        }
     end
 
-    local scaleFactor = 6
-    for k,v in pairs(bigassembly.animation.layers) do
-        bumpUp(v, scaleFactor)
-        bumpUp(v.hr_version, scaleFactor)
-    end
+    adjustVisuals(bigassembly, 6, 1/32)
 
     data.raw["assembling-machine"][name] = bigassembly
 

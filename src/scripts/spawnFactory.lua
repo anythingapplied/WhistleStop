@@ -34,14 +34,9 @@ end
 
 function spawn(center, surface, entityname)
     local force = game.forces.player
-
     if surface.can_place_entity{name=entityname, position=center, force=force} and clearArea(center, surface) then
-        
         local entity = surface.create_entity{name=entityname, position=center, force=force}
-        table.insert(global.whistlestops, {position=center, type=entityname, entity=entity, surface=surface, direction=entity.direction, recipe=nil, tag=nil})
-
-        local event = {created_entity=entity, player_index=1}
-        on_built_event(event)
+        script.raise_event(defines.events.script_raised_built, {created_entity=entity, player_index=1})
         return true
     end
     return false

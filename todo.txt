@@ -1,3 +1,12 @@
+Current Issues:
+Issues with skan-advanced-mining
+custom speed modules
+techs to add speed modules
+Adjust pipe
+test updating from .8 and 1.1
+loaders remove speed modules? Do they still connect to furnace?
+
+
 Notes from 0.17 preview list:
 - energy_source = "void" - Make mod that completely removes power?
 - no-inserter-pickup/no-inserter-dropoff for big machines? - Maybe not... if people want to use inserters bad enough, I say let them.
@@ -8,8 +17,9 @@ Awaiting factorio features:
 - Hide Recipes from main character screen
 
 Potential Improvements
+- Migrate - Items (tags), recipes, item-groups, crafting categories?
+- Foriegn object handling hidden at the end of loaders
 - Shift recipe icon upwards
-- Teleport the transport belts instead of destroy/recreate?
 - algorithm improvevements nth tick (factoriossmo queue logic?)
 - Deploy script - Update forums and mod portal with latest version
 - Git tag hook - Run deploy script when git tag in format vX.X.X
@@ -20,9 +30,10 @@ Potential Improvements
 - Animation
     - Get rid of animation will let me use higher resolution since max rez is size of sprite sheet
     - Also would further increase UPS/FPS
-- Destroy loaders based on list?
+- 5 loaders on top side, 5 on bottom of the right side of assemblers
 
 Suggestions from users and other random ideas that may or may not happen
+- Random selection of available recipes?
 - Create giant miners (with infinite ore patches)
 - Add giant beacons that increase belt speed
 - Split giant chemical plants from assembly machines
@@ -34,10 +45,3 @@ Suggestions from users and other random ideas that may or may not happen
 - Lock in some recipes for machines
 - Create whitelist/blacklist for lua surfaces using LuaRemote for other mods to stop these on their mod
 - Why doesn't iron pipes and a handful of other recipes get hidden when adding "recipe.hidden = true" to recipe creation?
-
-Buildable
-X Techs
-- Recipes
-- Settings
-- Localizations 
-Logic for when settings change

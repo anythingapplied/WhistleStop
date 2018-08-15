@@ -1,15 +1,15 @@
 -- Big furnace prototype and item definition
+require("adjustVisuals")
+require("util")
+
+commonAdjustments = require("commonAdjustments")
 
 local function create_bigrefinery(name, energy, speed)
     local bigrefinery = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"])
 
     bigrefinery.name = name
     -- bigrefinery.icon = "__WhistleStopFactories__/graphics/icons/big-furnace.png"
-    bigrefinery.localised_name = {"entity-name.big-refinery"}
-
-    bigrefinery.minable = nil
-    bigrefinery.fast_replaceable_group = nil
-    bigrefinery.dying_explosion = "big-explosion"
+    bigrefinery.localised_name = {"entity-name.wsf-big-refinery"}
 
     bigrefinery.collision_box = {{-14.5, -14.5}, {14.5, 14.5}}
     bigrefinery.selection_box = {{-15, -15}, {15, 15}}
@@ -21,16 +21,8 @@ local function create_bigrefinery(name, energy, speed)
     bigrefinery.energy_usage = energy
     bigrefinery.module_specification.module_slots = 6
     bigrefinery.map_color = {r=199, g=199, b=247}
-    bigrefinery.scale_entity_info_icon = true
 
-    bigrefinery.create_ghost_on_death = false
-    bigrefinery.flags = {"placeable-neutral", "placeable-player", "player-creation", "not-deconstructable", "not-blueprintable"}
-    bigrefinery.collision_mask = bigrefinery.collision_mask or {"item-layer", "object-layer", "player-layer", "water-tile"}
-    table.insert(bigrefinery.collision_mask, "resource-layer")
-    bigrefinery.resistances = bigrefinery.resistances or {}
-    table.insert(bigrefinery.resistances, {percent=100, type="poison"})  -- Prevent termite damage
-
-    bigrefinery.has_backer_name = nil
+    commonAdjustments(bigrefinery)
 
     local function fluidBox(type, position)
         retvalue = {
@@ -54,26 +46,10 @@ local function create_bigrefinery(name, energy, speed)
         fluidBox("output", {0, -15}),
         fluidBox("output", {12, -15})
     }
-    -- Scale graphics by a factor and correct animation speed
-    local function bumpUp(animation, factor)
-        animation.shift = util.table.deepcopy(animation.shift)
-        animation.shift[1] = animation.shift[1] * factor   
-        animation.shift[2] = animation.shift[2] * factor
 
-        animation.scale = (animation.scale or 1) * factor
-        animation.animation_speed = 0.05
-    end
-
-    local scaleFactor = 5.8
-    for _, direction in pairs({"north", "east", "south", "west"}) do
-        for k,v in pairs(bigrefinery.animation[direction].layers) do
-            bumpUp(v, scaleFactor)
-            bumpUp(v.hr_version, scaleFactor)
-        end
-    end
+    adjustVisuals(bigrefinery, 5.8, 1/20)
 
     data.raw["assembling-machine"][name] = bigrefinery
-
 
     local bigrefinery_item = util.table.deepcopy(data.raw.item["oil-refinery"])
 

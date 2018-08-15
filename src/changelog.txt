@@ -1,71 +1,85 @@
-Version: 0.1.1
-  Bugfixes:
-    - High resolution Refinery now has corrected offsets so looks correct now in high resolution mode
-    - Reset the tech effects which makes sure previously unlocked recipes have their big versions unlocked
-Version: 0.1.0
-  Changes:
-    - Added Oil Refinery (rare)
-    - Setting recipes now automatically creates map tags with the item's icon (can be disabled)
-    - Big factories now spawn on the 2x2 grid to match blueprints that have rails
-    - Balanced power consumption to be about 4 times higher to be more in line with other entities
-    - Loaders now rotate with big factories (added always-on pipes to make this work)
-    - Loader's speed now matches the fastest loaders or belts possible in your current game
-    - Limited spawning to the main surface
-    - Change ratio of spawning to change over time. First two spawns are furnances, but then the game focuses on assemblers
+## Version: 0.1.2
+### Changes
+- Gave big structures more health and resistances
+- Adjust big assembly pipe and loader locations to be more symmetrical (only for newly spawned factories)
+- Bobs Recipe Support - Big Furnaces now supports Bob's Metal Mixing and Chemical Furnace. Assembling machines support Bob's Electrolyser
+- Factories now spawn on all surfaces
+- Increased refinery spawn rate by 30%. May cause some short term compensation spawning
+### Bugfixes
+- Rotating buildings near big factories no longer removes loaders
+- Added wsf prefix to entity prototype names to prevent conflicts
+- Loaders are now indestructable again
+---------------------------------------------------------------------------------------------------
+## Version: 0.1.1
+### Bugfixes
+- High resolution Refinery now has corrected offsets so looks correct now in high resolution mode
+- Reset the tech effects which makes sure previously unlocked recipes have their big versions unlocked
+---------------------------------------------------------------------------------------------------
+## Version: 0.1.0
+### Changes
+- Added Oil Refinery (rare)
+- Setting recipes now automatically creates map tags with the item's icon (can be disabled)
+- Big factories now spawn on the 2x2 grid to match blueprints that have rails
+- Balanced power consumption to be about 4 times higher to be more in line with other entities
+- Loaders now rotate with big factories (added always-on pipes to make this work)
+- Loader's speed now matches the fastest loaders or belts possible in your current game
+- Limited spawning to the main surface
+- Change ratio of spawning to change over time. First two spawns are furnances, but then the game focuses on assemblers
       until eventually finding a balance similar to whats required for an equal amount of all of the science packs
-    - Big recipes unlocks are now hidden from the technology screen to avoid clutter
-    - Improved algorithm for minimum distance checking to be much more efficient, also changing setting affects current buildings
-  Bugfixes:
-    - Fixed issue where factories could spawn on the edge of a chunk
-    - Added more edge-case testing to avoid crashes from bad data from other mods
-    - Added additional logic to further avoid spawning over ores, rso is optional dependency now
-    - Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
-    - Loaders under factories no longer copied into blueprints,a,
-    - Better localization for mods so "Unknown Key" doesn't show up for item-groups or recipes
+- Big recipes unlocks are now hidden from the technology screen to avoid clutter
+- Improved algorithm for minimum distance checking to be much more efficient, also changing setting affects current buildings
+### Bugfixes
+- Fixed issue where factories could spawn on the edge of a chunk
+- Added more edge-case testing to avoid crashes from bad data from other mods
+- Added additional logic to further avoid spawning over ores, rso is optional dependency now
+- Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
+- Loaders under factories no longer copied into blueprints,a,
+- Better localization for mods so "Unknown Key" doesn't show up for item-groups or recipes
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.8
-  Bugfixes:
-    - Fixed issue with Reverse Factory caused by multiple refrences to the same table
-    - Fixed issue with recipes with expensive version but not normal version or vice-versa
-    - Fixed issue where loaders stopped working
+## Version: 0.0.8
+### Bugfixes
+- Fixed issue with Reverse Factory caused by multiple refrences to the same table
+- Fixed issue with recipes with expensive version but not normal version or vice-versa
+- Fixed issue where loaders stopped working
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.7
-  Changes:
-    - Big Factories can no longer be deconstructed, blueprinted, or leave a ghost
+## Version: 0.0.7
+### Changes
+- Big Factories can no longer be deconstructed, blueprinted, or leave a ghost
+
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.6
-  Changes:
-    - Big Factories are now immune to poison to prevent termite damage
-  Bugfixes:
-    - Fixed issue with AAI and other mods for a recipe format that wasn't accounted for causing game crash
-    - Prevented situations where only loaders spawned and not the factory which was caused by a side effect of interactions with certain mods
-    - Fixed an issue with automatic probability adjustment
+## Version: 0.0.6
+### Changes
+- Big Factories are now immune to poison to prevent termite damage
+### Bugfixes
+- Fixed issue with AAI and other mods for a recipe format that wasn't accounted for causing game crash
+- Prevented situations where only loaders spawned and not the factory which was caused by a side effect of interactions with certain mods
+- Fixed an issue with automatic probability adjustment
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.5
-  Bugfixes:
-    - Recipes with product outputs exceeding stacksize now limited to prevent lost items
-    - Fixed some recipes getting tagged with the wrong subgroup
+## Version: 0.0.5
+### Bugfixes
+- Recipes with product outputs exceeding stacksize now limited to prevent lost items
+- Fixed some recipes getting tagged with the wrong subgroup
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.4
-  Bugfixes:
-    - Productivity modules now work in big factories
-    - Big factories now take any crafting category that currently exists on the assembling-machine-3, electric-furnace, or chemical-plant for better mod support
+## Version: 0.0.4
+### Bugfixes
+- Productivity modules now work in big factories
+- Big factories now take any crafting category that currently exists on the assembling-machine-3, electric-furnace, or chemical-plant for better mod support
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.3
-  Changes:
-    - Spawn attempts now automatically adjust to be more frequent if they are frequently failing due to ore, terrain, or other entity conflicts
-    - Changed map colors of big furnace and big assembling machine so they'll be different on the map
-    - Increased the recipe icon size displayed on assembling machines and furnaces
+## Version: 0.0.3
+### Changes
+- Spawn attempts now automatically adjust to be more frequent if they are frequently failing due to ore, terrain, or other entity conflicts
+- Changed map colors of big furnace and big assembling machine so they'll be different on the map
+- Increased the recipe icon size displayed on assembling machines and furnaces
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.2
-  Changes:
-    - Furnaces now take up to 6 modules
-  Bugfixes:
-    - Changed big-furnace to a assembling machine to allow steel and stonebrick production with their stacksize limit
-    - Migrated entity definitions to data-final-fixes so it will load after all other mods
-    - Fixed build/deploy script unicode issue
-    - More error catches for unexpected values in modded recipes
+## Version: 0.0.2
+### Changes
+- Furnaces now take up to 6 modules
+### Bugfixes
+- Changed big-furnace to a assembling machine to allow steel and stonebrick production with their stacksize limit
+- Migrated entity definitions to data-final-fixes so it will load after all other mods
+- Fixed build/deploy script unicode issue
+- More error catches for unexpected values in modded recipes
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.1
-  Changes:
-    - initial release
+## Version: 0.0.1
+### Changes
+- initial release
