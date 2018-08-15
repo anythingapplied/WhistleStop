@@ -1,5 +1,7 @@
 -- Lists points used to determine if a new factory is far enough away from previous factories
 require("scripts.bufferPoints")
+require("scripts.controlSpawnEvent")
+require("util")
 
 Updates = {}
 local current_version = 3
@@ -31,8 +33,8 @@ Updates.run = function()
             distance_factor = math.max(0, math.min(1, (v.mindist - minSetting)/minSetting))
             center = {x=v.x, y=v.y}
             addBuffer(center, 1, distance_factor)
-
-            for _, entity in pairs(game.surfaces[1].find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly"}}) do
+            
+            for _, entity in pairs(game.surfaces[1].find_entities_filtered{area={{center.x-1, center.y-1},{center.x+1, center.y+1}}, name={"big-furnace", "big-assembly", "wsf-big-furnace", "wsf-big-assembly-old"}}) do
                 if entity and entity.valid then
                     table.insert(global.whistlestops, {position=center, type=entity.name, entity=entity, surface=entity.surface, direction=entity.direction, recipe=nil, tag=nil})
                 end
@@ -68,12 +70,12 @@ Updates.run = function()
 
         for k,v in pairs(entitylist) do
             if v.entity.valid then
-                local area = {{entity.position.x-8.8, entity.position.y-8.8}, {entity.position.x+8.8, entity.position.y+8.8}}
-                for _, entity in pairs(entity.surface.find_entities_filtered{area=area, name="wsf-factory-loader"}) do
-                    entity.destroy()
+                local area = {{v.position.x-8.8, v.position.y-8.8}, {v.position.x+8.8, v.position.y+8.8}}
+                for _, loader in pairs(v.entity.surface.find_entities_filtered{area=area, name="wsf-factory-loader"}) do
+                    loader.destroy()
                 end
 
-                script.raise_event(defines.events.script_raised_built, {created_entity=v.entity, player_index=1})
+                on_built_event({created_entity=v.entity, player_index=1})
             end
         end
     end

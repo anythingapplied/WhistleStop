@@ -124,6 +124,7 @@ script.on_nth_tick(6*60,
         for k,v in pairs(global.whistlestops) do
             -- Removes loaders for any entities that were destroyed by other mods without triggering destroy_entity event
             if not v.entity.valid then
+                debugWrite("Factory not properly cleaned up at " .. v.position.x .. "," .. v.position.y .. ".  Cleaning now.")
                 on_destroy_event({entity={name=v.type, unit_number=k}})
             elseif settings.global["whistle-enable-tagging"].value then
                 -- Creates tag for entities that have a set recipe

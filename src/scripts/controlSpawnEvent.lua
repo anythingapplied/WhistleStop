@@ -13,7 +13,11 @@ local function placeLoader(entity, xoffset, yoffset, type, direction)
 	direction_final = (direction + entity.direction)%8
 
 	local loader = entity.surface.create_entity{name="wsf-factory-loader", position={xposition, yposition}, force=entity.force, type=type, direction=direction_final}
-	loader.destructible = false
+	if loader then
+		loader.destructible = false
+	else
+		debugWrite("Loader Spawn failed at " .. xposition .. "," .. yposition)
+	end
 	return loader
 end
 
@@ -59,7 +63,7 @@ local function loadersForBigAssemblyOld(entity)
 	-- Left side loaders
 	for i=-6,6 do
 		if i ~= -1 then
-			placeLoader(entity, -7.5, i, "input", 2)
+			table.insert(loaderlist, placeLoader(entity, -7.5, i, "input", 2))
 		end
 	end
 
@@ -96,16 +100,16 @@ end
 
 script.on_event(defines.events.on_player_rotated_entity,
 	function (event)
-		if event.entity.name == "wsf-big-furnace" or event.entity.name == "wsf-big-assembly" then
+		if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old"}) then
 			destroyLoaders(event.entity.unit_number)
 			placeAllLoaders(event.entity)
 		end
 	end
 )
 
-local function on_built_event(event)
+function on_built_event(event)
 	local entity = event.created_entity
-	if not inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-refinery", "wsf-big-chemplant"}) then
+	if not inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		return
 	end
 
@@ -121,7 +125,7 @@ script.on_event(defines.events.script_raised_built, on_built_event)
 
 -- Destroying leftover loaders
 function on_destroy_event(event)
-	if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-refinery", "wsf-big-chemplant"}) then
+	if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		destroyLoaders(event.entity.unit_number)
 		global.whistlestops[event.entity.unit_number] = nil
 	end	

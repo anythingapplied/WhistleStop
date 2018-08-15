@@ -1,5 +1,6 @@
 -- Creates 50x versions of each recipe from selected categories
 require("luaMacros")
+require("util")
 
 -- List of factors to try in case of ingredient limitations or stacksize limitations, in order of what is tried
 local factor_list = {50, 40, 30, 20, 10, 5, 2, 1}
@@ -171,13 +172,13 @@ end
 local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
 
-    local cat_list1 = data.raw.furnace["electric-furnace"]["crafting_categories"]
+    local cat_list1 = util.table.deepcopy(data.raw.furnace["electric-furnace"]["crafting_categories"])
     table.insert(cat_list1, "chemical-furnace")  -- Support for Bobs chemical furnaces
     table.insert(cat_list1, "mixing-furnace") -- Support for Bobs mixing furnaces
-    local cat_list2 = data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"]
-    table.insert(cat_list1, "electrolysis") -- Support for Bobs electrolysis
-    local cat_list3 = data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"]
-    local cat_list4 = data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"]
+    local cat_list2 = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"])
+    local cat_list3 = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"])
+    table.insert(cat_list3, "electrolysis") -- Support for Bobs electrolysis
+    local cat_list4 = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"])
 
     for _, recipeBase in pairs(util.table.deepcopy(data.raw.recipe)) do
         if type(recipeBase) == "table" then

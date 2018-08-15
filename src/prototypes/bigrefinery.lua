@@ -1,5 +1,6 @@
 -- Big furnace prototype and item definition
 require("adjustVisuals")
+require("util")
 
 commonAdjustments = require("commonAdjustments")
 

@@ -1,4 +1,5 @@
 -- Big loader prototype and item definition
+require("util")
 
 local function create_bigloader(name)
     local bigloader = util.table.deepcopy(data.raw["loader"]["express-loader"])

@@ -4,7 +4,7 @@
 - Adjust big assembly pipe and loader locations to be more symmetrical (only for newly spawned factories)
 - Bobs Recipe Support - Big Furnaces now supports Bob's Metal Mixing and Chemical Furnace. Assembling machines support Bob's Electrolyser
 - Factories now spawn on all surfaces
-- Increased refinery spawn rate by 30%, may cause some short term compensation spawning
+- Increased refinery spawn rate by 30%. May cause some short term compensation spawning
 ### Bugfixes
 - Rotating buildings near big factories no longer removes loaders
 - Added wsf prefix to entity prototype names to prevent conflicts
