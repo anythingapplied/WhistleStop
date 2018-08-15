@@ -4,7 +4,7 @@ require("scripts.controlSpawnEvent")
 require("util")
 
 Updates = {}
-local current_version = 3
+local current_version = 4
 
 Updates.init = function()
 	global.update_version = current_version
@@ -77,6 +77,15 @@ Updates.run = function()
 
                 on_built_event({created_entity=v.entity, player_index=1})
             end
+        end
+    end
+    if global.update_version <= 4 then
+        if global.nextSpawnType == "big-assembly" then
+            global.nextSpawnType = "wsf-big-assembly"
+        elseif global.nextSpawnType == "big-furnace" then
+            global.nextSpawnType = "wsf-big-furnace"
+        elseif global.nextSpawnType == "big-refinery" then
+            global.nextSpawnType = "wsf-big-refinery"
         end
     end
 	global.update_version = current_version
