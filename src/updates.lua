@@ -4,7 +4,7 @@ require("scripts.controlSpawnEvent")
 require("util")
 
 Updates = {}
-local current_version = 4
+local current_version = 6
 
 Updates.init = function()
 	global.update_version = current_version
@@ -57,9 +57,9 @@ Updates.run = function()
         end
     end
     if global.update_version <= 3 then
-        global.whistlestats["wsf-big-furnace"] = global.whistlestats["big-furnace"]
-        global.whistlestats["wsf-big-assembly"] = global.whistlestats["big-assembly"]
-        global.whistlestats["wsf-big-refinery"] = global.whistlestats["big-refinery"]
+        global.whistlestats["wsf-big-furnace"] = global.whistlestats["big-furnace"] or global.whistlestats["wsf-big-furnace"] or 0
+        global.whistlestats["wsf-big-assembly"] = global.whistlestats["big-assembly"] or global.whistlestats["wsf-big-assembly"] or 0
+        global.whistlestats["wsf-big-refinery"] = global.whistlestats["big-refinery"] or global.whistlestats["wsf-big-refinery"] or 0
         global.whistlestats["big-furnace"] = nil
         global.whistlestats["big-assembly"] = nil
         global.whistlestats["big-refinery"] = nil
@@ -87,6 +87,11 @@ Updates.run = function()
         elseif global.nextSpawnType == "big-refinery" then
             global.nextSpawnType = "wsf-big-refinery"
         end
+    end
+    if global.update_version <= 5 then
+        global.whistlestats["wsf-big-furnace"] = global.whistlestats["wsf-big-furnace"] or 0
+        global.whistlestats["wsf-big-assembly"] = global.whistlestats["wsf-big-assembly"] or 0
+        global.whistlestats["wsf-big-refinery"] = global.whistlestats["wsf-big-refinery"] or 0
     end
 	global.update_version = current_version
 end
