@@ -14,4 +14,12 @@ data:extend({
             default_value = true,
             order = "b",
         },
+
+        {
+            type = "bool-setting",
+            name = "whistle-indestructible",
+            setting_type = "runtime-global",
+            default_value = false,
+            order = "c",
+        },
 })

@@ -1,3 +1,7 @@
+Version: 0.1.5
+  Changes
+    - Added option to make factories indestructible
+---------------------------------------------------------------------------------------------------
 Version: 0.1.4
   Bugfixes
     - Fixed issue where stat tracking used for controlling spawn rates could be wiped out
@@ -16,7 +20,7 @@ Version: 0.1.2
   Bugfixes
     - Rotating buildings near big factories no longer removes loaders
     - Added wsf prefix to entity prototype names to prevent conflicts
-    - Loaders are now indestructable again
+    - Loaders are now indestructible again
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
   Bugfixes
@@ -40,7 +44,7 @@ Version: 0.1.0
     - Fixed issue where factories could spawn on the edge of a chunk
     - Added more edge-case testing to avoid crashes from bad data from other mods
     - Added additional logic to further avoid spawning over ores, rso is optional dependency now
-    - Created cleanup logic for indestructable loaders that can sometimes be created by errors or conflicts with other mods
+    - Created cleanup logic for indestructible loaders that can sometimes be created by errors or conflicts with other mods
     - Loaders under factories no longer copied into blueprints,a,
     - Better localization for mods so "Unknown Key" doesn't show up for item-groups or recipes
 ---------------------------------------------------------------------------------------------------

@@ -195,3 +195,15 @@ script.on_event(defines.events.on_technology_effects_reset,
         end
     end
 )
+
+script.on_event(defines.events.on_runtime_mod_setting_changed,
+    function (event)
+        if event.setting == "whistle-indestructible" then
+            for k,v in pairs(global.whistlestops) do
+                if v.entity.valid then
+                    v.entity.destructible = not settings.global["whistle-indestructible"].value
+                end
+            end
+        end
+    end
+)

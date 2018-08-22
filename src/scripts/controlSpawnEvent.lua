@@ -117,6 +117,8 @@ function on_built_event(event)
 		recipe=nil, tag=nil, loaderlist={}}
 
 	placeAllLoaders(entity)
+
+	entity.destructible = not settings.global["whistle-indestructible"].value
 end
 
 script.on_event(defines.events.on_built_entity, on_built_event)
