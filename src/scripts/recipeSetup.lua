@@ -38,7 +38,7 @@ end
 
 local function getStackSize(item)
     if dataRawLookup[item].stack_size then
-        return dataRawLookup[item].stack_size
+        return math.min(maxIngredientCount, dataRawLookup[item].stack_size)
     end
     log("No stacksize found for " .. item)
     return 100
@@ -143,11 +143,7 @@ local function setValues(recipe)
     -- Highest factor that would excede the item stacksize for the output
     local min_factor2
     if recipe.result then
-        if recipe.result_count then
-            min_factor2 = getStackSize(recipe.result) / recipe.result_count
-        else
-            min_factor2 = getStackSize(recipe.result)
-        end
+        min_factor2 = getStackSize(recipe.result) / (recipe.result_count or 1)
     else
         min_factor2 = maxRecipeOutputFactor(recipe.results)
     end
@@ -232,6 +228,7 @@ local function recipeSetup()
                 end
                 
                 data.raw.recipe[recipe.name] = recipe
+
             end
         end
     end
