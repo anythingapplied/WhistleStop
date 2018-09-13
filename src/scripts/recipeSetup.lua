@@ -172,6 +172,9 @@ local function recipeSetup()
     table.insert(cat_list1, "chemical-furnace")  -- Support for Bobs chemical furnaces
     table.insert(cat_list1, "mixing-furnace") -- Support for Bobs mixing furnaces
     local cat_list2 = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"])
+    if settings.startup["whistle-centrifuge"].value then
+        table.insert(cat_list2, "centrifuging")
+    end
     local cat_list3 = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"]["crafting_categories"])
     table.insert(cat_list3, "electrolysis") -- Support for Bobs electrolysis
     local cat_list4 = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"]["crafting_categories"])

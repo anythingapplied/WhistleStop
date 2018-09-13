@@ -1,3 +1,10 @@
+Version: 0.1.6
+  Changes
+    - Added optional support for centrifuge recipes in assembly machine.  Off by default.
+  Bugfixes
+    - Fixed error with AllAboutMoney where combination of recipe results * 50 > 65535 and stack size > 65535 caused crash during game load
+    - Fixed a few missing Bob's recipes getting dropped due to furnace max ingredient count only being 2 instead of 4
+---------------------------------------------------------------------------------------------------
 Version: 0.1.5
   Changes
     - Added option to make factories indestructible
@@ -57,7 +64,6 @@ Version: 0.0.8
 Version: 0.0.7
   Changes
     - Big Factories can no longer be deconstructed, blueprinted, or leave a ghost
-
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
   Changes

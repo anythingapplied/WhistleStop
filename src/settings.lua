@@ -22,4 +22,12 @@ data:extend({
             default_value = false,
             order = "c",
         },
+
+        {
+            type = "bool-setting",
+            name = "whistle-centrifuge",
+            setting_type = "startup",
+            default_value = false,
+            order = "a",
+        },
 })
