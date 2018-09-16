@@ -160,7 +160,8 @@ local function setValues(recipe)
     -- Recipe output adjustment, defaulting to 1 if nil
     if recipe.result then
         recipe.result_count = (recipe.result_count or 1) * factor
-    else
+    end
+    if recipe.results then
         recipe.results = setFactorIngredients(recipe.results, factor)
     end
 end
@@ -231,6 +232,10 @@ local function recipeSetup()
                 end
                 
                 data.raw.recipe[recipe.name] = recipe
+
+                if recipe.name == "iron-plate-big" or recipe.name == "steel-plate-big" then -- TEMP
+                    log(inspect(recipe))
+                end
 
             end
         end
