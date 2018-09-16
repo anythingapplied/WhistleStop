@@ -1,3 +1,7 @@
+Version: 0.1.7
+  Bugfixes
+    - Fixed compatibility issue with Production Scrap 2 by accounting for recipes that specify both recipe= and recipes= so recipe results still get adjusted
+---------------------------------------------------------------------------------------------------
 Version: 0.1.6
   Changes
     - Added optional support for centrifuge recipes in assembly machine.  Off by default.
