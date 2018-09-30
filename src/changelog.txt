@@ -1,3 +1,8 @@
+
+Version: 0.1.8
+  Changes
+    - Big Recipes are now hidden normally.  Only enabled when a big machine interface is open.  Thanks OwnlyMe for figuring out how this could be done!
+---------------------------------------------------------------------------------------------------
 Version: 0.1.7
   Bugfixes
     - Fixed compatibility issue with Production Scrap 2 by accounting for recipes that specify both recipe= and recipes= so recipe results still get adjusted

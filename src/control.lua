@@ -95,6 +95,25 @@ script.on_event(defines.events.on_chunk_generated,
     end
 )
 
+local function disablebigrecipe(force)
+    for _, recipe in pairs(force.recipes) do
+        if inlist(recipe.category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) then
+            recipe.enabled = false
+        end
+    end
+end
+
+local function enablebigrecipe(force)
+    for _, recipe in pairs(force.recipes) do
+        if string.sub(recipe.name, -4)=="-big"
+            and force.recipes[string.sub(recipe.name,1,-5)].enabled
+            and not force.recipes[string.sub(recipe.name,1,-5)].hidden
+            and inlist(recipe.category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) then 
+                recipe.enabled=true
+        end 
+    end
+end
+
 script.on_init(
     function ()
         math.randomseed(game.surfaces[1].map_gen_settings.seed) --set the random seed to the map seed, so ruins are the same-ish with each generation.
@@ -116,6 +135,9 @@ script.on_init(
         global.whistlestats = {buffer=0, ["wsf-big-furnace"]=0, ["wsf-big-assembly"]=0, ["wsf-big-refinery"]=0, ["wsf-big-chemplant"]=0, valid_chunk_count=0}
 
         Updates.init()
+        for _, force in pairs(game.forces) do
+            disablebigrecipe(force)
+        end
     end
 )
 
@@ -163,35 +185,8 @@ script.on_nth_tick(6*60,
 script.on_configuration_changed(
     function (configData)
         Updates.run()
-    end
-)
-
--- Unlock big recipe versions when technology is researched
-script.on_event(defines.events.on_research_finished,
-    function (event)
-        local force = event.research.force
-        for _, effect in pairs(event.research.effects) do
-            if type(effect) == 'table' and effect.type == "unlock-recipe" then
-                if force.recipes[effect.recipe .. "-big"] then
-                    force.recipes[effect.recipe .. "-big"].enabled = true
-                end
-            end
-        end
-    end
-)
-
-script.on_event(defines.events.on_technology_effects_reset,
-    function (event)
-        for k,v in pairs(event.force.technologies) do
-            if v.researched then
-                for _, effect in pairs(v.effects) do
-                    if type(effect) == 'table' and effect.type == "unlock-recipe" then
-                        if event.force.recipes[effect.recipe .. "-big"] then
-                            event.force.recipes[effect.recipe .. "-big"].enabled = true
-                        end
-                    end
-                end
-            end
+        for _, force in pairs(game.forces) do
+            disablebigrecipe(force)
         end
     end
 )
@@ -204,6 +199,22 @@ script.on_event(defines.events.on_runtime_mod_setting_changed,
                     v.entity.destructible = not settings.global["whistle-indestructible"].value
                 end
             end
+        end
+    end
+)
+
+script.on_event(defines.events.on_gui_opened,
+    function(event)
+        if event.entity and inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
+            enablebigrecipe(game.players[event.player_index].force)
+        end
+    end
+)
+
+script.on_event(defines.events.on_gui_closed,
+    function(event)
+        if event.entity and inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
+            disablebigrecipe(game.players[event.player_index].force)
         end
     end
 )

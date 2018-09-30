@@ -233,10 +233,6 @@ local function recipeSetup()
                 
                 data.raw.recipe[recipe.name] = recipe
 
-                if recipe.name == "iron-plate-big" or recipe.name == "steel-plate-big" then -- TEMP
-                    log(inspect(recipe))
-                end
-
             end
         end
     end
