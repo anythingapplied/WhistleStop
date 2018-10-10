@@ -15,7 +15,7 @@ local function clearArea(center, surface)
     local area = {{center.x-8.8,center.y-8.8},{center.x+8.8,center.y+8.8}}
     -- Ensures factory won't overlap with resources or cliffs
     for index, entity in pairs(surface.find_entities(area)) do
-        if entity.valid and entity.type ~= "tree" then
+        if entity.valid and entity.type ~= "tree" and (entity.type ~= "resource" or not settings.startup["whistle-spawn-over-ore"].value) then
             debugWrite("Factory at (" .. center.x .. "," .. center.y .. ") overlaps with ores, cliffs, or other non-tree entities.  Canceling attempt.")
             return false
         end

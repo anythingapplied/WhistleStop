@@ -25,9 +25,25 @@ data:extend({
 
         {
             type = "bool-setting",
+            name = "whistle-recipe-hiding",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "d",
+        },
+
+        {
+            type = "bool-setting",
             name = "whistle-centrifuge",
             setting_type = "startup",
             default_value = false,
             order = "a",
+        },
+
+        {
+            type = "bool-setting",
+            name = "whistle-spawn-over-ore",
+            setting_type = "startup",
+            default_value = false,
+            order = "b",
         },
 })

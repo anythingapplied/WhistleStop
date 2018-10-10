@@ -1,4 +1,11 @@
 
+Version: 0.1.9
+  Changes
+    - Added option to disable the recipe hiding since it causes issues with some mods like crafting combinator
+    - Added option for spawning on top of ores for compatability mods like DangOreOus and Fish and Wildlife
+  Bugfixes
+    - Fixed issue with Angel's recipe causing GUI crash if recipe ended with "-big"
+---------------------------------------------------------------------------------------------------
 Version: 0.1.8
   Changes
     - Big Recipes are now hidden normally.  Only enabled when a big machine interface is open.  Thanks OwnlyMe for figuring out how this could be done!
