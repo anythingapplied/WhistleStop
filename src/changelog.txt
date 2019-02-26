@@ -1,4 +1,7 @@
-
+Version: 0.1.10
+  Changes
+    - 0.17 Compatability
+---------------------------------------------------------------------------------------------------
 Version: 0.1.9
   Changes
     - Added option to disable the recipe hiding since it causes issues with some mods like crafting combinator

@@ -1,8 +1,8 @@
 -- Big Assembly prototype and item definition
-require("adjustVisuals")
+require("__WhistleStopFactories__.prototypes.adjustVisuals")
 require("util")
 
-commonAdjustments = require("commonAdjustments")
+commonAdjustments = require("__WhistleStopFactories__.prototypes.commonAdjustments")
 
 local function create_bigchemplant(name, energy, speed)
     local bigchemplant = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])

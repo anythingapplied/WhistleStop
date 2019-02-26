@@ -1,6 +1,6 @@
 --checks for spawning validity and if valid, clears space for the spawn
 
-inspect = require("inspect")
+--serpent = require("serpent")
 
 local function clearArea(center, surface)
     for y = center.y-8, center.y+8 do --fail if any water in area

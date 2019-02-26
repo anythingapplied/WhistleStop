@@ -1,6 +1,6 @@
 
 -- Create prototypes for entities and items
-require("prototypes.prototypes")
+require("__WhistleStopFactories__.prototypes.prototypes")
 
 data:extend({ 
   -- Big furnace recipe category

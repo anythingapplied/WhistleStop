@@ -1,8 +1,8 @@
 -- Big furnace prototype and item definition
-require("adjustVisuals")
+require("__WhistleStopFactories__.prototypes.adjustVisuals")
 require("util")
 
-commonAdjustments = require("commonAdjustments")
+commonAdjustments = require("__WhistleStopFactories__.prototypes.commonAdjustments")
 
 local function create_bigfurnace(name, energy, speed)
     local bigfurnace = util.table.deepcopy(data.raw.furnace["electric-furnace"])

@@ -1,8 +1,8 @@
 -- Big Assembly prototype and item definition
-require("adjustVisuals")
+require("__WhistleStopFactories__.prototypes.adjustVisuals")
 require("util")
 
-commonAdjustments = require("commonAdjustments")
+commonAdjustments = require("__WhistleStopFactories__.prototypes.commonAdjustments")
 
 local function create_bigassembly(name, energy, speed)
     local bigassembly = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])

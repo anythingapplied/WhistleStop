@@ -1,20 +1,20 @@
-inspect = require("inspect")
+--serpent = require("serpent")
 
 -- Creates 50x versions of each recipe from selected categories
-require("scripts.recipeSetup")
+require("__WhistleStopFactories__.scripts.recipeSetup")
 
 -- Create the item groups for these new recipes
-require("scripts.itemGroupSetup")
+require("__WhistleStopFactories__.scripts.itemGroupSetup")
 
 -- Adds big items to list of productivity module usable items
-require("scripts.productivityFix")
+require("__WhistleStopFactories__.scripts.productivityFix")
 
 -- Creates dummy items with recipe icons so tag images can match recip icons (normally only item icons are available)
-require("scripts.tagIcons")
+require("__WhistleStopFactories__.scripts.tagIcons")
 
 -- Big Loader prototype and item definition (moved to data-final to capture visual updates on default loader some mods implement)
-local create_bigloader = require("prototypes.bigloader")
+local create_bigloader = require("__WhistleStopFactories__.prototypes.bigloader")
 create_bigloader("wsf-factory-loader")
 
 -- Update Loader speed to fastest available loaders or belts in current mod set
-require("scripts.updateLoaderSpeed")
+require("__WhistleStopFactories__.scripts.updateLoaderSpeed")

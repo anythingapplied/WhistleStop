@@ -2,8 +2,8 @@
     "output_directory": "../../../Google Drive/Factorio Mod Testing/mods",
     "info":{
         "name": "WhistleStopFactories",
-        "version": "0.1.9",
-        "factorio_version": "0.16",
+        "version": "0.1.10",
+        "factorio_version": "0.17",
         "title": "Whistle Stop Factories",
         "author": "Avongard",
         "homepage": "https://forums.factorio.com/viewtopic.php?t=61205",

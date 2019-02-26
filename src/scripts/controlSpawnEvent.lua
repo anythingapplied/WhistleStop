@@ -1,6 +1,6 @@
-inspect = require("inspect")
+--serpent = require("serpent")
 
-require("luaMacros")
+require("__WhistleStopFactories__.scripts.luaMacros")
 
 -- Placing/Destroying events and loader placement
 

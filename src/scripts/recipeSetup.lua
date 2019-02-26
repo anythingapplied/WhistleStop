@@ -1,5 +1,5 @@
 -- Creates 50x versions of each recipe from selected categories
-require("luaMacros")
+require("__WhistleStopFactories__.scripts.luaMacros")
 require("util")
 
 -- List of factors to try in case of ingredient limitations or stacksize limitations, in order of what is tried
@@ -53,7 +53,7 @@ local function maxRecipeAmount(ingredients)
         if amount then
             maxAmount = math.max(maxAmount, amount)
         else
-            log("Recipe with no amount registered " .. inspect(ingredient))
+            log("Recipe with no amount registered " .. serpent.line(ingredient))
         end
     end
     return maxAmount
@@ -91,7 +91,7 @@ local function setFactorIngredients(ary, factor)
         elseif v[2] then
             v[2] = v[2] * factor
         else
-            log("Recipe with no amount registered " .. inspect(v))
+            log("Recipe with no amount registered " .. serpent.line(v))
         end
     end
     return ary
@@ -124,7 +124,7 @@ local function findSubgroup(recipe)
     product = product or recipe.main_product
 
     if product == nil then
-        log("No main product found " .. recipename .. inspect(recipe))
+        log("No main product found " .. recipename .. serpent.dump(recipe))
         return
     end
 

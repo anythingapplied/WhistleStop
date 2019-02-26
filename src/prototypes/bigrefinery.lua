@@ -1,8 +1,8 @@
 -- Big furnace prototype and item definition
-require("adjustVisuals")
+require("__WhistleStopFactories__.prototypes.adjustVisuals")
 require("util")
 
-commonAdjustments = require("commonAdjustments")
+commonAdjustments = require("__WhistleStopFactories__.prototypes.commonAdjustments")
 
 local function create_bigrefinery(name, energy, speed)
     local bigrefinery = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"])

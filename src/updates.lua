@@ -1,6 +1,6 @@
 -- Lists points used to determine if a new factory is far enough away from previous factories
-require("scripts.bufferPoints")
-require("scripts.controlSpawnEvent")
+require("__WhistleStopFactories__.scripts.bufferPoints")
+require("__WhistleStopFactories__.scripts.controlSpawnEvent")
 require("util")
 
 Updates = {}

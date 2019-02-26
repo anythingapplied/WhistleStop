@@ -1,19 +1,19 @@
-inspect = require("inspect")
+--serpent = require("serpent")
 
 -- Provides spawn function which checks for valid spawn location and requests spawning
-require("scripts.spawnFactory")
+require("__WhistleStopFactories__.scripts.spawnFactory")
 
 -- Handles big machine spawn events with its loaders
-require("scripts.controlSpawnEvent")
+require("__WhistleStopFactories__.scripts.controlSpawnEvent")
 
 -- Lists points used to determine if a new factory is far enough away from previous factories
-require("scripts.bufferPoints")
+require("__WhistleStopFactories__.scripts.bufferPoints")
 
 -- Selects next spawn type using probability distribution
-chooseNextSpawnType = require("scripts.chooseNextSpawnType")
+chooseNextSpawnType = require("__WhistleStopFactories__.scripts.chooseNextSpawnType")
 
 -- Contains migration function for game and global variables
-local Updates = require("updates")
+local Updates = require("__WhistleStopFactories__.updates")
 
 DEBUG = true -- Used for debug, users should not enable
 local debugCount = 0 -- Stops debugging messages
@@ -84,7 +84,7 @@ script.on_event(defines.events.on_chunk_generated,
 
             local success = spawn(center, event.surface, global.nextSpawnType)
             if success then
-                debugWrite("Creating " .. global.nextSpawnType .. " at (" .. center.x .. "," .. center.y .. ").  Counts = " .. inspect(global.whistlestats))
+                debugWrite("Creating " .. global.nextSpawnType .. " at (" .. center.x .. "," .. center.y .. ").  Counts = " .. serpent.line(global.whistlestats))
                 addBuffer(center, event.surface.index)
                 global.whistlestats[global.nextSpawnType] = global.whistlestats[global.nextSpawnType] + 1
                 global.nextSpawnType = nil
