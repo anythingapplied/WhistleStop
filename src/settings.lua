@@ -33,6 +33,14 @@ data:extend({
 
         {
             type = "bool-setting",
+            name = "whistle-use-loaders",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "e",
+        },
+
+        {
+            type = "bool-setting",
             name = "whistle-centrifuge",
             setting_type = "startup",
             default_value = false,

@@ -102,7 +102,9 @@ script.on_event(defines.events.on_player_rotated_entity,
 	function (event)
 		if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old"}) then
 			destroyLoaders(event.entity.unit_number)
-			placeAllLoaders(event.entity)
+			if settings.global["whistle-use-loaders"].value then
+				placeAllLoaders(entity)
+			end
 		end
 	end
 )
@@ -116,7 +118,9 @@ function on_built_event(event)
 	global.whistlestops[entity.unit_number] = {position=entity.position, type=entity.name, entity=entity, surface=entity.surface, direction=entity.direction,
 		recipe=nil, tag=nil, loaderlist={}}
 
-	placeAllLoaders(entity)
+	if settings.global["whistle-use-loaders"].value then
+		placeAllLoaders(entity)
+	end
 
 	entity.destructible = not settings.global["whistle-indestructible"].value
 end
