@@ -1,5 +1,6 @@
 local function commonAdjustments(factory)
     factory.minable = nil
+    factory.next_upgrade = nil
     factory.fast_replaceable_group = nil
     factory.dying_explosion = "big-explosion"
     factory.max_health = 1600
