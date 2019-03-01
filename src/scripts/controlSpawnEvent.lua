@@ -103,7 +103,7 @@ script.on_event(defines.events.on_player_rotated_entity,
 		if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old"}) then
 			destroyLoaders(event.entity.unit_number)
 			if settings.global["whistle-use-loaders"].value then
-				placeAllLoaders(entity)
+				placeAllLoaders(event.entity)
 			end
 		end
 	end

@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+Date: 2019-2-28
+  Bugfixes:
+    - Fixed crash relating to next_upgrade - Thanks kenzierocks!
+    - Fixed crash on rotation due to recent loader placement option
+---------------------------------------------------------------------------------------------------
 Version: 0.1.11
 Date: 2019-2-26
   Changes:
