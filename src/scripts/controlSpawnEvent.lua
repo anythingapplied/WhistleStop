@@ -109,8 +109,7 @@ script.on_event(defines.events.on_player_rotated_entity,
 	end
 )
 
-function on_built_event(event)
-	local entity = event.created_entity
+function on_built_event(entity)
 	if not inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		return
 	end
@@ -125,19 +124,42 @@ function on_built_event(event)
 	entity.destructible = not settings.global["whistle-indestructible"].value
 end
 
-script.on_event(defines.events.on_built_entity, on_built_event)
-script.on_event(defines.events.on_robot_built_entity, on_built_event)
-script.on_event(defines.events.script_raised_built, on_built_event)
+script.on_event(
+    {
+        defines.events.on_built_entity,
+        defines.events.on_robot_built_entity
+    },
+    function (event)
+        on_built_event(event.created_entity)
+    end
+)
+
+script.on_event(
+    {
+        defines.events.script_raised_built,
+        defines.events.script_raised_revive
+    },
+    function (event)
+        on_built_event(event.entity)
+    end
+)
 
 -- Destroying leftover loaders
-function on_destroy_event(event)
-	if inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
-		destroyLoaders(event.entity.unit_number)
-		global.whistlestops[event.entity.unit_number] = nil
+function on_destroy_event(entity)
+	if inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
+		destroyLoaders(entity.unit_number)
+		global.whistlestops[entity.unit_number] = nil
 	end	
 end
 
-script.on_event(defines.events.on_player_mined_entity, on_destroy_event)
-script.on_event(defines.events.on_robot_mined_entity, on_destroy_event)
-script.on_event(defines.events.on_entity_died, on_destroy_event)
-script.on_event(defines.events.script_raised_destroy, on_destroy_event)
+script.on_event(
+    {
+        defines.events.on_entity_died,
+        defines.events.on_player_mined_entity,
+        defines.events.on_robot_mined_entity,
+        defines.events.script_raised_destroy
+    },
+    function (event)
+        on_destroy_event(event.entity)
+    end
+)

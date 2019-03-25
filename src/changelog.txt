@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.14
+Date: 2019-3-25
+  Changes:
+    - Both trees and rocks will get removed if in the way to allow for easier factory placement
+  Bugfixes:
+    - Fixed a incompatibility with Disco Science due to incorrectly formatted event
+    - Fixed a crash related to no main recipe - Thanks mrudat!
+---------------------------------------------------------------------------------------------------
 Version: 0.1.13
 Date: 2019-3-10
   Bugfixes:
