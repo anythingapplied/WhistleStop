@@ -124,7 +124,7 @@ local function findSubgroup(recipe)
     product = product or recipe.main_product
 
     if product == nil then
-        log("No main product found " .. recipename .. serpent.dump(recipe))
+        log("No main product found " .. recipe.name .. serpent.dump(recipe))
         return
     end
 
