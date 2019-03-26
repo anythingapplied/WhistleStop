@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.15
+Date: 2019-3-26
+  Bugfixes:
+    - Fixed a a crash related to the script_raised_built being incorrectly formatted in other mods caused by fixing my formatting in 0.1.14
+---------------------------------------------------------------------------------------------------
 Version: 0.1.14
 Date: 2019-3-25
   Changes:

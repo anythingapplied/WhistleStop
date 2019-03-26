@@ -110,7 +110,8 @@ script.on_event(defines.events.on_player_rotated_entity,
 )
 
 function on_built_event(entity)
-	if not inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
+	game.print(type(entity))
+	if type(entity) ~= "table" or not inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		return
 	end
 
@@ -129,8 +130,10 @@ script.on_event(
         defines.events.on_built_entity,
         defines.events.on_robot_built_entity
     },
-    function (event)
-        on_built_event(event.created_entity)
+	function (event)
+		if type(event) == "table" then
+			on_built_event(event.created_entity)
+		end
     end
 )
 
@@ -139,14 +142,16 @@ script.on_event(
         defines.events.script_raised_built,
         defines.events.script_raised_revive
     },
-    function (event)
-        on_built_event(event.entity)
+	function (event)
+		if type(event) == "table" then
+			on_built_event(event.entity)
+		end
     end
 )
 
 -- Destroying leftover loaders
 function on_destroy_event(entity)
-	if inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
+	if type(entity) == "table" and inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		destroyLoaders(entity.unit_number)
 		global.whistlestops[entity.unit_number] = nil
 	end	
@@ -159,7 +164,9 @@ script.on_event(
         defines.events.on_robot_mined_entity,
         defines.events.script_raised_destroy
     },
-    function (event)
-        on_destroy_event(event.entity)
+	function (event)
+		if type(event) == "table" then
+			on_destroy_event(event.entity)
+		end
     end
 )
