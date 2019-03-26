@@ -110,7 +110,6 @@ script.on_event(defines.events.on_player_rotated_entity,
 )
 
 function on_built_event(entity)
-	game.print(type(entity))
 	if type(entity) ~= "table" or not inlist(entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
 		return
 	end
