@@ -4,7 +4,7 @@ require("__WhistleStopFactories__.scripts.controlSpawnEvent")
 require("util")
 
 Updates = {}
-local current_version = 6
+local current_version = 7
 
 Updates.init = function()
 	global.update_version = current_version
@@ -92,6 +92,19 @@ Updates.run = function()
         global.whistlestats["wsf-big-furnace"] = global.whistlestats["wsf-big-furnace"] or 0
         global.whistlestats["wsf-big-assembly"] = global.whistlestats["wsf-big-assembly"] or 0
         global.whistlestats["wsf-big-refinery"] = global.whistlestats["wsf-big-refinery"] or 0
+    end
+    if global.update_version <= 6 then
+        for _, force in pairs(game.forces) do
+            for _, recipe in pairs(force.recipes) do
+                if string.sub(recipe.name, -4)=="-big"
+                    and inlist(recipe.category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) 
+                    and force.recipes[string.sub(recipe.name,1,-5)]
+                    and force.recipes[string.sub(recipe.name,1,-5)].enabled
+                    and not force.recipes[string.sub(recipe.name,1,-5)].hidden then 
+                        recipe.enabled=true
+                end 
+            end
+        end
     end
 	global.update_version = current_version
 end

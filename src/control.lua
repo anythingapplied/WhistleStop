@@ -95,26 +95,6 @@ script.on_event(defines.events.on_chunk_generated,
     end
 )
 
-local function disablebigrecipe(force)
-    for _, recipe in pairs(force.recipes) do
-        if inlist(recipe.category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) then
-            recipe.enabled = false
-        end
-    end
-end
-
-local function enablebigrecipe(force)
-    for _, recipe in pairs(force.recipes) do
-        if string.sub(recipe.name, -4)=="-big"
-            and inlist(recipe.category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) 
-            and force.recipes[string.sub(recipe.name,1,-5)]
-            and force.recipes[string.sub(recipe.name,1,-5)].enabled
-            and not force.recipes[string.sub(recipe.name,1,-5)].hidden then 
-                recipe.enabled=true
-        end 
-    end
-end
-
 script.on_init(
     function ()
         math.randomseed(game.surfaces[1].map_gen_settings.seed) --set the random seed to the map seed, so ruins are the same-ish with each generation.
@@ -136,16 +116,6 @@ script.on_init(
         global.whistlestats = {buffer=0, ["wsf-big-furnace"]=0, ["wsf-big-assembly"]=0, ["wsf-big-refinery"]=0, ["wsf-big-chemplant"]=0, valid_chunk_count=0}
 
         Updates.init()
-        
-        if settings.global["whistle-recipe-hiding"].value then
-            for _, force in pairs(game.forces) do
-                disablebigrecipe(force)
-            end
-        else
-            for _, force in pairs(game.forces) do
-                enablebigrecipe(force)
-            end
-        end
     end
 )
 
@@ -193,16 +163,6 @@ script.on_nth_tick(6*60,
 script.on_configuration_changed(
     function (configData)
         Updates.run()
-
-        if settings.global["whistle-recipe-hiding"].value then
-            for _, force in pairs(game.forces) do
-                disablebigrecipe(force)
-            end
-        else
-            for _, force in pairs(game.forces) do
-                enablebigrecipe(force)
-            end
-        end
     end
 )
 
@@ -214,35 +174,20 @@ script.on_event(defines.events.on_runtime_mod_setting_changed,
                     v.entity.destructible = not settings.global["whistle-indestructible"].value
                 end
             end
-        elseif event.setting == "whistle-recipe-hiding" then
-            if settings.global["whistle-recipe-hiding"].value then
-                for _, force in pairs(game.forces) do
-                    disablebigrecipe(force)
-                end
-            else
-                for _, force in pairs(game.forces) do
-                    enablebigrecipe(force)
-                end
-            end
         end
     end
 )
 
-script.on_event(defines.events.on_gui_opened,
-    function(event)
-        if settings.global["whistle-recipe-hiding"].value then
-            if event.entity and inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
-                enablebigrecipe(game.players[event.player_index].force)
-            end
-        end
-    end
-)
-
-script.on_event(defines.events.on_gui_closed,
-    function(event)
-        if settings.global["whistle-recipe-hiding"].value then
-            if event.entity and inlist(event.entity.name, {"wsf-big-furnace", "wsf-big-assembly", "wsf-big-assembly-old", "wsf-big-refinery", "wsf-big-chemplant"}) then
-                disablebigrecipe(game.players[event.player_index].force)
+-- Unlock big recipe versions when technology is researched
+script.on_event(defines.events.on_research_finished,
+    function (event)
+        local force = event.research.force
+        for _, effect in pairs(event.research.effects) do
+            if type(effect) == 'table' and effect.type == "unlock-recipe" then
+                if force.recipes[effect.recipe .. "-big"] and
+                        inlist(force.recipes[effect.recipe .. "-big"].category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"})  then
+                    force.recipes[effect.recipe .. "-big"].enabled = true
+                end
             end
         end
     end

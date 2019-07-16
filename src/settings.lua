@@ -25,14 +25,6 @@ data:extend({
 
         {
             type = "bool-setting",
-            name = "whistle-recipe-hiding",
-            setting_type = "runtime-global",
-            default_value = true,
-            order = "d",
-        },
-
-        {
-            type = "bool-setting",
             name = "whistle-use-loaders",
             setting_type = "runtime-global",
             default_value = true,

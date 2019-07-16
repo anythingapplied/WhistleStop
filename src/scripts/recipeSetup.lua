@@ -164,6 +164,8 @@ local function setValues(recipe)
     if recipe.results then
         recipe.results = setFactorIngredients(recipe.results, factor)
     end
+
+    recipe.hide_from_player_crafting = true
 end
 
 local function recipeSetup()
@@ -230,9 +232,10 @@ local function recipeSetup()
                 elseif inlist(cat, cat_list4) then
                     recipe.category = "big-refinery"
                 end
+
+                
                 
                 data.raw.recipe[recipe.name] = recipe
-
             end
         end
     end
