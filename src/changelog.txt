@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-7-25
+  Bugfixes:
+    - Fixed crash in new recipe validaion code
+    ---------------------------------------------------------------------------------------------------
 Version: 0.2.1
-Date: 2019-7-24
+Date: 2019-7-25
   Bugfixes:
     - Some recipes were getting modified after WhistleStop copies them.  Added some dependencies to fix specific instances and a validation check that runs on game load.
     - Fixed catalyst_amount getting properly multiplied

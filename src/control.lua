@@ -106,9 +106,6 @@ function recipevalidation()
                             end
                         end
                     end
-                    if recipe.ingredients[1].catalyst_amount then
-                        log(serpent.line(small_recipe.ingredients) .. " " .. serpent.line(recipe.ingredients))
-                    end
                     for k,ingr in pairs(recipe.ingredients) do
                         ingr2 = small_recipe.ingredients[k]
                         if ingr.type ~= ingr2.type
