@@ -93,6 +93,9 @@ local function setFactorIngredients(ary, factor)
         else
             log("Recipe with no amount registered " .. serpent.line(v))
         end
+        if v.catalyst_amount then
+            v.catalyst_amount = v.catalyst_amount * factor
+        end
     end
     return ary
 end
@@ -192,12 +195,14 @@ local function recipeSetup()
                 -- Recipe is split into normal/expensive, one allowed to be blank
                 if recipe.normal or recipe.expensive then
                     if recipe.normal then
+                        recipe.normal = util.table.deepcopy(recipe.normal)
                         setValues(recipe.normal)
                         if not recipe.normal.main_product and type(recipe.normal.results) == "table" and #recipe.normal.results > 1 then
                             recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}
                         end
                     end
                     if recipe.expensive then
+                        recipe.expensive = util.table.deepcopy(recipe.expensive)
                         setValues(recipe.expensive)
                         if not recipe.expensive.main_product and type(recipe.expensive.results) == "table" and #recipe.expensive.results > 1 then
                             recipe.localised_name = recipe.localised_name or {"recipe-name." .. recipe.name}

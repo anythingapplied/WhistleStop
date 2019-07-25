@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2019-7-24
+  Bugfixes:
+    - Some recipes were getting modified after WhistleStop copies them.  Added some dependencies to fix specific instances and a validation check that runs on game load.
+    - Fixed catalyst_amount getting properly multiplied
+    - Fixed an edge case where recipe ingredients were getting multiplied by 50^2 instead of 50.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2019-7-15
   Changes:

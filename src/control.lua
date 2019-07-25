@@ -48,6 +48,110 @@ function probability(percent)
     return math.random() <= percent
 end
 
+function recipevalidation()
+    log("Whistle Stop recipe check starts...")
+    local cat_list1 = util.table.deepcopy(game.entity_prototypes["electric-furnace"]["crafting_categories"])
+    cat_list1["chemical-furnace"] = true  -- Support for Bobs chemical furnaces
+    cat_list1["mixing-furnace"] = true -- Support for Bobs mixing furnaces
+    local cat_list2 = util.table.deepcopy(game.entity_prototypes["assembling-machine-3"]["crafting_categories"])
+    if settings.startup["whistle-centrifuge"].value then
+        cat_list2["centrifuging"] = true
+    end
+    local cat_list3 = util.table.deepcopy(game.entity_prototypes["chemical-plant"]["crafting_categories"])
+    cat_list3["electrolysis"] = true -- Support for Bobs electrolysis
+    local cat_list4 = util.table.deepcopy(game.entity_prototypes["oil-refinery"]["crafting_categories"])
+    
+    local foundissue = false
+    local prod2
+    local ingr2
+    for _, recipe in pairs(game.recipe_prototypes) do
+        local cat = recipe.category
+        if inkey(cat, cat_list1) or inkey(cat, cat_list2) or inkey(cat, cat_list3) or inkey(cat, cat_list4) then
+            if not game.recipe_prototypes[recipe.name .. "-big"] or not inlist(game.recipe_prototypes[recipe.name .. "-big"].category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) then
+                log("No big recipe pair for " .. recipe.name)
+                foundissue = true
+            end
+        elseif  inlist(cat, {"big-smelting", "big-recipe", "big-chem", "big-refinery"}) then
+            local small_recipe = game.recipe_prototypes[string.sub(recipe.name,1,-5)]
+            if not small_recipe or not (inkey(small_recipe.category, cat_list1) or inkey(small_recipe.category, cat_list2) or inkey(small_recipe.category, cat_list3) or inkey(small_recipe.category, cat_list4)) then
+                log("No small recipe pair for " .. recipe.name)
+                foundissue = true
+            else
+                if #small_recipe.products == #recipe.products and #small_recipe.ingredients == #recipe.ingredients then
+                    local ratio_max
+                    local ratio_min
+                    for k,prod in pairs(recipe.products) do
+                        prod2 = small_recipe.products[k]
+                        if prod.type ~= prod2.type
+                                or prod.name ~= prod2.name
+                                or type(prod.amount) ~= type(prod2.amount)
+                                or prod.temperature ~= prod2.temperature
+                                or type(prod.amount_min) ~= type(prod2.amount_min)
+                                or type(prod.amount_max) ~= type(prod2.amount_max)
+                                or prod.probability ~= prod2.probability
+                                or type(prod.catalyst_amount) ~= type(prod2.catalyst_amount) then
+                            log("Products don't match for" .. recipe.name .. serpent.line(prod) .. serpent.line(prod2))
+                            foundissue = true
+                        else
+                            for k,v in pairs({"amount", "amount_min", "amount_max", "catalyst_amount"}) do
+                                if prod[v] then
+                                    if not ratio_max then
+                                        ratio_max = prod[v]/prod2[v]
+                                        ratio_min = prod[v]/prod2[v]
+                                    else
+                                        ratio_max = math.max(ratio_max,prod[v]/prod2[v])
+                                        ratio_min = math.min(ratio_min,prod[v]/prod2[v])
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    if recipe.ingredients[1].catalyst_amount then
+                        log(serpent.line(small_recipe.ingredients) .. " " .. serpent.line(recipe.ingredients))
+                    end
+                    for k,ingr in pairs(recipe.ingredients) do
+                        ingr2 = small_recipe.ingredients[k]
+                        if ingr.type ~= ingr2.type
+                                or ingr.name ~= ingr2.name
+                                or type(ingr.amount) ~= type(ingr2.amount)
+                                or ingr.minimum_temperature ~= ingr2.minimum_temperature
+                                or ingr.maximum_temperature ~= ingr2.maximum_temperature
+                                or type(ingr.catalyst_amount) ~= type(ingr2.catalyst_amount) then
+                            log("Ingredients don't match for" .. recipe.name .. serpent.line(ingr) .. serpent.line(ingr2))
+                            foundissue = true
+                        else
+                            for k,v in pairs({"amount", "amount_min", "amount_max", "catalyst_amount"}) do
+                                if ingr[v] then
+                                    if not ratio_max then
+                                        ratio_max = ingr[v]/ingr2[v]
+                                        ratio_min = ingr[v]/ingr2[v]
+                                    else
+                                        ratio_max = math.max(ratio_max,ingr[v]/ingr2[v])
+                                        ratio_min = math.min(ratio_min,ingr[v]/ingr2[v])
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    if ratio_min + .005 < ratio_max then
+                        log("Recipe Ratio not consistent for recipe " .. recipe.name)
+                        foundissue = true
+                    end
+                else
+                    log("Different number of products/ingredients for recipe " .. recipe.name)
+                    foundissue = true
+                end
+            end
+        end
+    end
+    if foundissue then
+        game.print("Whistle Stop recipe check found a issue with another mod.  See factorio-current.log for more information.")
+        game.print("Please report to the Whistle Stop author here: https://mods.factorio.com/mod/WhistleStopFactories/discussion")
+    else
+        log("Whistle Stop recipe check complete.  No issues found.")
+    end
+end
+
 script.on_event(defines.events.on_chunk_generated,
     function (event)
         -- Probability adjusts based on previous success.  Will attempt more spawns if lots are being blocked by ore and water.
@@ -116,6 +220,8 @@ script.on_init(
         global.whistlestats = {buffer=0, ["wsf-big-furnace"]=0, ["wsf-big-assembly"]=0, ["wsf-big-refinery"]=0, ["wsf-big-chemplant"]=0, valid_chunk_count=0}
 
         Updates.init()
+
+        recipevalidation()
     end
 )
 
@@ -163,6 +269,9 @@ script.on_nth_tick(6*60,
 script.on_configuration_changed(
     function (configData)
         Updates.run()
+
+        recipevalidation()
+        
     end
 )
 

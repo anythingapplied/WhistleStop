@@ -18,3 +18,31 @@ create_bigloader("wsf-factory-loader")
 
 -- Update Loader speed to fastest available loaders or belts in current mod set
 require("__WhistleStopFactories__.scripts.updateLoaderSpeed")
+
+
+
+--TEST
+log(serpent.line(data.raw.recipe["gate"].normal))
+
+-- data.raw.recipe.gateb = {
+--     expensive = {
+--         enabled = false, 
+--         ingredients = {
+--             {amount = 1, name = "stone-wall", type = "item"}, 
+--             {amount = 2, name = "steel-plate", type = "item"}, 
+--             {amount = 2, name = "basic-circuit-board", type = "item"}, 
+--             {amount = 2, name = "motor", type = "item"}
+--         }, 
+--         results = {
+--             {amount = 1, name = "gate", type = "item"}
+--         }
+--     }, 
+--     name = "gateb", 
+--     normal = {
+--         enabled = false, 
+--         ingredients = nil, 
+--         results = {
+--             {amount = 1, name = "gate", type = "item"}
+--         }
+--     }, 
+--     type = "recipe"}
