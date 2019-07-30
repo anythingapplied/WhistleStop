@@ -287,12 +287,29 @@ script.on_event(defines.events.on_runtime_mod_setting_changed,
 -- Unlock big recipe versions when technology is researched
 script.on_event(defines.events.on_research_finished,
     function (event)
+        game.print(event.research)  --TEST
         local force = event.research.force
         for _, effect in pairs(event.research.effects) do
             if type(effect) == 'table' and effect.type == "unlock-recipe" then
                 if force.recipes[effect.recipe .. "-big"] and
                         inlist(force.recipes[effect.recipe .. "-big"].category, {"big-smelting", "big-recipe", "big-chem", "big-refinery"})  then
                     force.recipes[effect.recipe .. "-big"].enabled = true
+                end
+            end
+        end
+    end
+)
+
+script.on_event(defines.events.on_technology_effects_reset,
+    function (event)
+        for k,v in pairs(event.force.technologies) do
+            if v.researched then
+                for _, effect in pairs(v.effects) do
+                    if type(effect) == 'table' and effect.type == "unlock-recipe" then
+                        if event.force.recipes[effect.recipe .. "-big"] then
+                            event.force.recipes[effect.recipe .. "-big"].enabled = true
+                        end
+                    end
                 end
             end
         end
