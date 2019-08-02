@@ -287,7 +287,6 @@ script.on_event(defines.events.on_runtime_mod_setting_changed,
 -- Unlock big recipe versions when technology is researched
 script.on_event(defines.events.on_research_finished,
     function (event)
-        game.print(event.research)  --TEST
         local force = event.research.force
         for _, effect in pairs(event.research.effects) do
             if type(effect) == 'table' and effect.type == "unlock-recipe" then

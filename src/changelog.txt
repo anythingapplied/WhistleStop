@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2019-8-2
+  Bugfixes:
+    - Added Krastorio and space-exploration to hidden optional dependencies to fix big recipe version not including the final version for some recipes
+---------------------------------------------------------------------------------------------------
 Version: 0.2.3
 Date: 2019-7-29
   Bugfixes:
