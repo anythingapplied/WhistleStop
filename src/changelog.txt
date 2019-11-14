@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2019-11-14
+  Changes:
+    - Added setting to allow deconstruction and rebuilding of factories.  Still have to find them in the wild though.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.4
 Date: 2019-8-2
   Bugfixes:
