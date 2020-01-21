@@ -10,6 +10,7 @@ local function create_bigassembly(name, energy, speed)
 
     bigassembly.name = name
     bigassembly.icon = icon
+    bigassembly.icon_size = 32
     bigassembly.localised_name = {"entity-name.wsf-big-assembly"}
 
     bigassembly.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
@@ -67,6 +68,7 @@ local function create_bigassembly(name, energy, speed)
 
     bigassembly_item.name = name
     bigassembly_item.icon = icon
+    bigassembly_item.icon_size = 32
     bigassembly_item.order = "c[" .. name .. "]"
     bigassembly_item.place_result = name
 

@@ -2,11 +2,11 @@
     "output_directory": "../../../Google Drive/Factorio Mod Testing/mods",
     "info":{
         "name": "WhistleStopFactories",
-        "version": "0.3.0",
-        "factorio_version": "0.17",
+        "version": "0.3.1",
+        "factorio_version": "0.18",
         "title": "Whistle Stop Factories",
         "author": "Avongard",
         "homepage": "https://forums.factorio.com/viewtopic.php?t=61205",
         "description": "Spawns massive furnaces and assembly machines around the map to make the game all about building trains to connect them",
-        "dependencies": ["base >= 0.17.57", "(?) rso-mod", "(?) angelssmelting", "(?) Deadlock-AAII-bridge", "(?) Krastorio", "(?) space-exploration-postprocess"] }
+        "dependencies": ["base >= 0.18.0", "(?) rso-mod", "(?) angelssmelting", "(?) Deadlock-AAII-bridge", "(?) Krastorio", "(?) space-exploration-postprocess"] }
 }

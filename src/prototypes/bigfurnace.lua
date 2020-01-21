@@ -10,6 +10,7 @@ local function create_bigfurnace(name, energy, speed)
 
     bigfurnace.name = name
     bigfurnace.icon = icon
+    bigfurnace.icon_size = 32
     bigfurnace.localised_name = {"entity-name.wsf-big-furnace"}
 
     bigfurnace.collision_box = {{-8.1, -8.1}, {8.1, 8.1}}
@@ -60,10 +61,13 @@ local function create_bigfurnace(name, energy, speed)
 
     bigfurnace_item.name = name
     bigfurnace_item.icon = icon
+    bigfurnace_item.icon_size = 32
     bigfurnace_item.order = "d[" .. name .. "]"
     bigfurnace_item.place_result = name
 
     data.raw.item[name] = bigfurnace_item
+    -- log(serpent.line(bigfurnace))
+    -- log(serpent.line(bigfurnace_item))
 end
 
 return create_bigfurnace
