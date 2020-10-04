@@ -174,7 +174,15 @@ end
 local function recipeSetup()
     -- Cycles through recipes adding big version to recipe list
 
-    local cat_list1 = util.table.deepcopy(data.raw.furnace["electric-furnace"]["crafting_categories"])
+    local cat_list1 = {}
+
+    if type(data.raw.furnace["electric-furnace"]) == "table" then
+        for k,v in pairs(data.raw.furnace["electric-furnace"]["crafting_categories"]) do
+            table.insert(cat_list1, v)
+        end
+    else
+        table.insert(cat_list1, "smelting")
+    end
     table.insert(cat_list1, "chemical-furnace")  -- Support for Bobs chemical furnaces
     table.insert(cat_list1, "mixing-furnace") -- Support for Bobs mixing furnaces
     local cat_list2 = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"]["crafting_categories"])
