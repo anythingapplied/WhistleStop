@@ -17,6 +17,12 @@ local function create_bigfurnace(name, energy, speed)
     bigfurnace.selection_box = {{-8.8, -9}, {8.8, 9}}
     bigfurnace.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
 
+    if bigfurnace.energy_source and bigfurnace.energy_source.emissions_per_minute then
+        local prepollution = bigfurnace.energy_source.emissions_per_minute
+        bigfurnace.energy_source.emissions_per_minute = bigfurnace.energy_source.emissions_per_minute * (speed / bigfurnace.crafting_speed)
+        log("adjusted pollution of bigfurnace from "..prepollution.." to "..bigfurnace.energy_source.emissions_per_minute)
+    end
+
     bigfurnace.crafting_categories = {"big-smelting"}
     bigfurnace.crafting_speed = speed
 

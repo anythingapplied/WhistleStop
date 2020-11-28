@@ -15,6 +15,12 @@ local function create_bigrefinery(name, energy, speed)
     bigrefinery.selection_box = {{-15, -15}, {15, 15}}
     bigrefinery.drawing_box = {{-15, -15.3}, {15, 15}}
 
+    if bigrefinery.energy_source and bigrefinery.energy_source.emissions_per_minute then
+        local prepollution = bigrefinery.energy_source.emissions_per_minute
+        bigrefinery.energy_source.emissions_per_minute = bigrefinery.energy_source.emissions_per_minute * (speed / bigrefinery.crafting_speed)
+        log("adjusted pollution of bigrefinery from "..prepollution.." to "..bigrefinery.energy_source.emissions_per_minute)
+    end
+
     bigrefinery.crafting_categories = {"big-refinery"}
     bigrefinery.crafting_speed = speed
 

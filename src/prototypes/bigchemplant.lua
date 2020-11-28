@@ -16,6 +16,12 @@ local function create_bigchemplant(name, energy, speed)
     bigchemplant.selection_box = {{-8.8, -9}, {8.8, 9}}
     bigchemplant.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
 
+    if bigchemplant.energy_source and bigchemplant.energy_source.emissions_per_minute then
+        local prepollution = bigchemplant.energy_source.emissions_per_minute
+        bigchemplant.energy_source.emissions_per_minute = bigchemplant.energy_source.emissions_per_minute * (speed / bigchemplant.crafting_speed)
+        log("adjusted pollution of bigchemplant from "..prepollution.." to "..bigchemplant.energy_source.emissions_per_minute)
+    end
+
     bigchemplant.crafting_categories = {"big-chem"}
     bigchemplant.crafting_speed = speed
 

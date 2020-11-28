@@ -17,6 +17,12 @@ local function create_bigassembly(name, energy, speed)
     bigassembly.selection_box = {{-8.8, -9}, {8.8, 9}}
     bigassembly.drawing_box = {{-8.8, -8.8}, {8.8, 8.8}}
 
+    if bigassembly.energy_source and bigassembly.energy_source.emissions_per_minute then
+        local prepollution = bigassembly.energy_source.emissions_per_minute
+        bigassembly.energy_source.emissions_per_minute = bigassembly.energy_source.emissions_per_minute * (speed / bigassembly.crafting_speed)
+        log("adjusted pollution of bigassembly from "..prepollution.." to "..bigassembly.energy_source.emissions_per_minute)
+    end
+    
     bigassembly.crafting_categories = {"big-recipe", "big-chem"}
     bigassembly.crafting_speed = speed
 
